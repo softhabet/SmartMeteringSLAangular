@@ -1,0 +1,2 @@
+generate component:
+npm run ng g c ./views/app/dashboard
