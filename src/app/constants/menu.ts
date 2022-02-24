@@ -411,22 +411,22 @@ const data: IMenuItem[] = [
   to: '/app/dashboard'
 },
 {
-  id: 'blank-page',
-  icon: 'iconsminds-bucket',
-  label: 'blank-page',
-  to: '/app/blank-page'
+  id: 'report-generation',
+  icon: 'simple-icon-note',
+  label: 'report-generation',
+  to: '/app/report-generation'
 },
 {
-  id: 'blank-page',
-  icon: 'iconsminds-bucket',
-  label: 'blank-page',
-  to: '/app/blank-page'
+  id: 'generated-reports',
+  icon: 'simple-icon-notebook',
+  label: 'generated-reports',
+  to: '/app/generated-reports'
 },
 {
-  id: 'blank-page',
-  icon: 'iconsminds-bucket',
-  label: 'blank-page',
-  to: '/app/blank-page'
+  id: 'map',
+  icon: 'simple-icon-globe',
+  label: 'Map',
+  to: '/app/map'
 },
 // {
 //   id: 'docs',
