@@ -9,6 +9,8 @@ import { Subscription } from 'rxjs';
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html'
 })
+
+//There is a little error on reseize
 export class SidebarComponent implements OnInit, OnDestroy {
   menuItems: IMenuItem[] = menuItems;
   selectedParentMenu = '';
@@ -68,6 +70,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       // (this fixed menu hiding when clicking on menu and blanck and on init)
       this.sidebarService.changeSelectedMenuHasSubItems(false);
       this.sidebarService.setContainerClassnames(0, containerClassnames, false);
+      // end
       this.isCurrentMenuHasSubItem();
     }, 100);
   }

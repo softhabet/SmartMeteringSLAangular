@@ -20,8 +20,11 @@
   },
   "menu": {
     "app": "Home",
-    "dashboards": "Dashboards",
     "dashboard": "Dashboard",
+    "generated-reports": "Generated Reports",
+    "report-generation": "Reports Generation",
+    "map": "Map",
+    "dashboards": "Dashboards",
     "default": "Default",
     "analytics": "Analytics",
     "ecommerce": "Ecommerce",
