@@ -8,11 +8,11 @@ import { PagesContainersModule } from 'src/app/containers/pages/pages.containers
 import { PaginationModule } from 'ngx-bootstrap';
 import { LayoutContainersModule } from 'src/app/containers/layout/layout.containers.module';
 import { GeneratedReportsComponent } from './generated-reports.component';
-import { DatatableComponent } from './datatable/datatable.component';
+import { ReportTableComponent } from './report-table/report-table.component';
 
 
 @NgModule({
-  declarations: [GeneratedReportsComponent, DatatableComponent],
+  declarations: [GeneratedReportsComponent, ReportTableComponent],
   imports: [
     CommonModule,
     SharedModule,

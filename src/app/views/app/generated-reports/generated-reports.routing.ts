@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DatatableComponent } from './datatable/datatable.component';
+import { ReportTableComponent } from './report-table/report-table.component';
 import { GeneratedReportsComponent } from './generated-reports.component';
 
 const routes: Routes = [
     {
-        path: '', component: DatatableComponent,
+        path: '', component: ReportTableComponent,
     }
 ];
 
