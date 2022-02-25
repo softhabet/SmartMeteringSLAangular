@@ -4,7 +4,6 @@ import { AppComponent } from './app.component';
 import { BlankPageComponent } from './blank-page/blank-page.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ReportGenerationComponent } from './report-generation/report-generation.component';
-import { GeneratedReportsComponent } from './generated-reports/generated-reports.component';
 import { MapComponent } from './map/map.component';
 
 const routes: Routes = [
@@ -18,9 +17,10 @@ const routes: Routes = [
             { path: 'ui', loadChildren: () => import('./ui/ui.module').then(m => m.UiModule) },
             { path: 'menu', loadChildren: () => import('./menu/menu.module').then(m => m.MenuModule) },
             { path: 'blank-page', component: BlankPageComponent },
+
+            { path: 'generated-reports', loadChildren: () => import('./generated-reports/generated-reports.module').then(m => m.GeneratedReportsModule) },
             { path: 'dashboard', component: DashboardComponent },
             { path: 'report-generation', component: ReportGenerationComponent },
-            { path: 'generated-reports', component: GeneratedReportsComponent },
             { path: 'map', component: MapComponent }
 
         ]
