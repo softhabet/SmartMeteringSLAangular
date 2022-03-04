@@ -14,28 +14,6 @@ export interface IReport {
   date: string;
 }
 
-export interface IProduct {
-  id: number;
-  title: string;
-  img: string;
-  category: string;
-  status: string;
-  statusColor: string;
-  description: string;
-  sales: number;
-  stock: number;
-  date: string;
-}
-
-export interface IProductResponse {
-  data: IProduct[];
-  status: boolean;
-  totalItem: number;
-  totalPage: number;
-  pageSize: string;
-  currentPage: string;
-}
-
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   constructor(private http: HttpClient) { }
@@ -50,7 +28,7 @@ export class ApiService {
 
     return this.http.get(url, { params })
       .pipe(
-        map((res: IProductResponse) => {
+        map((res: IReport) => {
           return res;
         }),
         catchError(errorRes => {

@@ -1,2 +1,5 @@
 generate component:
 npm run ng g c ./views/app/dashboard
+
+generate module with routing:
+ng g m [ModuleName] --routing

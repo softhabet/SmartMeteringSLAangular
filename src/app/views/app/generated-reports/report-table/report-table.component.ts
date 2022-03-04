@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import productItems from 'src/app/mydata/products';
+import reports from 'src/app/mydata/reports';
 import { ColumnMode, DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
 
 @Component({
@@ -9,12 +9,12 @@ import { ColumnMode, DatatableComponent, SelectionType } from '@swimlane/ngx-dat
 export class ReportTableComponent implements OnInit {
 
   @ViewChild(DatatableComponent) table: DatatableComponent;
-  rows = productItems.slice(0, 20).map(({ title, sales, stock, category, id }) => ({ title, sales, stock, category, id }));
+  rows = reports.slice(0, 20).map(({ title, createdBy, date, id }) => ({ title, createdBy, date, id }));
 
   columns = [
     { prop: 'title', name: 'Title' },
-    { prop: 'sales', name: 'Sales' },
-    { prop: 'category', name: 'Category' },
+    { prop: 'createdBy', name: 'Created By' },
+    { prop: 'date', name: 'Date' },
     { prop: 'id', name: 'Id' }
   ];
   ColumnMode = ColumnMode;

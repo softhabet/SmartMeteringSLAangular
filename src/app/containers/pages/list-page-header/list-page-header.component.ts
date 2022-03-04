@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild, EventEmitter, Output, Input } from '@angular/core';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-list-page-header',
@@ -26,7 +28,7 @@ export class ListPageHeaderComponent implements OnInit {
   @Output() changeOrderBy: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('search') search: any;
-  constructor() { }
+  constructor(private router : Router) { }
 
   ngOnInit() {
   }
@@ -35,7 +37,7 @@ export class ListPageHeaderComponent implements OnInit {
     this.changeDisplayMode.emit(mode);
   }
   onAddNewItem() {
-    this.addNewItem.emit(null);
+   this.router.navigate(['/app/report-generation']);
   }
   selectAll(event) {
     this.selectAllChange.emit(event);

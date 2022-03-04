@@ -6,6 +6,9 @@ import { GeneratedReportsComponent } from './generated-reports.component';
 const routes: Routes = [
     {
         path: '', component: ReportTableComponent,
+        // children : [
+        //   { path: '', redirectTo: 'blog-list', pathMatch: 'full' },
+        // ]
     }
 ];
 
