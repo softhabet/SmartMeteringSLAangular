@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BlankPageComponent } from './blank-page/blank-page.component';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -11,7 +10,7 @@ import { MapComponent } from './map/map.component';
 
 
 @NgModule({
-  declarations: [BlankPageComponent, AppComponent, DashboardComponent, ReportGenerationComponent, MapComponent],
+  declarations: [AppComponent, DashboardComponent, ReportGenerationComponent, MapComponent],
   imports: [
     CommonModule,
     AppRoutingModule,
