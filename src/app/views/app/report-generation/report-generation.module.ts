@@ -8,11 +8,14 @@ import { PagesContainersModule } from 'src/app/containers/pages/pages.containers
 import { PaginationModule } from 'ngx-bootstrap';
 import { LayoutContainersModule } from 'src/app/containers/layout/layout.containers.module';
 import { ReportGenerationComponent} from './report-generation.component';
-import { ReportSearchComponent } from './report-search/report-search.component';
+import { ReportsComponent } from './reports/reports.component';
+import { ComponentsStateButtonModule } from 'src/app/components/state-button/components.state-button.module';
+import { BootstrapModule } from 'src/app/components/bootstrap/bootstrap.module';
+import { UiModalsContainersModule } from 'src/app/containers/ui/modals/ui.modals.containers.module';
 
 
 @NgModule({
-  declarations: [ReportGenerationComponent, ReportSearchComponent],
+  declarations: [ReportGenerationComponent, ReportsComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -21,6 +24,11 @@ import { ReportSearchComponent } from './report-search/report-search.component';
     NgxDatatableModule,
     CollapseModule,
     PagesContainersModule,
+    //added for dropDown button
+    ComponentsStateButtonModule,
+    BootstrapModule,
+    UiModalsContainersModule,
+    LayoutContainersModule,
     PaginationModule.forRoot()
   ]
 })

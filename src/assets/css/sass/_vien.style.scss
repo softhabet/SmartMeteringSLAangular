@@ -54,9 +54,9 @@ Table of Contents
 
 $main-menu-item-height: 110px;
 $main-menu-width: 120px;
-$main-menu-width-lg: 110px;
-$main-menu-width-md: 100px;
-$main-menu-width-xs: 90px;
+$main-menu-width-lg: 125px;
+$main-menu-width-md: 115px;
+$main-menu-width-xs: 100px;
 
 $sub-menu-width: 230px;
 $sub-menu-width-lg: 230px;
@@ -5418,6 +5418,7 @@ dropzone > .dropzone.dz-wrapper.dz-multiple.dz-started .dz-message {
 
 .input-group-text {
   border-radius: $border-radius;
+  font-size: 0.9rem;
 }
 
 .noUi-target {
@@ -5454,7 +5455,7 @@ dropzone > .dropzone.dz-wrapper.dz-multiple.dz-started .dz-message {
   border-radius: $border-radius;
   padding: 0.5rem 0.75rem;
   height: initial;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   background: $foreground-color;
   border-color: $separator-color;
 }
@@ -6168,6 +6169,33 @@ aw-wizard-navigation-bar.horizontal.large-empty-symbols
     font-family: "simple-line-icons";
     content: "\E090";
     font-size: 14px;
+    color: $secondary-color;
+    position: absolute;
+    right: 10px;
+    text-align: center;
+    cursor: pointer;
+    top: 2px;
+  }
+}
+
+.search-md {
+  position: relative;
+
+  input {
+    background: none;
+    outline: initial !important;
+    border-radius: 15px;
+    padding: 0.25rem 0.75rem 0.25rem 0.75rem;
+    font-size: 17px;
+    line-height: 1.3;
+    border: 1px solid $secondary-color;
+    color: $primary-color;
+  }
+
+  &:after {
+    font-family: "simple-line-icons";
+    content: "\E090";
+    font-size: 17px;
     color: $secondary-color;
     position: absolute;
     right: 10px;

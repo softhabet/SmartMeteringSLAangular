@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ReportGenerationComponent } from './report-generation.component';
-import { ReportSearchComponent } from './report-search/report-search.component';
+import { ReportsComponent } from './reports/reports.component';
 
 const routes: Routes = [
     {
-        path: '', component: ReportSearchComponent,
+        path: '', component: ReportGenerationComponent,
         children : [
-          // { path: '', redirectTo:'', pathMatch: 'full' },
-          // { path: '', component: ReportSearchComponent },
+          { path: '', redirectTo:'reports', pathMatch: 'full' },
+          { path: 'reports', component: ReportsComponent },
         ]
     }
 ];
