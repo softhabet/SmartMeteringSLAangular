@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-12">
+    <div class="float-right" *ngIf="showItemsPerPage">
+      <span class="text-muted text-small">Per Page </span>
+      <span dropdown class="d-inline-block position-relative">
+        <button class="btn btn-outline-dark btn-xs dropdown-toggle" type="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false" dropdownToggle>
+          {{itemsPerPage}}
+        </button>
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-sm text-right" *dropdownMenu>
+          <li role="menuitem" *ngFor="let item of itemOptionsPerPage"><a
+              [ngClass]="item === itemsPerPage ? 'dropdown-item active' : 'dropdown-item'"
+              (click)="onChangeItemsPerPage(item)">{{item}}</a></li>
+        </div>
+      </span>
+    </div>
+  </div>
+  <div class="separator mb-4"></div>
+</div>

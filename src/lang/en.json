@@ -111,7 +111,8 @@
     "owner":"Owner",
     "is-scheduled": "Is Scheduled",
     "status": "Status",
-    "search": "Search"
+    "search": "Search",
+    "reports-list": "Reports List"
   },
   "dashboards": {
     "pending-orders": "Pending Orders",

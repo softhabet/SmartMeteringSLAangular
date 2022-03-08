@@ -31,6 +31,7 @@ import { ProductDetailOrdersComponent } from './product-detail-orders/product-de
 import { ProductDetailCommentsComponent } from './product-detail-comments/product-detail-comments.component';
 import { ProductDetailInfoComponent } from './product-detail-info/product-detail-info.component';
 import { ProductDetailTabsComponent } from './product-detail-tabs/product-detail-tabs.component';
+import { ReportsListPageHeaderComponent } from './reports-list-page-header/reports-list-page-header.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { ProductDetailTabsComponent } from './product-detail-tabs/product-detail
     ProductDetailOrdersComponent,
     ProductDetailCommentsComponent,
     ProductDetailInfoComponent,
-    ProductDetailTabsComponent
+    ProductDetailTabsComponent,
+    ReportsListPageHeaderComponent
   ],
   imports: [
     CommonModule,
@@ -94,7 +96,8 @@ import { ProductDetailTabsComponent } from './product-detail-tabs/product-detail
     ProductDetailOrdersComponent,
     ProductDetailCommentsComponent,
     ProductDetailInfoComponent,
-    ProductDetailTabsComponent
+    ProductDetailTabsComponent,
+    ReportsListPageHeaderComponent
   ]
 })
 export class PagesContainersModule { }
