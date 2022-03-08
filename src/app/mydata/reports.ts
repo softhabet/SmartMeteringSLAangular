@@ -2,125 +2,65 @@ import { IReport } from './api.service';
 
 const data: IReport[] = [
   {
-    id: 1,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
+    report_id: 1,
+    reportName: 'report1',
+    report_owner: 'sofiene',
+    description: 'Meter',
+    creationDate: '08.03.2022',
+    isScheduled: true,
+    status: 'Active',
+    descriptionColor: 'primary',
+    scheduledColor: 'primary',
+    statusColor: 'primary'
   },
   {
-    id: 2,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
+    report_id: 2,
+    reportName: 'report1',
+    report_owner: 'sofiene',
+    description: 'Meter',
+    creationDate: '08.03.2022',
+    isScheduled: true,
+    status: 'Active',
+    descriptionColor: 'primary',
+    scheduledColor: 'primary',
+    statusColor: 'primary'
   },
   {
-    id: 3,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
+    report_id: 3,
+    reportName: 'report1',
+    report_owner: 'sofiene',
+    description: 'Meter',
+    creationDate: '08.03.2022',
+    isScheduled: true,
+    status: 'Active',
+    descriptionColor: 'primary',
+    scheduledColor: 'primary',
+    statusColor: 'primary'
   },
   {
-    id: 4,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
+    report_id: 4,
+    reportName: 'report1',
+    report_owner: 'sofiene',
+    description: 'Meter',
+    creationDate: '08.03.2022',
+    isScheduled: true,
+    status: 'Active',
+    descriptionColor: 'primary',
+    scheduledColor: 'primary',
+    statusColor: 'primary'
   },
   {
-    id: 5,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 6,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 7,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 8,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 9,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 10,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 11,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 12,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 13,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 14,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 15,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 16,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 17,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 18,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 19,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
-  },
-  {
-    id: 20,
-    title: 'Report',
-    createdBy : 'Sofiene',
-    date: '02.04.2018'
+    report_id: 5,
+    reportName: 'report1',
+    report_owner: 'sofiene',
+    description: 'Meter',
+    creationDate: '08.03.2022',
+    isScheduled: true,
+    status: 'Active',
+    descriptionColor: 'primary',
+    scheduledColor: 'primary',
+    statusColor: 'primary'
   }
-];
+]
 
 export default data;

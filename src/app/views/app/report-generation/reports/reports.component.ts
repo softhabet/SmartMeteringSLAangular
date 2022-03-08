@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
-import { ApiService } from 'src/app/mydata/api.service';
+import { ApiService, IReportInstance } from 'src/app/mydata/api.service';
 import reports from 'src/app/mydata/reports';
 import { ContextMenuComponent } from 'ngx-contextmenu';
 import { IReport } from 'src/app/mydata/api.service';
@@ -45,8 +45,8 @@ export class ReportsComponent implements OnInit {
     this.search = search;
     this.orderBy = orderBy;
 
-    this.reports = reports.slice(0, 20).map(({ title, createdBy, date, id }) => ({ title, createdBy, date, id }));
-    this.data = reports.slice(pageSize * (currentPage-1), pageSize * currentPage).map(({ title, createdBy, date, id }) => ({ title, createdBy, date, id }));
+    this.reports = reports.slice(0, 5).map(({ report_id, reportName, report_owner, description, creationDate, isScheduled, status, descriptionColor, scheduledColor, statusColor}) => ({ report_id, reportName, report_owner, description, creationDate, isScheduled, status, descriptionColor, scheduledColor, statusColor}));
+    this.data = reports.slice(pageSize * (currentPage-1), pageSize * currentPage).map(({ report_id, reportName, report_owner, description, creationDate, isScheduled, status, descriptionColor, scheduledColor, statusColor}) => ({ report_id, reportName, report_owner, description, creationDate, isScheduled, status, descriptionColor, scheduledColor, statusColor}));
     this.totalItem = this.reports.length;
     // this.totalPage = pageSize;
 
@@ -67,12 +67,13 @@ export class ReportsComponent implements OnInit {
     // );
   }
 
-  onStateButtonClick() {
+  onStateButtonClick(event) {
     if (this.stateButtonDisabled) {
       return;
     }
     this.stateButtonDisabled = true;
     this.stateButtonCurrentState = 'show-spinner';
+    // this.SearchKeyUp(event);
     setTimeout(() => {
       this.stateButtonCurrentState = 'show-success';
       setTimeout(() => {
@@ -83,8 +84,10 @@ export class ReportsComponent implements OnInit {
     }, 1000);
   }
 
-  onSearchKeyUp($event){
-    this.searchKeyUp.emit($event);
+
+  SearchKeyUp(event) {
+    const val = event.target.value.toLowerCase().trim();
+    this.loadData(this.itemsPerPage, 1, val, this.orderBy);
   }
 
   itemsPerPageChange(perPage: number) {
