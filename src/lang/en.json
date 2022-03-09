@@ -26,6 +26,10 @@
     "reports": "Reports",
     "map": "Map",
     "dashboards": "Dashboards",
+    "generation": "Generation",
+    "meter": "Meter",
+    "event": "Event",
+
     "default": "Default",
     "details": "Details",
     "search": "Search",
@@ -105,6 +109,7 @@
     "form-validations": "Form Validations",
     "form-wizard": "Form Wizard"
   },
+
   "reports-generation": {
     "search-reports":"Search Reports",
     "report-name":"Report Name",
@@ -114,6 +119,7 @@
     "search": "Search",
     "reports-list": "Reports List"
   },
+
   "dashboards": {
     "pending-orders": "Pending Orders",
     "completed-orders": "Completed Orders",
@@ -706,9 +712,9 @@
     "bootstrap-hoverable": "Hoverable Rows"
   },
   "wizard":{
-    "step-name-1": "Step 1",
-    "step-name-2": "Step 2",
-    "step-name-3": "Step 3",
+    "step-name-1": "Report Generation",
+    "step-name-2": "Report Filtration",
+    "step-name-3": "Report Creation",
     "step-desc-1": "First step description",
     "step-desc-2": "Second step description",
     "step-desc-3": "Third step description",

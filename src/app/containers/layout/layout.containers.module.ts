@@ -12,6 +12,7 @@ import { FooterComponent } from './footer/footer.component';
 import { HeadingComponent } from './heading/heading.component';
 import { ApplicationMenuComponent } from './application-menu/application-menu.component';
 import { FormsModule } from '@angular/forms';
+import { BreadcrumbReportsComponent } from './breadcrumb-reports/breadcrumb-reports.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { FormsModule } from '@angular/forms';
     ColorSwitcherComponent,
     FooterComponent,
     HeadingComponent,
-    ApplicationMenuComponent
+    ApplicationMenuComponent,
+    BreadcrumbReportsComponent
   ],
   imports: [
     CommonModule,
@@ -37,6 +39,7 @@ import { FormsModule } from '@angular/forms';
     TopnavComponent,
     SidebarComponent,
     BreadcrumbComponent,
+    BreadcrumbReportsComponent,
     ColorSwitcherComponent,
     FooterComponent,
     HeadingComponent,

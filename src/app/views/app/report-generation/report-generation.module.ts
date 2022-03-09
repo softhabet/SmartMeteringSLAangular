@@ -37,6 +37,21 @@ import { FormsModule as FormsModuleAngular, ReactiveFormsModule } from '@angular
     ContextMenuModule.forRoot({
       useBootstrap4: true,
     })
+  ],
+  exports: [
+    CommonModule,
+    SharedModule,
+    ReportGenerationRoutingModule,
+    LayoutContainersModule,
+    NgxDatatableModule,
+    CollapseModule,
+    PagesContainersModule,
+    ComponentsStateButtonModule,
+    BootstrapModule,
+    UiModalsContainersModule,
+    LayoutContainersModule,
+    FormsModuleAngular,
+    ReactiveFormsModule,
   ]
 })
 

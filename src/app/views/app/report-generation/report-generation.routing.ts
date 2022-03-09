@@ -9,6 +9,7 @@ const routes: Routes = [
         children : [
           { path: '', redirectTo:'reports', pathMatch: 'full' },
           { path: 'reports', component: ReportsComponent },
+          { path: 'generation', loadChildren: () => import('./generation/generation.module').then(m => m.GenerationModule) },
         ]
     }
 ];
