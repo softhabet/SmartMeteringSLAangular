@@ -24,6 +24,7 @@ import { Step3Component } from './step3/step3.component';
     ContextMenuModule.forRoot({
       useBootstrap4: true,
     })
-  ]
+  ],
+  exports: [Step1Component, Step2Component, Step3Component]
 })
 export class GenerationMeterModule { }

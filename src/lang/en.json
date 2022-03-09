@@ -113,6 +113,7 @@
   "reports-generation": {
     "search-reports":"Search Reports",
     "report-name":"Report Name",
+    "report-description":"Report Description",
     "owner":"Owner",
     "is-scheduled": "Is Scheduled",
     "status": "Status",
