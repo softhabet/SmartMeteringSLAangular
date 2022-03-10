@@ -7,6 +7,9 @@ import { FormsModule as FormsModuleAngular } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ArchwizardModule } from 'angular-archwizard';
 import { DndListModule } from 'ngx-drag-and-drop-lists';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { Step1Component } from './step1/step1.component';
 import { Step2Component } from './step2/step2.component';
 import { Step3Component } from './step3/step3.component';
@@ -23,6 +26,9 @@ import { Step3Component } from './step3/step3.component';
     ArchwizardModule,
     ReportGenerationModule,
     DndListModule,
+    NgSelectModule,
+    BsDatepickerModule.forRoot(),
+    TimepickerModule.forRoot(),
     PaginationModule.forRoot(),
     ContextMenuModule.forRoot({
       useBootstrap4: true,
