@@ -10,18 +10,23 @@ export class Step1Component implements OnInit {
 
   public simpleList = [
     [
-      { 'name': 'John' },
-      { 'name': 'Smith' },
-      { 'name': 'George' },
+      { 'name': 'status' },
+      { 'name': 'pre_active_meter_date' },
+      { 'name': 'meter_active_date' },
+      { 'name': 'version' },
+      { 'name': 'meter_discovered' },
+      { 'name': 'meter_type' }
     ],
     [
-      { 'name': 'Jennifer' },
-      { 'name': 'Laura' },
-      { 'name': 'Georgina' },
+      { 'name': 'dc_number' }
     ]
   ];
 
   ngOnInit(): void {
+  }
+
+  public removeItem(item: any, list: any[]): void {
+    list.splice(list.indexOf(item), 1);
   }
 
 }

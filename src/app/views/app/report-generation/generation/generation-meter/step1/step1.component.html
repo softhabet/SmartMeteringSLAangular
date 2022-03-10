@@ -1,5 +1,6 @@
+<!-- [isOpen]="true" -->
 <accordion class="mt-4 mb-4" [isAnimated]="true">
-  <accordion-group heading="Report Management" [panelClass]="'border'" [isOpen]="true">
+  <accordion-group heading="Report Management" [panelClass]="'border'">
 
     <div class="d-flex mb-2">
       <span class="w-25 d-block mr-5">
@@ -31,7 +32,7 @@
 </accordion>
 
 <accordion class="mt-4 mb-4" [isAnimated]="true">
-  <accordion-group heading="Report file Name Specification" [panelClass]="'border'" [isOpen]="true">
+  <accordion-group heading="Report file Name Specification" [panelClass]="'border'">
     <span class="d-inline-block ml-1 mb-4">
       <div class="d-flex flex-row">
         <h6 class="text-nowrap mt-2 mr-4">Report file name separator: </h6>
@@ -90,7 +91,7 @@
 </accordion>
 
 <accordion class="mt-4 mb-4" [isAnimated]="true">
-  <accordion-group heading="Report Publishing Folders" [panelClass]="'border'" [isOpen]="true">
+  <accordion-group heading="Report Publishing Folders" [panelClass]="'border'">
     <ul class="list-unstyled mb-3 ml-1">
       <li>
         <div class="custom-control custom-checkbox mb-2">
@@ -109,7 +110,28 @@
 </accordion>
 
 <accordion class="mt-4 mb-4" [isAnimated]="true">
-  <accordion-group heading="Columns configuration" [panelClass]="'border'" [isOpen]="true">
+  <accordion-group heading="Columns configuration" [panelClass]="'border'">
+
+    <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th style="font-size: medium;" class="col-md-6 text-center" scope="col">Available columns</th>
+          <th style="font-size: medium;" class="col-md-6 text-center" scope="col">Selected columns</th>
+        </tr>
+      </thead>
+    </table>
+
+    <div class="dndPlaceholder col-md-12" #placeholder></div>
+    <div class="row">
+      <div class="col-md-6 text-center mt-1" [dndList] [dndPlaceholder]="placeholder" [dndModel]="simpleList[0]">
+        <div *ngFor="let item of simpleList[0]" style="font-size: medium;" class="col-md-12 mb-2" [dndType]="'item'"
+          (dndMoved)="removeItem(item, simpleList[0])" [dndDraggable] [dndObject]="item">{{item.name}}</div>
+      </div>
+      <div class="col-md-6 text-center mt-1" [dndList] [dndModel]="simpleList[1]" [dndPlaceholder]="placeholder">
+        <div *ngFor="let item of simpleList[1]" style="font-size: medium;" class="col-md-12 mb-2" [dndType]="'item'"
+          (dndMoved)="removeItem(item, simpleList[1])" [dndDraggable] [dndObject]="item">{{item.name}}</div>
+      </div>
+    </div>
 
   </accordion-group>
 </accordion>

@@ -6,12 +6,14 @@ import { ContextMenuModule } from 'ngx-contextmenu';
 import { FormsModule as FormsModuleAngular } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ArchwizardModule } from 'angular-archwizard';
+import { DndListModule } from 'ngx-drag-and-drop-lists';
 import { Step1Component } from './step1/step1.component';
 import { Step2Component } from './step2/step2.component';
 import { Step3Component } from './step3/step3.component';
 
 
 @NgModule({
+
   declarations: [Step1Component, Step2Component, Step3Component],
   imports: [
     CommonModule,
@@ -20,6 +22,7 @@ import { Step3Component } from './step3/step3.component';
     TranslateModule,
     ArchwizardModule,
     ReportGenerationModule,
+    DndListModule,
     PaginationModule.forRoot(),
     ContextMenuModule.forRoot({
       useBootstrap4: true,
