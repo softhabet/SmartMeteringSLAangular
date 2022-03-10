@@ -56,41 +56,60 @@
           <td
             style="text-align: left; vertical-align:middle; border-radius: 10px; padding:30px; background-color: #f0eeee; border-right: 10px solid white;">
             <span class="d-block mr-5">
-              <h6 class="mb-2">{{'reports-generation.report-name' | translate}}</h6>
+              <h6 class="mb-2">Prefix</h6>
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="{{'reports-generation.report-name' | translate}}"
-                  aria-label="report-name" aria-describedby="basic-addon1">
+                <input type="text" class="form-control" placeholder="Prefix" aria-label="prefix"
+                  aria-describedby="basic-addon1">
               </div>
             </span>
           </td>
-
           <td
             style="text-align: left; padding-top:0px; padding-bottom:0; vertical-align:middle; padding:30px; background-color: #f0eeee; border-radius: 10px; border-left: 10px solid white;">
             <span class="d-block mr-5">
-              <h6 class="mb-2">{{'reports-generation.report-name' | translate}}</h6>
+              <h6 class="mb-2">Timestamp</h6>
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="{{'reports-generation.report-name' | translate}}"
-                  aria-label="report-name" aria-describedby="basic-addon1">
+                <input type="text" class="form-control" placeholder="Timestamp" aria-label="timestamp"
+                  aria-describedby="basic-addon1">
               </div>
             </span>
           </td>
-
           <td
             style="text-align: left; padding-top:0px; padding-bottom:0; vertical-align:middle; padding:30px; background-color: #f0eeee; border-radius: 10px; border-left: 10px solid white;">
             <span class="d-block mr-5">
-              <h6 class="mb-2">{{'reports-generation.report-name' | translate}}</h6>
+              <h6 class="mb-2">RandomId</h6>
               <p style="color:#8f8f8f; font-size: 14px; padding: 0; line-height: 1.6; margin:0; ">
                 = A 13 Digit number<br>
-                to randomize the report name
+                To randomize the report name
               </p>
             </span>
           </td>
-
         </tr>
       </tbody>
     </table>
+  </accordion-group>
+</accordion>
 
+<accordion class="mt-4 mb-4" [isAnimated]="true">
+  <accordion-group heading="Report Publishing Folders" [panelClass]="'border'" [isOpen]="true">
+    <ul class="list-unstyled mb-3 ml-1">
+      <li>
+        <div class="custom-control custom-checkbox mb-2">
+          <input type="checkbox" class="custom-control-input" id="compressed">
+          <label style="font-size: 0.95rem" class="custom-control-label" for="compressed">Compressed Export</label>
+        </div>
+      </li>
+      <li>
+        <div class="custom-control custom-checkbox mb-2">
+          <input type="checkbox" class="custom-control-input" id="timestamped">
+          <label style="font-size: 0.95rem" class="custom-control-label" for="timestamped">Timestamped Folder</label>
+        </div>
+      </li>
+    </ul>
+  </accordion-group>
+</accordion>
 
+<accordion class="mt-4 mb-4" [isAnimated]="true">
+  <accordion-group heading="Columns configuration" [panelClass]="'border'" [isOpen]="true">
 
   </accordion-group>
 </accordion>

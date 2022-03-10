@@ -8,6 +8,19 @@ export class Step1Component implements OnInit {
 
   constructor() { }
 
+  public simpleList = [
+    [
+      { 'name': 'John' },
+      { 'name': 'Smith' },
+      { 'name': 'George' },
+    ],
+    [
+      { 'name': 'Jennifer' },
+      { 'name': 'Laura' },
+      { 'name': 'Georgina' },
+    ]
+  ];
+
   ngOnInit(): void {
   }
 
