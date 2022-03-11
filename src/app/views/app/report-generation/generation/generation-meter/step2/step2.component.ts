@@ -11,25 +11,22 @@ import { esLocale } from 'ngx-bootstrap/locale';
 export class Step2Component implements OnInit {
 
   // filters accordion
-  groups = [
+  public groups = [
     {
-      title: 'Group Header - 1',
-      content: 'Dynamic group body text - 1'
+      id: 1,
+      title: 'Filter - 1'
     },
   ];
 
   addGroupItem(): void {
     this.groups.push({
-      title: `Group Header - ${this.groups.length + 1}`,
-      content: `Dynamic group body text - ${this.groups.length + 1}`
+      id: this.groups.length + 1,
+      title: `Filter - ${this.groups.length + 1}`
     });
   }
 
-  DeleteGroupItem(): void {
-    this.groups.push({
-      title: `Group Header - ${this.groups.length + 1}`,
-      content: `Dynamic group body text - ${this.groups.length + 1}`
-    });
+  deleteGroupItem(id : number): void {
+    this.groups.splice(id -1 , 1);
   }
 
   // Select fiels

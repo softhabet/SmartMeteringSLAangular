@@ -22,6 +22,17 @@ export class Step1Component implements OnInit {
     ]
   ];
 
+  public fieldList = [
+    { 'id': 1, 'name': 'status' },
+    { 'id': 2, 'name': 'pre_active_meter_date' },
+    { 'id': 3, 'name': 'meter_active_date' },
+    { 'id': 4, 'name': 'version' },
+    { 'id': 5, 'name': 'meter_discovered' },
+    { 'id': 6, 'name': 'meter_type' }
+  ] ;
+
+  selectedFieldId = 1;
+
   ngOnInit(): void {
   }
 
