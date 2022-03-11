@@ -26,7 +26,9 @@ export class Step2Component implements OnInit {
   }
 
   deleteGroupItem(id : number): void {
-    this.groups.splice(id -1 , 1);
+    this.groups.forEach((value,index)=>{
+      if(value.id==id) this.groups.splice(index,1);
+  });
   }
 
   // Select fiels
@@ -60,7 +62,7 @@ public valueList = [
   public value : boolean = false;
   public date : boolean = true;
 
-  // DatePicker
+  // DatePicker + timePicker
   form: FormGroup;
   bsValue = new Date();
   bsRangeValue: Date[];

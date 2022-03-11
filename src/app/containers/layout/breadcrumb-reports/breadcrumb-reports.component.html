@@ -21,9 +21,11 @@
         Generate Report <span class="caret"></span>
       </button>
       <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
-        <li role="menuitem"><a class="dropdown-item" href="/app/report-generation/generation/meter">Meter Report</a>
+        <li role="menuitem"><a class="dropdown-item" [routerLink]="['/app/report-generation/generation/meter']"
+            routerLinkActive="router-link-active">Meter Report</a>
         </li>
-        <li role=" menuitem"><a class="dropdown-item" href="/app/report-generation/generation/event">Event Report</a>
+        <li role=" menuitem"><a class="dropdown-item" [routerLink]="['/app/report-generation/generation/event']"
+            routerLinkActive="router-link-active">Event Report</a>
         </li>
       </ul>
     </div>

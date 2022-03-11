@@ -23,7 +23,7 @@
         <h6 class="mb-2">{{'reports-generation.owner' | translate}}</h6>
         <div class="input-group">
           <input type="text" class="form-control" placeholder="{{'reports-generation.owner' | translate}}"
-            aria-label="report-owner" aria-describedby="basic-addon3">
+            aria-label="report-owner" aria-describedby="basic-addon3" disabled>
         </div>
       </span>
     </div>
@@ -51,7 +51,7 @@
 
     <h6 class="text-nowrap mb-4 ml-1">Report file name parts: </h6>
 
-    <table class="mb-2 ml-2 mr-2" style="width: 100%;">
+    <table class="mb-2 ml-2 mr-2" style="table-layout: fixed; width: 100%;">
       <tbody>
         <tr>
           <td
@@ -69,9 +69,9 @@
             <span class="d-block mr-5">
               <h6 class="mb-2">Timestamp</h6>
               <select class="custom-select" id="inputGroupSelect03">
-                <option selected value="1">UnderScore (_)</option>
-                <option value="2">Dash (-)</option>
-                <option value="3">Slash (/)</option>
+                <option selected value="1">yyyyMMddHHmm</option>
+                <option value="2">ddMMyyyyHHmm</option>
+                <option value="3">MMddyyyyHHmm</option>
               </select>
             </span>
           </td>

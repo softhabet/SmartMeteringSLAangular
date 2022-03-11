@@ -31,14 +31,13 @@
         </div>
       </aw-wizard-step>
 
-      <aw-wizard-step stepTitle="{{ 'wizard.step-name-3' | translate }}" style="height: 120px;">
+      <aw-wizard-step stepTitle="{{ 'wizard.step-name-3' | translate }}" style="min-height: 120px;">
+
+        <app-step3></app-step3>
+
         <div class="text-center">
-          <h2 class="mb-2">{{ 'wizard.content-thanks' | translate }}</h2>
-          <p>{{ 'wizard.registered' | translate }}</p>
-        </div>
-        <div class="text-center">
-          <button type="button" class="btn btn-primary" awPreviousStep>{{ 'wizard.prev' | translate }}</button>{{" "}}
-          <button type="button" class="btn btn-primary" awNextStep disabled>{{ 'wizard.next' | translate }}</button>
+          <button type="button" class="btn btn-primary mr-1" awPreviousStep>{{ 'wizard.prev' | translate }}</button>
+          <button type="button" class="btn btn-primary">Generate</button>
         </div>
       </aw-wizard-step>
 

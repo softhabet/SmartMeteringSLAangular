@@ -1,1 +1,109 @@
-<p>step3 works!</p>
+<div class="row mt-4 mb-4">
+  <div class="col-12 col-lg-6">
+    <!-- Report Generation mode card -->
+    <div class="card">
+      <div class="card-body">
+        <h5 class="mb-4">Report Generation mode</h5>
+        <!-- check-box (need to add checked option) -->
+        <form #f="ngForm">
+          <div class="d-flex mb-4">
+            <div class="mr-4 custom-control custom-radio ">
+              <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input"
+                (click)="choose(false)" checked>
+              <label style="font-size: 16px; font-weight: 600;" class="custom-control-label" for="customRadio1">On
+                Demand</label>
+            </div>
+            <div class="custom-control custom-radio">
+              <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input"
+                (click)="choose(true)">
+              <label style="font-size: 16px; font-weight: 600;" class="custom-control-label"
+                for="customRadio2">Scheduled</label>
+            </div>
+          </div>
+        </form>
+        <div *ngIf="scheduled == true">
+          <!-- date for scheduled -->
+          <div class="w-75 d-block mt-2 mb-2">
+            <h6 class="mb-2">Date :</h6>
+            <div class="form-group mb-3">
+              <input class="form-control" #drp="bsDaterangepicker" bsDaterangepicker [container]="'html'"
+                [(ngModel)]="bsRangeValue">
+            </div>
+          </div>
+          <!-- Time-->
+          <div class="d-flex">
+            <!-- Time from -->
+            <div class="w-50">
+              <span style="transform: translate(0, 44%);" class="mr-3 d-block">
+                <h6 class=" text-nowrap mb-2">Time From :</h6>
+              </span>
+              <span style="transform: translate(0, 17%);" class="w-25 d-inline-block">
+                <timepicker class="timepicker" [mousewheel]="true" [(ngModel)]="mouseTime" [showMeridian]="false">
+                </timepicker>
+              </span>
+            </div>
+            <!-- Time to -->
+            <div class="w-50">
+              <span style="transform: translate(0, 44%);" class="mr-3 d-block">
+                <h6 class=" text-nowrap mb-2">Time To :</h6>
+              </span>
+              <span style="transform: translate(0, 17%);" class="w-25 d-inline-block">
+                <timepicker class="timepicker" [mousewheel]="true" [(ngModel)]="mouseTime" [showMeridian]="false">
+                </timepicker>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- simulation Button -->
+        <div class="d-flex mt-4 flex-row-reverse">
+          <button style="font-size: small;" type="button" class="btn btn-primary mb-1">Simulate</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Generated report info card -->
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="mb-4">Generated report info</h5>
+        <div class="row mt-4 mb-2">
+          <!-- Total Meters card box -->
+          <div class="col-12 col-lg-6">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex">
+                  <div>
+                    <i style="font-size: 2.6rem; font-weight: 550;" class="iconsminds-equalizer mr-1"></i>
+                  </div>
+                  <div class="d-block">
+                    <div style="font-size: medium; font-weight: normal;" class="mt-2"><span>Total Meters</span></div>
+                    <div style="font-size: medium; font-weight: normal;"><span>1234</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Selected Meters card box -->
+          <div class="col-12 col-lg-6">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex">
+                  <div>
+                    <i style="font-size: 2.6rem; font-weight: 550;" class="iconsminds-equalizer mr-1"></i>
+                  </div>
+                  <div class="d-block">
+                    <div style="font-size: medium; font-weight: normal;" class="mt-2 text-nowrap"><span>Selected
+                        Meters</span></div>
+                    <div style="font-size: medium; font-weight: normal;"><span>1234</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
