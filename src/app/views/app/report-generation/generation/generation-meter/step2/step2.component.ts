@@ -18,11 +18,14 @@ export class Step2Component implements OnInit {
     },
   ];
 
+  public groupsLength : number = 1;
+
   addGroupItem(): void {
     this.groups.push({
-      id: this.groups.length + 1,
-      title: `Filter - ${this.groups.length + 1}`
+      id: this.groupsLength + 1,
+      title: `Filter - ${this.groupsLength + 1}`
     });
+    this.groupsLength++;
   }
 
   deleteGroupItem(id : number): void {

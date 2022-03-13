@@ -84,16 +84,16 @@ $animation-time-short: 200ms;
 $border-radius: 0.1rem;
 $border-radius-rounded: 0.75rem;
 
-$theme-color-purple-monster: #922c88;
-$theme-color-blue-navy: #00365a;
+// $theme-color-purple-monster: #922c88;
+// $theme-color-blue-navy: #00365a;
 $theme-color-blue-yale: #145388;
-$theme-color-blue-olympic: #008ecc;
-$theme-color-green-moss: #576a3d;
-$theme-color-green-lime: #6fb327;
-$theme-color-orange-carrot: #ed7117;
-$theme-color-red-ruby: #900604;
-$theme-color-yellow-granola: #c0a145;
-$theme-color-grey-steel: #48494b;
+// $theme-color-blue-olympic: #008ecc;
+// $theme-color-green-moss: #576a3d;
+// $theme-color-green-lime: #6fb327;
+// $theme-color-orange-carrot: #ed7117;
+// $theme-color-red-ruby: #900604;
+// $theme-color-yellow-granola: #c0a145;
+// $theme-color-grey-steel: #48494b;
 
 $info-color: #3195a5;
 $success-color: #3e884f;
@@ -109,17 +109,17 @@ html {
 
 :root {
   --theme-color-1: #{$theme-color-1};
-  --theme-color-2: #{$theme-color-2};
-  --theme-color-3: #{$theme-color-3};
-  --theme-color-4: #{$theme-color-4};
-  --theme-color-5: #{$theme-color-5};
-  --theme-color-6: #{$theme-color-6};
+  // --theme-color-2: #{$theme-color-2};
+  // --theme-color-3: #{$theme-color-3};
+  // --theme-color-4: #{$theme-color-4};
+  // --theme-color-5: #{$theme-color-5};
+  // --theme-color-6: #{$theme-color-6};
   --theme-color-1-10: #{rgba($theme-color-1, 0.1)};
-  --theme-color-2-10: #{rgba($theme-color-2, 0.1)};
-  --theme-color-3-10: #{rgba($theme-color-3, 0.1)};
-  --theme-color-4-10: #{rgba($theme-color-4, 0.1)};
-  --theme-color-5-10: #{rgba($theme-color-5, 0.1)};
-  --theme-color-6-10: #{rgba($theme-color-6, 0.1)};
+  // --theme-color-2-10: #{rgba($theme-color-2, 0.1)};
+  // --theme-color-3-10: #{rgba($theme-color-3, 0.1)};
+  // --theme-color-4-10: #{rgba($theme-color-4, 0.1)};
+  // --theme-color-5-10: #{rgba($theme-color-5, 0.1)};
+  // --theme-color-6-10: #{rgba($theme-color-6, 0.1)};
 
   --primary-color: #{$primary-color};
   --foreground-color: #{$foreground-color};
@@ -6803,55 +6803,55 @@ rating span {
     }
   }
 
-  .theme-color-purplemonster {
-    border: 3px solid $theme-color-purple-monster;
-    background: $theme-color-purple-monster;
-  }
+  // .theme-color-purplemonster {
+  //   border: 3px solid $theme-color-purple-monster;
+  //   background: $theme-color-purple-monster;
+  // }
 
   .theme-color-blueyale {
     border: 3px solid $theme-color-blue-yale;
     background: $theme-color-blue-yale;
   }
 
-  .theme-color-blueolympic {
-    border: 3px solid $theme-color-blue-olympic;
-    background: $theme-color-blue-olympic;
-  }
+  // .theme-color-blueolympic {
+  //   border: 3px solid $theme-color-blue-olympic;
+  //   background: $theme-color-blue-olympic;
+  // }
 
-  .theme-color-bluenavy {
-    border: 3px solid $theme-color-blue-navy;
-    background: $theme-color-blue-navy;
-  }
+  // .theme-color-bluenavy {
+  //   border: 3px solid $theme-color-blue-navy;
+  //   background: $theme-color-blue-navy;
+  // }
 
-  .theme-color-orangecarrot {
-    border: 3px solid $theme-color-orange-carrot;
-    background: $theme-color-orange-carrot;
-  }
+  // .theme-color-orangecarrot {
+  //   border: 3px solid $theme-color-orange-carrot;
+  //   background: $theme-color-orange-carrot;
+  // }
 
-  .theme-color-greenmoss {
-    border: 3px solid $theme-color-green-moss;
-    background: $theme-color-green-moss;
-  }
+  // .theme-color-greenmoss {
+  //   border: 3px solid $theme-color-green-moss;
+  //   background: $theme-color-green-moss;
+  // }
 
-  .theme-color-greenlime {
-    border: 3px solid $theme-color-green-lime;
-    background: $theme-color-green-lime;
-  }
+  // .theme-color-greenlime {
+  //   border: 3px solid $theme-color-green-lime;
+  //   background: $theme-color-green-lime;
+  // }
 
-  .theme-color-redruby {
-    border: 3px solid $theme-color-red-ruby;
-    background: $theme-color-red-ruby;
-  }
+  // .theme-color-redruby {
+  //   border: 3px solid $theme-color-red-ruby;
+  //   background: $theme-color-red-ruby;
+  // }
 
-  .theme-color-greysteel {
-    border: 3px solid $theme-color-grey-steel;
-    background: $theme-color-grey-steel;
-  }
+  // .theme-color-greysteel {
+  //   border: 3px solid $theme-color-grey-steel;
+  //   background: $theme-color-grey-steel;
+  // }
 
-  .theme-color-yellowgranola {
-    border: 3px solid $theme-color-yellow-granola;
-    background: $theme-color-yellow-granola;
-  }
+  // .theme-color-yellowgranola {
+  //   border: 3px solid $theme-color-yellow-granola;
+  //   background: $theme-color-yellow-granola;
+  // }
 
   &.shown {
     transform: translate(0, calc(-50% + 0.5px));
