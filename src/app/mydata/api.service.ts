@@ -22,6 +22,19 @@ export interface IReport {
   creationDate: string;
   isScheduled: boolean;
   status: string;
+  // descriptionColor: string;
+  // scheduledColor: string;
+  // statusColor: string;
+}
+
+export interface IReportTable {
+  report_id: number;
+  reportName: string;
+  report_owner: string;
+  description: string;
+  creationDate: string;
+  isScheduled: boolean;
+  status: string;
   descriptionColor: string;
   scheduledColor: string;
   statusColor: string;

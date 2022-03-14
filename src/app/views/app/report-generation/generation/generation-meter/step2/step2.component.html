@@ -1,17 +1,20 @@
 <div class="card mt-4 mb-4">
+  <!-- Report Filtrartion card -->
   <div class="card-body">
     <h5 class="mb-4">Filters</h5>
+    <!-- Add filter button -->
     <p>
       <button type="button" class="btn btn-outline-primary btn-sm mb-3" (click)="addGroupItem()">
         Add Filter
       </button>
     </p>
-
+    <!-- filters accordion group -->
     <!-- bug when collapse fixed thanks to yassmine -->
     <accordion [closeOthers]="true" [isAnimated]="false">
       <accordion-group class="mb-3" *ngFor="let group of groups" [heading]="group.title" [panelClass]="'border'"
         [isOpen]="true">
-        <div class="d-flex mb-4 mt-1">
+        <!-- filelds dropdown -->
+        <div class="d-flex mb-4 mt-4">
           <span class="w-25 d-block mr-5">
             <h6 class="mb-2">Field</h6>
             <ng-select [items]="fieldList" bindLabel="name" bindValue="id" [(ngModel)]="selectedFieldId">
@@ -22,11 +25,13 @@
             <ng-select [items]="filterList" bindLabel="name" bindValue="id" [(ngModel)]="selectedFilterId">
             </ng-select>
           </span>
+          <!-- Filter Value -->
           <span *ngIf="value" class="w-25 d-block">
             <h6 class="mb-2">value</h6>
             <ng-select [items]="valueList" bindLabel="name" bindValue="id" [(ngModel)]="selectedValueId">
             </ng-select>
           </span>
+          <!-- Filter Date -->
           <span *ngIf="date" class="w-25 mr-4 d-block">
             <h6 class="mb-2">Date</h6>
             <div class="form-group mb-3">
@@ -42,14 +47,12 @@
             </timepicker>
           </span>
         </div>
+        <!-- Delete Filter button -->
         <div class="d-flex mb-1 mt-3 p-1 flex-row-reverse">
           <button style="font-size: small;" type="button" class="btn btn-danger mb-1"
             (click)="deleteGroupItem(group.id)">Delete</button>
         </div>
       </accordion-group>
     </accordion>
-
-
-
   </div>
 </div>

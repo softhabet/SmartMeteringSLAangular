@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BsLocaleService} from 'ngx-bootstrap';
 import { defineLocale } from 'ngx-bootstrap/chronos';
-import { esLocale } from 'ngx-bootstrap/locale';
+import { frLocale } from 'ngx-bootstrap/locale';
 
 @Component({
   selector: 'app-step3',
@@ -15,7 +15,8 @@ export class Step3Component implements OnInit {
   bsValue = new Date();
   bsRangeValue: Date[];
   maxDate = new Date();
-  mouseTime = new Date();
+  mouseTime1 = new Date();
+  mouseTime2 = new Date();
 
   bsInlineValue = new Date();
 
@@ -27,8 +28,9 @@ export class Step3Component implements OnInit {
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
 
-    defineLocale('es', esLocale);
-    // this.localeService.use('es');
+    //defined frensh local date
+    defineLocale('fr', frLocale);
+    this.localeService.use('fr');
    }
 
   ngOnInit(): void {

@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
-import { ApiService, IReportInstance } from 'src/app/mydata/api.service';
+import { ApiService, IReport, IReportTable } from 'src/app/mydata/api.service';
 import reports from 'src/app/mydata/reports';
 import { ContextMenuComponent } from 'ngx-contextmenu';
-import { IReport } from 'src/app/mydata/api.service';
 
 @Component({
   selector: 'app-reports',
@@ -19,7 +18,7 @@ export class ReportsComponent implements OnInit {
   displayMode = 'list';
   selectAllState = '';
   selected: IReport[] = [];
-  data: IReport[] = [];
+  data: IReportTable[] = [];
   reports: IReport[] = [];
   currentPage = 1;
   itemsPerPage = 10;
@@ -45,8 +44,27 @@ export class ReportsComponent implements OnInit {
     this.search = search;
     this.orderBy = orderBy;
 
-    this.reports = reports.slice(0, 5).map(({ report_id, reportName, report_owner, description, creationDate, isScheduled, status, descriptionColor, scheduledColor, statusColor}) => ({ report_id, reportName, report_owner, description, creationDate, isScheduled, status, descriptionColor, scheduledColor, statusColor}));
-    this.data = reports.slice(pageSize * (currentPage-1), pageSize * currentPage).map(({ report_id, reportName, report_owner, description, creationDate, isScheduled, status, descriptionColor, scheduledColor, statusColor}) => ({ report_id, reportName, report_owner, description, creationDate, isScheduled, status, descriptionColor, scheduledColor, statusColor}));
+    this.reports = reports.slice(0, 10).map(({ report_id, reportName, report_owner, description, creationDate, isScheduled, status}) => ({ report_id, reportName, report_owner, description, creationDate, isScheduled, status}));
+    this.data = reports.slice(pageSize * (currentPage-1), pageSize * currentPage).map(({ report_id, reportName, report_owner, description, creationDate, isScheduled, status}) => ({ report_id, reportName, report_owner, description, creationDate, isScheduled, status, descriptionColor : '', scheduledColor : '', statusColor : ''}));
+    this.data.forEach(r=>{
+      if (r.description == "Meter"){
+        r.descriptionColor = 'primary'
+      } else if (r.description === "Event") {
+        r.descriptionColor = 'secondary'
+      };
+      if (r.isScheduled == true){
+        r.scheduledColor = 'success'
+      } else if (r.isScheduled == false) {
+        r.scheduledColor = 'danger'
+      };
+      if (r.status == "Active"){
+        r.statusColor = 'success'
+      } else if (r.status == "Finished") {
+        r.statusColor = 'danger'
+      }else if (r.status == "Not Started") {
+        r.statusColor = 'warning'
+      };
+    });
     this.totalItem = this.reports.length;
     // this.totalPage = pageSize;
 
