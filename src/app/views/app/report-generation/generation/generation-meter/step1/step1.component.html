@@ -8,7 +8,7 @@
         <h6 class="mb-2">{{'reports-generation.report-name' | translate}}</h6>
         <div class="input-group">
           <input type="text" class="form-control" placeholder="{{'reports-generation.report-name' | translate}}"
-            aria-label="report-name" aria-describedby="basic-addon1">
+                 aria-label="report-name" aria-describedby="basic-addon1">
         </div>
       </span>
 
@@ -16,7 +16,7 @@
         <h6 class="mb-2">{{'reports-generation.report-description' | translate}}</h6>
         <div class="input-group">
           <input type="text" class="form-control" placeholder="{{'reports-generation.report-description' | translate}}"
-            aria-label="report-description" aria-describedby="basic-addon2">
+                 aria-label="report-description" aria-describedby="basic-addon2">
         </div>
       </span>
 
@@ -24,7 +24,7 @@
         <h6 class="mb-2">{{'reports-generation.owner' | translate}}</h6>
         <div class="input-group">
           <input type="text" class="form-control" placeholder="{{'reports-generation.owner' | translate}}"
-            aria-label="report-owner" aria-describedby="basic-addon3" disabled>
+                 aria-label="report-owner" aria-describedby="basic-addon3" disabled>
         </div>
       </span>
     </div>
@@ -55,19 +55,19 @@
 
     <table class="mb-2 ml-2 mr-2" style="table-layout: fixed; width: 100%;">
       <tbody>
-        <tr>
-          <td
-            style="text-align: left; vertical-align:middle; border-radius: 10px; padding:30px; background-color: #f0eeee; border-right: 10px solid white;">
+      <tr>
+        <td
+          style="text-align: left; vertical-align:middle; border-radius: 10px; padding:30px; background-color: #f0eeee; border-right: 10px solid white;">
             <span class="d-block mr-5">
               <h6 class="mb-2">Prefix</h6>
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Prefix" aria-label="prefix"
-                  aria-describedby="basic-addon1">
+                       aria-describedby="basic-addon1">
               </div>
             </span>
-          </td>
-          <td
-            style="text-align: left; padding-top:0px; padding-bottom:0; vertical-align:middle; padding:30px; background-color: #f0eeee; border-radius: 10px; border-left: 10px solid white;">
+        </td>
+        <td
+          style="text-align: left; padding-top:0px; padding-bottom:0; vertical-align:middle; padding:30px; background-color: #f0eeee; border-radius: 10px; border-left: 10px solid white;">
             <span class="d-block mr-5">
               <h6 class="mb-2">Timestamp</h6>
               <select class="custom-select" id="inputGroupSelect03">
@@ -76,9 +76,9 @@
                 <option value="3">MMddyyyyHHmm</option>
               </select>
             </span>
-          </td>
-          <td
-            style="text-align: left; padding-top:0px; padding-bottom:0; vertical-align:middle; padding:30px; background-color: #f0eeee; border-radius: 10px; border-left: 10px solid white;">
+        </td>
+        <td
+          style="text-align: left; padding-top:0px; padding-bottom:0; vertical-align:middle; padding:30px; background-color: #f0eeee; border-radius: 10px; border-left: 10px solid white;">
             <span class="d-block mr-5">
               <h6 class="mb-2">RandomId</h6>
               <p style="color:#8f8f8f; font-size: 14px; padding: 0; line-height: 1.6; margin:0; ">
@@ -86,8 +86,8 @@
                 To randomize the report name
               </p>
             </span>
-          </td>
-        </tr>
+        </td>
+      </tr>
       </tbody>
     </table>
   </accordion-group>
@@ -119,22 +119,26 @@
 
     <table class="table">
       <thead class="thead-light">
-        <tr>
-          <th style="font-size: medium;" class="col-md-6 text-center" scope="col">Available columns</th>
-          <th style="font-size: medium;" class="col-md-6 text-center" scope="col">Selected columns</th>
-        </tr>
+      <tr>
+        <th style="font-size: medium;" class="col-md-6 text-center" scope="col">Available columns</th>
+        <th style="font-size: medium;" class="col-md-6 text-center" scope="col">Selected columns</th>
+      </tr>
       </thead>
     </table>
 
     <div class="dndPlaceholder col-md-12" #placeholder></div>
     <div class="row">
       <div class="col-md-6 text-center mt-1" [dndList] [dndPlaceholder]="placeholder" [dndModel]="simpleList[0]">
-        <div *ngFor="let item of simpleList[0]" style="font-size: medium;" class="col-md-12 mb-2" [dndType]="'item'"
-          (dndMoved)="removeItem(item, simpleList[0])" [dndDraggable] [dndObject]="item">{{item.name}}</div>
+        <div *ngFor="let item of simpleList[0]" style="font-size: medium; border-width:2px !important;"
+             class="border col-md-12 mb-2 p-2"
+             [dndType]="'item'"
+             (dndMoved)="removeItem(item, simpleList[0])" [dndDraggable] [dndObject]="item">{{item.name}}</div>
       </div>
       <div class="col-md-6 text-center mt-1" [dndList] [dndModel]="simpleList[1]" [dndPlaceholder]="placeholder">
-        <div *ngFor="let item of simpleList[1]" style="font-size: medium;" class="col-md-12 mb-2" [dndType]="'item'"
-          (dndMoved)="removeItem(item, simpleList[1])" [dndDraggable] [dndObject]="item">{{item.name}}</div>
+        <div *ngFor="let item of simpleList[1]" style="font-size: medium; border-width:2px !important;"
+             class="border col-md-12 mb-2 p-2"
+             [dndType]="'item'"
+             (dndMoved)="removeItem(item, simpleList[1])" [dndDraggable] [dndObject]="item">{{item.name}}</div>
       </div>
     </div>
 

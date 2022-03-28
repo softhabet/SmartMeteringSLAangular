@@ -8,7 +8,7 @@ const routes: Routes = [
     {
       path: '', component: GenerationComponent,
         children : [
-          { path: '', redirectTo:'meter', pathMatch: 'full' },
+          { path: '', redirectTo: 'meter', pathMatch: 'full' },
           { path: 'meter', component: GenerationMeterComponent },
           { path: 'event', component: GenerationEventComponent },
         ]

@@ -3,32 +3,37 @@
   <div class="card-body">
     <h5 class="mb-4">Filters</h5>
     <!-- Add filter button -->
-    <p>
-      <button type="button" class="btn btn-outline-primary btn-sm mb-3" (click)="addGroupItem()">
-        Add Filter
-      </button>
-    </p>
+    <!--    <p>-->
+    <!--      <button type="button" class="btn btn-outline-primary btn-sm mb-3" (click)="addGroupItem()">-->
+    <!--        Add Filter-->
+    <!--      </button>-->
+    <!--    </p>-->
     <!-- filters accordion group -->
     <!-- bug when collapse fixed thanks to yassmine -->
-    <accordion [closeOthers]="true" [isAnimated]="false">
-      <accordion-group class="mb-3" *ngFor="let group of groups" [heading]="group.title" [panelClass]="'border'"
-        [isOpen]="true">
-        <!-- filelds dropdown -->
-        <div class="d-flex mb-4 mt-4">
+    <accordion [closeOthers]="false" [isAnimated]="false">
+      <!--      <accordion-group class="mb-3" *ngFor="let group of groups" [heading]="group.title" [panelClass]="'border'"-->
+      <!--                       [isOpen]="true">-->
+      <accordion-group class="mb-3" *ngFor="let group of groups" [panelClass]="'border'"
+                       [isOpen]="true">
+        <!-- filelds dropdown changed m -->
+        <div class="d-flex">
           <span class="w-25 d-block mr-5">
             <h6 class="mb-2">Field</h6>
-            <ng-select [items]="fieldList" bindLabel="name" bindValue="id" [(ngModel)]="selectedFieldId">
+            <ng-select [items]="fieldsLists[group.id]" bindLabel="name" bindValue="id"
+                       [(ngModel)]="selectedFieldIds[group.id]" (click)="change($event, selectedFieldIds[group.id])">
             </ng-select>
           </span>
           <span class="w-25 d-block mr-5">
-            <h6 class="mb-2">Filter</h6>
-            <ng-select [items]="filterList" bindLabel="name" bindValue="id" [(ngModel)]="selectedFilterId">
+            <h6 class="mb-2">Operator</h6>
+            <ng-select [items]="operatorsLists[group.id]" bindLabel="name" bindValue="id"
+                       [(ngModel)]="selectedOperatorIds[group.id]">
             </ng-select>
           </span>
           <!-- Filter Value -->
           <span *ngIf="value" class="w-25 d-block">
             <h6 class="mb-2">value</h6>
-            <ng-select [items]="valueList" bindLabel="name" bindValue="id" [(ngModel)]="selectedValueId">
+            <ng-select [items]="valuesLists[group.id]" bindLabel="name" bindValue="id"
+                       [(ngModel)]="selectedValueIds[group.id]">
             </ng-select>
           </span>
           <!-- Filter Date -->
@@ -36,21 +41,33 @@
             <h6 class="mb-2">Date</h6>
             <div class="form-group mb-3">
               <input class="form-control" #drp="bsDaterangepicker" bsDaterangepicker [container]="'html'"
-                [(ngModel)]="bsRangeValue">
+                     [(ngModel)]="bsRangeValues[group.id]">
             </div>
           </span>
-          <span *ngIf="date" style="transform: translate(0, 44%);" class="mr-3 d-block">
+          <span *ngIf="time" style="transform: translate(0, 44%);" class="mr-3 d-block">
             <h6 class=" text-nowrap mb-2">Time :</h6>
           </span>
-          <span *ngIf="date" style="transform: translate(0, 17%);" class="w-25 d-inline-block">
-            <timepicker class="timepicker" [mousewheel]="true" [(ngModel)]="mouseTime" [showMeridian]="false">
+          <span *ngIf="time" style="transform: translate(0, 17%);" class="w-25 d-inline-block">
+            <timepicker class="timepicker" [mousewheel]="true" [(ngModel)]="mouseTimes[group.id]"
+                        [showMeridian]="false">
             </timepicker>
+          </span>
+          <span class="d-inline-block">
+            <button style="font-size: 28px; color: #145388"
+                    class="simple-icon-plus btn btn-empty ml-2 mt-3" type="button" (click)="addGroupItem()"></button>
           </span>
         </div>
         <!-- Delete Filter button -->
-        <div class="d-flex mb-1 mt-3 p-1 flex-row-reverse">
-          <button style="font-size: small;" type="button" class="btn btn-danger mb-1"
-            (click)="deleteGroupItem(group.id)">Delete</button>
+        <div class="d-flex flex-row-reverse mt-1">
+          <button style="font-size: small;" type="button" class="btn btn-danger ml-1"
+                  (click)="deleteGroupItem(group.id)">Delete
+          </button>
+          <app-state-button btnClass="btn btn-success" [currentState]="stateButtonCurrentState"
+                            [message]="stateButtonMessage" [showMessage]="stateButtonShowMessage"
+                            (click)="onStateButtonClick($event)"
+                            [isDisabled]="stateButtonDisabled">
+            save
+          </app-state-button>
         </div>
       </accordion-group>
     </accordion>

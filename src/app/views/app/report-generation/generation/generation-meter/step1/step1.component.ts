@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-step1',
@@ -6,30 +6,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class Step1Component implements OnInit {
 
-  constructor() { }
+  constructor() {
+  }
 
   public simpleList = [
     [
-      { 'name': 'status' },
-      { 'name': 'pre_active_meter_date' },
-      { 'name': 'meter_active_date' },
-      { 'name': 'version' },
-      { 'name': 'meter_discovered' },
-      { 'name': 'meter_type' }
+      {name: 'status'},
+      {name: 'pre_active_meter_date'},
+      {name: 'meter_active_date'},
+      {name: 'version'},
+      {name: 'meter_discovered'},
+      {name: 'meter_type'}
     ],
     [
-      { 'name': 'dc_number' }
+      {name: 'dc_number'}
     ]
   ];
 
   public fieldList = [
-    { 'id': 1, 'name': 'status' },
-    { 'id': 2, 'name': 'pre_active_meter_date' },
-    { 'id': 3, 'name': 'meter_active_date' },
-    { 'id': 4, 'name': 'version' },
-    { 'id': 5, 'name': 'meter_discovered' },
-    { 'id': 6, 'name': 'meter_type' }
-  ] ;
+    {id: 1, name: 'status'},
+    {id: 2, name: 'pre_active_meter_date'},
+    {id: 3, name: 'meter_active_date'},
+    {id: 4, name: 'version'},
+    {id: 5, name: 'meter_discovered'},
+    {id: 6, name: 'meter_type'}
+  ];
 
   selectedFieldId = 1;
 
