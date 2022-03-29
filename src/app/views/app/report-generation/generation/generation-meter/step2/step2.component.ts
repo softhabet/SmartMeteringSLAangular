@@ -4,6 +4,7 @@ import {BsLocaleService} from 'ngx-bootstrap';
 import {defineLocale} from 'ngx-bootstrap/chronos';
 import {frLocale} from 'ngx-bootstrap/locale';
 import {templateJitUrl} from '@angular/compiler';
+import { tr } from 'date-fns/locale';
 
 @Component({
   selector: 'app-step2',
@@ -97,8 +98,11 @@ export class Step2Component implements OnInit {
     this.selectedValueIds.push(0);
   }
 
+  lastElement(id: number): boolean {
+    return id === this.groups[this.groups.length - 1].id;
+  }
+
   deleteGroupItem(id: number): void {
-    console.log(this.mouseTimes[id]);
     this.groups.splice(id, 1);
     this.fieldsLists.splice(id, 1);
     this.operatorsLists.splice(id, 1);
@@ -108,6 +112,18 @@ export class Step2Component implements OnInit {
     this.selectedFieldIds.splice(id, 1);
     this.selectedOperatorIds.splice(id, 1);
     this.selectedValueIds.splice(id, 1);
+  }
+
+  deleteGroup(): void {
+    this.groups = [];
+  }
+
+  emptyGroup(): boolean {
+    if (this.groups.length === 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   constructor(private localeService: BsLocaleService) {

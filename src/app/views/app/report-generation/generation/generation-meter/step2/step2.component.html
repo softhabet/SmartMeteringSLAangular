@@ -3,45 +3,46 @@
   <div class="card-body">
     <h5 class="mb-4">Filters</h5>
     <!-- Add filter button -->
-    <!--    <p>-->
-    <!--      <button type="button" class="btn btn-outline-primary btn-sm mb-3" (click)="addGroupItem()">-->
-    <!--        Add Filter-->
-    <!--      </button>-->
-    <!--    </p>-->
+    <div class="d-flex ml-2">
+      <button type="button" class="btn btn-outline-primary btn-sm mb-3 mr-2" (click)="addGroupItem()">
+        Create new filter
+      </button>
+      <button type="button" class="btn btn-outline-primary btn-sm mb-3">
+        Select existing filter
+      </button>
+    </div>
     <!-- filters accordion group -->
-    <!-- bug when collapse fixed thanks to yassmine -->
-    <accordion [closeOthers]="false" [isAnimated]="false">
-      <!--      <accordion-group class="mb-3" *ngFor="let group of groups" [heading]="group.title" [panelClass]="'border'"-->
-      <!--                       [isOpen]="true">-->
-      <accordion-group class="mb-3" *ngFor="let group of groups" [panelClass]="'border'"
-                       [isOpen]="true">
+    <div class="card-body">
+      <div class="mb-3" *ngFor="let group of groups">
         <!-- filelds dropdown changed m -->
         <div class="d-flex">
           <span class="w-25 d-block mr-5">
             <h6 class="mb-2">Field</h6>
             <ng-select [items]="fieldsLists[group.id]" bindLabel="name" bindValue="id"
-                       [(ngModel)]="selectedFieldIds[group.id]" (click)="change($event, selectedFieldIds[group.id])">
+              [(ngModel)]="selectedFieldIds[group.id]" (click)="change($event, selectedFieldIds[group.id])">
             </ng-select>
           </span>
           <span class="w-25 d-block mr-5">
             <h6 class="mb-2">Operator</h6>
             <ng-select [items]="operatorsLists[group.id]" bindLabel="name" bindValue="id"
-                       [(ngModel)]="selectedOperatorIds[group.id]">
+              [(ngModel)]="selectedOperatorIds[group.id]">
             </ng-select>
           </span>
           <!-- Filter Value -->
           <span *ngIf="value" class="w-25 d-block">
             <h6 class="mb-2">value</h6>
             <ng-select [items]="valuesLists[group.id]" bindLabel="name" bindValue="id"
-                       [(ngModel)]="selectedValueIds[group.id]">
+              [(ngModel)]="selectedValueIds[group.id]">
             </ng-select>
           </span>
           <!-- Filter Date -->
           <span *ngIf="date" class="w-25 mr-4 d-block">
             <h6 class="mb-2">Date</h6>
             <div class="form-group mb-3">
-              <input class="form-control" #drp="bsDaterangepicker" bsDaterangepicker [container]="'html'"
-                     [(ngModel)]="bsRangeValues[group.id]">
+              <!-- <input class="form-control" #drp="bsDaterangepicker" bsDaterangepicker [container]="'html'"
+                [(ngModel)]="bsRangeValues[group.id]"> -->
+              <!-- remove [(ngModel)]="bsRangeValues[group.id]" to remove default value -->
+              <input class="form-control" #drp="bsDaterangepicker" bsDaterangepicker [container]="'html'">
             </div>
           </span>
           <span *ngIf="time" style="transform: translate(0, 44%);" class="mr-3 d-block">
@@ -49,27 +50,34 @@
           </span>
           <span *ngIf="time" style="transform: translate(0, 17%);" class="w-25 d-inline-block">
             <timepicker class="timepicker" [mousewheel]="true" [(ngModel)]="mouseTimes[group.id]"
-                        [showMeridian]="false">
+              [showMeridian]="false">
             </timepicker>
           </span>
-          <span class="d-inline-block">
-            <button style="font-size: 28px; color: #145388"
-                    class="simple-icon-plus btn btn-empty ml-2 mt-3" type="button" (click)="addGroupItem()"></button>
+          <!-- add Filter button -->
+          <span *ngIf="lastElement(group.id)" class="d-inline-block">
+            <button style="font-size: 28px; color: #145388" class="simple-icon-plus btn btn-empty ml-2 mt-3"
+              type="button" (click)="addGroupItem()"></button>
           </span>
         </div>
-        <!-- Delete Filter button -->
-        <div class="d-flex flex-row-reverse mt-1">
-          <button style="font-size: small;" type="button" class="btn btn-danger ml-1"
-                  (click)="deleteGroupItem(group.id)">Delete
-          </button>
-          <app-state-button btnClass="btn btn-success" [currentState]="stateButtonCurrentState"
-                            [message]="stateButtonMessage" [showMessage]="stateButtonShowMessage"
-                            (click)="onStateButtonClick($event)"
-                            [isDisabled]="stateButtonDisabled">
-            save
-          </app-state-button>
-        </div>
-      </accordion-group>
-    </accordion>
+      </div>
+      <br>
+      <!-- Delete Save Filter button -->
+      <div class="d-flex flex-row-reverse">
+        <button *ngIf="emptyGroup() === false" style="font-size: small;" type="button" class="btn btn-danger ml-1"
+          (click)="deleteGroup()">Delete Filters
+        </button>
+        <button *ngIf="emptyGroup() === true" style="font-size: small;" type="button" class="btn btn-danger ml-1"
+          disabled>Delete Filters
+        </button>
+        <app-state-button *ngIf="emptyGroup() === false" btnClass="btn btn-success"
+          [currentState]="stateButtonCurrentState" [message]="stateButtonMessage" [showMessage]="stateButtonShowMessage"
+          (click)="onStateButtonClick($event)" [isDisabled]="stateButtonDisabled">
+          Save Filters
+        </app-state-button>
+        <button *ngIf="emptyGroup() === true" style="font-size: small;" type="button" class="btn btn-success"
+          disabled>Save Filters
+        </button>
+      </div>
+    </div>
   </div>
 </div>
