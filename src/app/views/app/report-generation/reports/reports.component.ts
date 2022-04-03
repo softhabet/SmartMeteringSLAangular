@@ -2,12 +2,33 @@ import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/cor
 import { ApiService, IReport, IReportTable } from 'src/app/mydata/api.service';
 import reports from 'src/app/mydata/reports';
 import { ContextMenuComponent } from 'ngx-contextmenu';
+import {
+  FormGroup,
+  FormControl,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html'
 })
 export class ReportsComponent implements OnInit {
+  reportForm: FormGroup;
+  get searchName() {
+    return this.reportForm.get('searchName');
+  }
+  get searchOwner() {
+    return this.reportForm.get('searchOwner');
+  }
+  get scheduled() {
+    return this.reportForm.get('scheduled');
+  }
+  get status() {
+    return this.reportForm.get('status');
+  }
+  state = false;
 
   @Output() searchKeyUp: EventEmitter<any> = new EventEmitter();
   stateButtonCurrentState = '';
@@ -31,10 +52,26 @@ export class ReportsComponent implements OnInit {
 
   // @ViewChild('search') search: any;
   @ViewChild('basicMenu') public basicMenu: ContextMenuComponent;
-  constructor(private apiService: ApiService) { }
+  constructor(fb: FormBuilder, private apiService: ApiService, private router: Router) {
+    const reportControls = {
+      searchName: new FormControl(''),
+      searchOwner: new FormControl(''),
+      scheduled: new FormControl(''),
+      status: new FormControl('')
+    };
+    this.reportForm = fb.group(reportControls);
+   }
 
   ngOnInit(): void {
     this.loadData(this.itemsPerPage, this.currentPage, this.search, this.orderBy);
+  }
+
+  onChangeScheduled(value) {
+    if (value === 'false') {
+      this.state = true;
+    } else {
+      this.state = false;
+    }
   }
 
 
@@ -85,13 +122,18 @@ export class ReportsComponent implements OnInit {
     // );
   }
 
+  onSubmit() {
+    console.log('submitted');
+    console.log(this.reportForm.value);
+  }
+
   onStateButtonClick(event) {
     if (this.stateButtonDisabled) {
       return;
     }
     this.stateButtonDisabled = true;
     this.stateButtonCurrentState = 'show-spinner';
-    // this.SearchKeyUp(event);
+    this.onSubmit();
     setTimeout(() => {
       this.stateButtonCurrentState = 'show-success';
       setTimeout(() => {
@@ -117,7 +159,7 @@ export class ReportsComponent implements OnInit {
   }
 
   onContextMenuClick(action: string, event) {
-    console.log('onContextMenuClick -> action :  ', action, ', item.row :', event.title);
+    console.log('onContextMenuClick -> action :  ', action, ', item.row :', event.reportName);
   }
 
 }

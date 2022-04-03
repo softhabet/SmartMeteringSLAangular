@@ -4,69 +4,87 @@
     <app-breadcrumb-reports></app-breadcrumb-reports>
     <div class="separator mb-5"></div>
 
-    <!-- search-reports card -->
+    <!-- search-reports form card -->
     <div class="card mb-4">
       <div class="card-body">
+        <!-- search reports -->
         <h3 class="mb-4">{{ 'reports-generation.search-reports' | translate}}</h3>
-        <div class="d-flex">
-          <span class="d-block mr-3">
-            <h6 class="mb-2">{{'reports-generation.report-name' | translate}}</h6>
-            <div class="d-inline-block mt-1">
-              <div class="search-md d-inline-block float-md-left mr-1 mb-1 align-top">
-                <input class="form-control" placeholder="Search">
+        <!-- form begin -->
+        <form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+          <div class="d-flex">
+            <!-- search report name -->
+            <div class="form-group d-block mr-3">
+              <h6 class="mb-2">{{'reports-generation.report-name' | translate}}</h6>
+              <div class="d-inline-block mt-1">
+                <div class="search-md d-inline-block float-md-left mr-1 mb-1 align-top">
+                  <input class="form-control" formControlName="searchName" placeholder="SearchName">
+                </div>
               </div>
             </div>
-          </span>
-          <span class="d-block mr-3">
-            <h6 class="mb-2">{{'reports-generation.owner' | translate}}</h6>
-            <div class="d-inline-block mt-1">
-              <div class="search-md d-inline-block float-md-left mr-1 mb-1 align-top">
-                <input class="form-control" placeholder="Search">
+            <!-- search report owner -->
+            <div class="form-group d-block mr-3">
+              <h6 class="mb-2">{{'reports-generation.owner' | translate}}</h6>
+              <div class="d-inline-block mt-1">
+                <div class="search-md d-inline-block float-md-left mr-1 mb-1 align-top">
+                  <input class="form-control" formControlName="searchOwner" placeholder="SearchOwner">
+                </div>
               </div>
             </div>
-          </span>
-          <span class="d-block ml-3 mr-3 flex-grow-1">
-            <h6 class="mb-2">{{'reports-generation.is-scheduled' | translate}}</h6>
-            <div class="flex-grow-1">
-              <div class="input-group mb-3">
+            <!-- select scheduled -->
+            <div class="form-group d-block ml-3 mr-3 flex-grow-1">
+              <h6 class="mb-2">{{'reports-generation.is-scheduled' | translate}}</h6>
+              <!-- <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01">{{'reports-generation.is-scheduled' |
+                  <label class="input-group-text" for="inputGroupSelectScheduled">{{'reports-generation.is-scheduled'
+                    |
                     translate}}</label>
                 </div>
-                <select class="custom-select" id="inputGroupSelect01">
+                <select class="custom-select" id="inputGroupSelectScheduled">
                   <option selected>Choose... </option>
                   <option value="1">Yes</option>
                   <option value="2">No</option>
                 </select>
-              </div>
+              </div> -->
+              <select (change)="onChangeScheduled($event.target.value)" id=" scheduled" class="form-control mb-3"
+                formControlName="scheduled">
+                <option selected>{{ 'input-groups.choose' | translate }}</option>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
             </div>
-          </span>
-          <span class="d-block ml-3 mr-3 flex-grow-1">
-            <h6 class="mb-2">{{'reports-generation.status' | translate}}</h6>
-            <div class="flex-grow-1">
-              <div class="input-group">
+            <!-- select status disable if scheduled false or not selected -->
+            <div class="form-group d-block ml-3 mr-3 flex-grow-1">
+              <h6 class="mb-2">{{'reports-generation.status' | translate}}</h6>
+              <!-- <div class="input-group">
                 <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect02">{{'reports-generation.status' |
+                  <label class="input-group-text" for="inputGroupSelectStatus">{{'reports-generation.status' |
                     translate}}</label>
                 </div>
-                <select class="custom-select" id="inputGroupSelect02">
+                <select class="custom-select" id="inputGroupSelectStatus">
                   <option selected>Choose...</option>
                   <option value="1">Active</option>
                   <option value="2">Finished</option>
                   <option value="3">Not Started</option>
                 </select>
-              </div>
+              </div> -->
+              <select [attr.disabled]="state ? '' : null" id="status" class="form-control mb-3"
+                formControlName="status">
+                <option selected>{{ 'input-groups.choose' | translate }}</option>
+                <option value="ACTIVE">Active</option>
+                <option value="FINSHED">Finished</option>
+                <option value="NOT_STARTED">Not Started</option>
+              </select>
             </div>
-          </span>
-        </div>
-        <div class="d-flex justify-content-end mt-3 mr-2 mb-1">
-          <app-state-button btnClass="btn btn-primary" [currentState]="stateButtonCurrentState"
-                            [message]="stateButtonMessage" [showMessage]="stateButtonShowMessage"
-                            (click)="onStateButtonClick($event)"
-                            [isDisabled]="stateButtonDisabled">
-            {{'reports-generation.search' |translate}}
-          </app-state-button>
-        </div>
+          </div>
+          <!-- submit button -->
+          <div class="d-flex justify-content-end mt-3 mr-2 mb-1">
+            <app-state-button btnClass="btn btn-primary" [currentState]="stateButtonCurrentState"
+              [message]="stateButtonMessage" [showMessage]="stateButtonShowMessage" [isDisabled]="stateButtonDisabled"
+              (click)="onStateButtonClick($event)">
+              {{'reports-generation.search' |translate}}
+            </app-state-button>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -76,19 +94,19 @@
         <h3>{{'reports-generation.reports-list' | translate}}</h3>
 
         <app-reports-list-page-header (itemsPerPageChange)="itemsPerPageChange($event)" [itemOptionsPerPage]="[5,10,20]"
-                                      [itemsPerPage]="itemsPerPage">
+          [itemsPerPage]="itemsPerPage">
         </app-reports-list-page-header>
 
         <div class="separator mt-3 mb-5"></div>
 
         <context-menu #basicMenu>
-          <ng-template contextMenuItem let-item (execute)="onContextMenuClick('move-to-archive',$event.item)">
+          <ng-template contextMenuItem let-item (execute)="onContextMenuClick('edit',$event.item)">
             <i class="iconsminds-file-edit mr-1"></i> <span>Edit</span>
           </ng-template>
-          <ng-template contextMenuItem let-item (execute)="onContextMenuClick('move-to-archive',$event.item)">
+          <ng-template contextMenuItem let-item (execute)="onContextMenuClick('details',$event.item)">
             <i class="iconsminds-magnifi-glass mr-1"></i> <span>Details</span>
           </ng-template>
-          <ng-template contextMenuItem let-item (execute)="onContextMenuClick('move-to-archive',$event.item)">
+          <ng-template contextMenuItem let-item (execute)="onContextMenuClick('instances',$event.item)">
             <i class="iconsminds-files mr-1"></i> <span>Report Instances</span>
           </ng-template>
           <ng-template contextMenuItem let-item (execute)="onContextMenuClick('delete',$event.item)">
@@ -101,36 +119,35 @@
           <div class="card-body">
             <table class="table table-hover">
               <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Report Name</th>
-                <th scope="col">Owner</th>
-                <th scope="col">Description</th>
-                <th scope="col">Creation Date</th>
-                <th scope="col">Scheduled</th>
-                <th scope="col">Status</th>
-              </tr>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Report Name</th>
+                  <th scope="col">Owner</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Creation Date</th>
+                  <th scope="col">Scheduled</th>
+                  <th scope="col">Status</th>
+                </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let r of data" [contextMenu]="basicMenu" [contextMenuSubject]="r">
-                <td>{{r.report_id}}</td>
-                <td>{{r.reportName}}</td>
-                <td>{{r.report_owner}}</td>
-                <td><span [class]="'badge badge-pill badge-'+ r.descriptionColor">{{r.description}}</span></td>
-                <td>{{r.creationDate}}</td>
-                <td><span [class]="'badge badge-pill badge-'+ r.scheduledColor">{{r.isScheduled}}</span></td>
-                <td><span [class]="'badge badge-pill badge-'+ r.statusColor">{{r.status}}</span></td>
-                <td class="iconsminds-mouse-3"></td>
-              </tr>
+                <tr *ngFor="let r of data" [contextMenu]="basicMenu" [contextMenuSubject]="r">
+                  <td>{{r.report_id}}</td>
+                  <td>{{r.reportName}}</td>
+                  <td>{{r.report_owner}}</td>
+                  <td><span [class]="'badge badge-pill badge-'+ r.descriptionColor">{{r.description}}</span></td>
+                  <td>{{r.creationDate}}</td>
+                  <td><span [class]="'badge badge-pill badge-'+ r.scheduledColor">{{r.isScheduled}}</span></td>
+                  <td><span [class]="'badge badge-pill badge-'+ r.statusColor">{{r.status}}</span></td>
+                  <td class="iconsminds-mouse-3"></td>
+                </tr>
               </tbody>
             </table>
           </div>
 
           <div class="col-12">
             <pagination [totalItems]="totalItem" [itemsPerPage]="itemsPerPage" [rotate]="true" [maxSize]="5"
-                        [(ngModel)]="currentPage" (pageChanged)="pageChanged($event)" class="justify-content-center"
-                        previousText="<i class='simple-icon-arrow-left'></i>"
-                        nextText="<i class='simple-icon-arrow-right'></i>">
+              [(ngModel)]="currentPage" (pageChanged)="pageChanged($event)" class="justify-content-center"
+              previousText="<i class='simple-icon-arrow-left'></i>" nextText="<i class='simple-icon-arrow-right'></i>">
             </pagination>
           </div>
 
