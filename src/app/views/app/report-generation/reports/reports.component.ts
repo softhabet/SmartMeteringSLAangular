@@ -29,11 +29,6 @@ export class ReportsComponent implements OnInit {
   }
   // if true : is scheduled
   isScheduled = false;
-  selectedScheduled = '';
-  selectedStatus = '';
-  selectedName = '';
-  selectedOwner = '';
-
 
   @Output() searchKeyUp: EventEmitter<any> = new EventEmitter();
   stateButtonCurrentState = '';
@@ -115,10 +110,10 @@ export class ReportsComponent implements OnInit {
     this.reportForm.value.scheduled = '';
     this.reportForm.value.status = '';
     this.isScheduled = false;
-    this.selectedScheduled = '';
-    this.selectedStatus = '';
-    this.selectedName = '';
-    this.selectedOwner = '';
+    this.reportForm.get('scheduled').setValue('');
+    this.reportForm.get('status').setValue('');
+    this.reportForm.get('searchName').setValue('');
+    this.reportForm.get('searchOwner').setValue('');
     this.itemsPerPage = 10;
     this.currentPage = 0;
     this.loadData(this.itemsPerPage, this.currentPage);

@@ -17,8 +17,7 @@
               <h6 class="mb-2">{{'reports-generation.report-name' | translate}}</h6>
               <div class="d-inline-block mt-1">
                 <div class="search-md d-inline-block float-md-left mr-1 mb-1 align-top flex-grow-1">
-                  <input class="form-control" formControlName="searchName" placeholder="SearchName"
-                    [(ngModel)]='selectedName'>
+                  <input class="form-control" formControlName="searchName" placeholder="SearchName">
                 </div>
               </div>
             </div>
@@ -27,8 +26,7 @@
               <h6 class="mb-2">{{'reports-generation.owner' | translate}}</h6>
               <div class="d-inline-block mt-1">
                 <div class="search-md d-inline-block float-md-left mr-1 mb-1 align-top">
-                  <input class="form-control" formControlName="searchOwner" placeholder="SearchOwner"
-                    [(ngModel)]='selectedOwner'>
+                  <input class="form-control" formControlName="searchOwner" placeholder="SearchOwner">
                 </div>
               </div>
             </div>
@@ -36,7 +34,7 @@
             <div class="form-group d-block ml-3 mr-3 w-25">
               <h6 class="mb-2">{{'reports-generation.is-scheduled' | translate}}</h6>
               <select (change)="onChangeScheduled($event.target.value)" id=" scheduled" class="form-control mb-3"
-                formControlName="scheduled" [(ngModel)]='selectedScheduled'>
+                formControlName="scheduled">
                 <option value="" selected>{{ 'input-groups.choose' | translate }}</option>
                 <option value="true">Yes</option>
                 <option value="false">No</option>
@@ -46,7 +44,7 @@
             <div class="form-group d-block ml-3 mr-3 w-25">
               <h6 class="mb-2">{{'reports-generation.status' | translate}}</h6>
               <select [attr.disabled]="isScheduled ? '' : null" id="status" class="form-control mb-3"
-                formControlName="status" [(ngModel)]='selectedStatus'>
+                formControlName="status">
                 <option value="" selected>{{ 'input-groups.choose' | translate }}</option>
                 <option value="ACTIVE">Active</option>
                 <option value="FINISHED">Finished</option>
