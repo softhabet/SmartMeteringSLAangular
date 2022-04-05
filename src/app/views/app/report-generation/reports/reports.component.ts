@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
-import { ApiService, IReport, IReportTable } from 'src/app/mydata/api.service';
-import reports from 'src/app/mydata/reports';
+import { ReportService, IReport, IReportResponse } from 'src/app/services/report.service';
 import { ContextMenuComponent } from 'ngx-contextmenu';
 import {
   FormGroup,
@@ -28,7 +27,13 @@ export class ReportsComponent implements OnInit {
   get status() {
     return this.reportForm.get('status');
   }
-  state = false;
+  // if true : is scheduled
+  isScheduled = false;
+  selectedScheduled = '';
+  selectedStatus = '';
+  selectedName = '';
+  selectedOwner = '';
+
 
   @Output() searchKeyUp: EventEmitter<any> = new EventEmitter();
   stateButtonCurrentState = '';
@@ -37,14 +42,10 @@ export class ReportsComponent implements OnInit {
   stateButtonDisabled = false;
 
   displayMode = 'list';
-  selectAllState = '';
-  selected: IReport[] = [];
-  data: IReportTable[] = [];
-  reports: IReport[] = [];
-  currentPage = 1;
+  res: IReportResponse[] = [];
+  reportsList: IReport[] = [];
+  currentPage = 0;
   itemsPerPage = 10;
-  search = '';
-  orderBy = '';
   isLoading: boolean;
   endOfTheList = false;
   totalItem = 0;
@@ -52,7 +53,7 @@ export class ReportsComponent implements OnInit {
 
   // @ViewChild('search') search: any;
   @ViewChild('basicMenu') public basicMenu: ContextMenuComponent;
-  constructor(fb: FormBuilder, private apiService: ApiService, private router: Router) {
+  constructor(fb: FormBuilder, private reportService: ReportService, private router: Router) {
     const reportControls = {
       searchName: new FormControl(''),
       searchOwner: new FormControl(''),
@@ -63,69 +64,137 @@ export class ReportsComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.loadData(this.itemsPerPage, this.currentPage, this.search, this.orderBy);
+    this.loadData(this.itemsPerPage, this.currentPage);
+  }
+
+  loadData(pageSize: number = 10, currentPage: number = 0, searchName: string = '', searchOwner: string = '', status: string = '') {
+    this.itemsPerPage = pageSize;
+    this.currentPage = currentPage;
+    if (!this.isScheduledSelected()) {
+      this.reportService.getReports(pageSize, currentPage, searchName, searchOwner, status).subscribe(
+        res => {
+          if (res) {
+            this.isLoading = false;
+            this.reportsList = res.reportsList;
+            this.totalItem = res.totalItems;
+            this.totalPage = res.totalPages;
+          } else {
+            this.endOfTheList = true;
+          }
+        },
+        error => {
+          this.isLoading = false;
+        }
+      );
+    }
+  }
+
+  loadDataScheduled(pageSize: number = 10, currentPage: number = 0, searchName: string = '', searchOwner: string = '', scheduled: boolean = this.isScheduled, status: string = '') {
+    if (this.isScheduledSelected()) {
+      this.reportService.getReportsScheduled(pageSize, currentPage, searchName, searchOwner, scheduled, status).subscribe(
+        res => {
+          if (res) {
+            this.isLoading = false;
+            this.reportsList = res.reportsList;
+            this.totalItem = res.totalItems;
+            this.totalPage = res.totalPages;
+          } else {
+            this.endOfTheList = true;
+          }
+        },
+        error => {
+          this.isLoading = false;
+        }
+      );
+    }
+  }
+
+  clearForm() {
+    this.reportForm.value.searchName = '';
+    this.reportForm.value.searchOwner = '';
+    this.reportForm.value.scheduled = '';
+    this.reportForm.value.status = '';
+    this.isScheduled = false;
+    this.selectedScheduled = '';
+    this.selectedStatus = '';
+    this.selectedName = '';
+    this.selectedOwner = '';
+    this.itemsPerPage = 10;
+    this.currentPage = 0;
+    this.loadData(this.itemsPerPage, this.currentPage);
   }
 
   onChangeScheduled(value) {
     if (value === 'false') {
-      this.state = true;
+      this.isScheduled = true;
     } else {
-      this.state = false;
+      this.isScheduled = false;
     }
   }
 
+  formatDate(date) {
+    if (typeof date !== 'undefined') {
+      const dates = date.split('+');
+      return dates[0].replace('T', ' ');
+    }
+  }
 
-  loadData(pageSize: number = 10, currentPage: number = 1, search: string = '', orderBy: string = '') {
-    this.itemsPerPage = pageSize;
-    this.currentPage = currentPage;
-    this.search = search;
-    this.orderBy = orderBy;
+  typeColor(type) {
+    if (type === 'METER') {
+      return 'primary';
+    } else if (type === 'EVENT') {
+      return 'secondary';
+    }
+  }
 
-    this.reports = reports.slice(0, 10).map(({ report_id, reportName, report_owner, description, creationDate, isScheduled, status}) => ({ report_id, reportName, report_owner, description, creationDate, isScheduled, status}));
-    this.data = reports.slice(pageSize * (currentPage-1), pageSize * currentPage).map(({ report_id, reportName, report_owner, description, creationDate, isScheduled, status}) => ({ report_id, reportName, report_owner, description, creationDate, isScheduled, status, descriptionColor : '', scheduledColor : '', statusColor : ''}));
-    this.data.forEach(r=>{
-      if (r.description == "Meter"){
-        r.descriptionColor = 'primary'
-      } else if (r.description === "Event") {
-        r.descriptionColor = 'secondary'
-      };
-      if (r.isScheduled == true){
-        r.scheduledColor = 'success'
-      } else if (r.isScheduled == false) {
-        r.scheduledColor = 'danger'
-      };
-      if (r.status == "Active"){
-        r.statusColor = 'success'
-      } else if (r.status == "Finished") {
-        r.statusColor = 'danger'
-      }else if (r.status == "Not Started") {
-        r.statusColor = 'warning'
-      };
-    });
-    this.totalItem = this.reports.length;
-    // this.totalPage = pageSize;
+  scheduledColor(scheduled) {
+    if (scheduled === true) {
+      return 'success';
+    } else if (scheduled === false) {
+      return 'danger';
+    }
+  }
 
-    // this.apiService.getReports(pageSize, currentPage, search, orderBy).subscribe(
-    //   data => {
-    //     if (data) {
-    //       this.isLoading = false;
-    //       this.data = data.data;
-    //       this.totalItem = data.totalItem;
-    //       this.totalPage = data.totalPage;
-    //     } else {
-    //       this.endOfTheList = true;
-    //     }
-    //   },
-    //   error => {
-    //     this.isLoading = false;
-    //   }
-    // );
+  statusColor(status) {
+    if (status === 'ACTIVE') {
+      return 'success';
+    } else if (status === 'FINISHED') {
+      return 'danger';
+    } else if (status === 'NOT_STARTED') {
+      return 'warning';
+    }
+  }
+
+  reportIndex(index) {
+    return index + 1 + this.itemsPerPage * (this.currentPage - 1);
   }
 
   onSubmit() {
-    console.log('submitted');
-    console.log(this.reportForm.value);
+    console.log(this.reportForm.value)
+    if (!this.isScheduledSelected()) {
+      this.loadData(this.itemsPerPage, 0, this.reportForm.value.searchName, this.reportForm.value.searchOwner, this.RemoveChoose(this.reportForm.value.status));
+    } else {
+      this.loadDataScheduled(this.itemsPerPage, 0, this.reportForm.value.searchName, this.reportForm.value.searchOwner, this.getBoolean(this.RemoveChoose(this.reportForm.value.scheduled)), this.RemoveChoose(this.reportForm.value.status));
+
+    }
   }
+
+  isScheduledSelected() {
+    return (this.reportForm.value.scheduled !== ('Choose...') && this.reportForm.value.scheduled !== (''));
+  }
+
+  RemoveChoose(val) {
+    if (val === 'Choose...') {
+      return '';
+    } else {
+      return val;
+    }
+  }
+
+  getBoolean(string) {
+    return string === 'true';
+  }
+
 
   onStateButtonClick(event) {
     if (this.stateButtonDisabled) {
@@ -140,22 +209,26 @@ export class ReportsComponent implements OnInit {
         this.stateButtonCurrentState = '';
         this.stateButtonShowMessage = false;
         this.stateButtonDisabled = false;
-      }, 2000);
-    }, 1000);
-  }
-
-
-  SearchKeyUp(event) {
-    const val = event.target.value.toLowerCase().trim();
-    this.loadData(this.itemsPerPage, 1, val, this.orderBy);
+      }, 750);
+    }, 1250);
   }
 
   itemsPerPageChange(perPage: number) {
-    this.loadData(perPage, 1, this.search, this.orderBy);
+    this.itemsPerPage = perPage;
+    if (!this.isScheduledSelected()) {
+      this.loadData(this.itemsPerPage, 0, this.reportForm.value.searchName, this.reportForm.value.searchOwner, this.RemoveChoose(this.reportForm.value.status));
+    } else {
+      this.loadDataScheduled(this.itemsPerPage, 0, this.reportForm.value.searchName, this.reportForm.value.searchOwner, this.getBoolean(this.RemoveChoose(this.reportForm.value.scheduled)), this.RemoveChoose(this.reportForm.value.status));
+    }
   }
 
   pageChanged(event: any): void {
-    this.loadData(this.itemsPerPage, event.page, this.search, this.orderBy);
+    if (!this.isScheduledSelected()) {
+      this.loadData(this.itemsPerPage, event.page - 1, this.reportForm.value.searchName, this.reportForm.value.searchOwner, this.RemoveChoose(this.reportForm.value.status));
+    } else {
+      // tslint:disable-next-line: max-line-length
+      this.loadDataScheduled(this.itemsPerPage, event.page - 1, this.reportForm.value.searchName, this.reportForm.value.searchOwner, this.getBoolean(this.RemoveChoose(this.reportForm.value.scheduled)), this.RemoveChoose(this.reportForm.value.status));
+    }
   }
 
   onContextMenuClick(action: string, event) {

@@ -13,71 +13,51 @@
         <form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
           <div class="d-flex">
             <!-- search report name -->
-            <div class="form-group d-block mr-3">
+            <div class="form-group d-block mr-3 w-25">
               <h6 class="mb-2">{{'reports-generation.report-name' | translate}}</h6>
               <div class="d-inline-block mt-1">
-                <div class="search-md d-inline-block float-md-left mr-1 mb-1 align-top">
-                  <input class="form-control" formControlName="searchName" placeholder="SearchName">
+                <div class="search-md d-inline-block float-md-left mr-1 mb-1 align-top flex-grow-1">
+                  <input class="form-control" formControlName="searchName" placeholder="SearchName"
+                    [(ngModel)]='selectedName'>
                 </div>
               </div>
             </div>
             <!-- search report owner -->
-            <div class="form-group d-block mr-3">
+            <div class="form-group d-block mr-3 w-25">
               <h6 class="mb-2">{{'reports-generation.owner' | translate}}</h6>
               <div class="d-inline-block mt-1">
                 <div class="search-md d-inline-block float-md-left mr-1 mb-1 align-top">
-                  <input class="form-control" formControlName="searchOwner" placeholder="SearchOwner">
+                  <input class="form-control" formControlName="searchOwner" placeholder="SearchOwner"
+                    [(ngModel)]='selectedOwner'>
                 </div>
               </div>
             </div>
             <!-- select scheduled -->
-            <div class="form-group d-block ml-3 mr-3 flex-grow-1">
+            <div class="form-group d-block ml-3 mr-3 w-25">
               <h6 class="mb-2">{{'reports-generation.is-scheduled' | translate}}</h6>
-              <!-- <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelectScheduled">{{'reports-generation.is-scheduled'
-                    |
-                    translate}}</label>
-                </div>
-                <select class="custom-select" id="inputGroupSelectScheduled">
-                  <option selected>Choose... </option>
-                  <option value="1">Yes</option>
-                  <option value="2">No</option>
-                </select>
-              </div> -->
               <select (change)="onChangeScheduled($event.target.value)" id=" scheduled" class="form-control mb-3"
-                formControlName="scheduled">
-                <option selected>{{ 'input-groups.choose' | translate }}</option>
+                formControlName="scheduled" [(ngModel)]='selectedScheduled'>
+                <option value="" selected>{{ 'input-groups.choose' | translate }}</option>
                 <option value="true">Yes</option>
                 <option value="false">No</option>
               </select>
             </div>
             <!-- select status disable if scheduled false or not selected -->
-            <div class="form-group d-block ml-3 mr-3 flex-grow-1">
+            <div class="form-group d-block ml-3 mr-3 w-25">
               <h6 class="mb-2">{{'reports-generation.status' | translate}}</h6>
-              <!-- <div class="input-group">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelectStatus">{{'reports-generation.status' |
-                    translate}}</label>
-                </div>
-                <select class="custom-select" id="inputGroupSelectStatus">
-                  <option selected>Choose...</option>
-                  <option value="1">Active</option>
-                  <option value="2">Finished</option>
-                  <option value="3">Not Started</option>
-                </select>
-              </div> -->
-              <select [attr.disabled]="state ? '' : null" id="status" class="form-control mb-3"
-                formControlName="status">
-                <option selected>{{ 'input-groups.choose' | translate }}</option>
+              <select [attr.disabled]="isScheduled ? '' : null" id="status" class="form-control mb-3"
+                formControlName="status" [(ngModel)]='selectedStatus'>
+                <option value="" selected>{{ 'input-groups.choose' | translate }}</option>
                 <option value="ACTIVE">Active</option>
-                <option value="FINSHED">Finished</option>
+                <option value="FINISHED">Finished</option>
                 <option value="NOT_STARTED">Not Started</option>
               </select>
             </div>
           </div>
           <!-- submit button -->
           <div class="d-flex justify-content-end mt-3 mr-2 mb-1">
+            <button style="font-size: small;" type="button" class="btn btn-dark mr-2" (click)="clearForm()">Clear
+            </button>
             <app-state-button btnClass="btn btn-primary" [currentState]="stateButtonCurrentState"
               [message]="stateButtonMessage" [showMessage]="stateButtonShowMessage" [isDisabled]="stateButtonDisabled"
               (click)="onStateButtonClick($event)">
@@ -130,14 +110,17 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let r of data" [contextMenu]="basicMenu" [contextMenuSubject]="r">
-                  <td>{{r.report_id}}</td>
+                <tr *ngFor="let r of reportsList" [contextMenu]="basicMenu" [contextMenuSubject]="r">
+                  <td>{{reportIndex(reportsList.indexOf(r))}}</td>
                   <td>{{r.reportName}}</td>
-                  <td>{{r.report_owner}}</td>
-                  <td><span [class]="'badge badge-pill badge-'+ r.descriptionColor">{{r.description}}</span></td>
-                  <td>{{r.creationDate}}</td>
-                  <td><span [class]="'badge badge-pill badge-'+ r.scheduledColor">{{r.isScheduled}}</span></td>
-                  <td><span [class]="'badge badge-pill badge-'+ r.statusColor">{{r.status}}</span></td>
+                  <td>{{r.userName}}</td>
+                  <td><span [class]="'badge badge-pill badge-'+ typeColor(r.reportType)">{{r.reportType}}</span>
+                  </td>
+                  <td *ngIf="r.creationDate != undefined">{{formatDate(r.creationDate)}}</td>
+                  <td><span
+                      [class]="'badge badge-pill badge-'+ scheduledColor(r.isScheduled)">{{r.isScheduled.toString().toUpperCase()}}</span>
+                  </td>
+                  <td><span [class]="'badge badge-pill badge-'+ statusColor(r.status)">{{r.status}}</span></td>
                   <td class="iconsminds-mouse-3"></td>
                 </tr>
               </tbody>
