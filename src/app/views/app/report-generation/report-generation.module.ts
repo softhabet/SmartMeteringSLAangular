@@ -12,8 +12,11 @@ import { ReportsComponent } from './reports/reports.component';
 import { ComponentsStateButtonModule } from 'src/app/components/state-button/components.state-button.module';
 import { BootstrapModule } from 'src/app/components/bootstrap/bootstrap.module';
 import { UiModalsContainersModule } from 'src/app/containers/ui/modals/ui.modals.containers.module';
+import { UiCardsContainersModule } from 'src/app/containers/ui/cards/ui.cards.containers.module';
 import { ContextMenuModule } from 'ngx-contextmenu';
+import { SimpleNotificationsModule } from 'angular2-notifications';
 import { FormsModule as FormsModuleAngular, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -30,9 +33,11 @@ import { FormsModule as FormsModuleAngular, ReactiveFormsModule } from '@angular
     ComponentsStateButtonModule,
     BootstrapModule,
     UiModalsContainersModule,
+    UiCardsContainersModule,
     LayoutContainersModule,
     FormsModuleAngular,
     ReactiveFormsModule,
+    SimpleNotificationsModule.forRoot(),
     PaginationModule.forRoot(),
     ContextMenuModule.forRoot({
       useBootstrap4: true,

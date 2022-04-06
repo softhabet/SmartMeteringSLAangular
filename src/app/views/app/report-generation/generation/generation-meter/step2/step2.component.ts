@@ -5,6 +5,7 @@ import {defineLocale} from 'ngx-bootstrap/chronos';
 import {frLocale} from 'ngx-bootstrap/locale';
 import {templateJitUrl} from '@angular/compiler';
 import { tr } from 'date-fns/locale';
+import { ReportService} from 'src/app/services/report.service';
 
 @Component({
   selector: 'app-step2',
@@ -126,7 +127,7 @@ export class Step2Component implements OnInit {
     }
   }
 
-  constructor(private localeService: BsLocaleService) {
+  constructor(private localeService: BsLocaleService, private reportService: ReportService) {
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
     this.bsRangeValues = [this.bsRangeValue];
@@ -137,6 +138,14 @@ export class Step2Component implements OnInit {
   }
 
   ngOnInit(): void {
+    this.reportService.getCriteriaSet(1).subscribe(
+      (res) => {
+        // this.simpleList[0] = res;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
     this.fieldsLists.push(this.fieldList);
     this.operatorsLists.push(this.operatorList);
     this.valuesLists.push(this.valueList);

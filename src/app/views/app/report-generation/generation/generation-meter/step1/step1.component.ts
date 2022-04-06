@@ -1,40 +1,48 @@
 import {Component, OnInit} from '@angular/core';
+import { NgForm, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import {requiredList} from './../custom.validators';
+import { ReportService} from 'src/app/services/report.service';
 
 @Component({
   selector: 'app-step1',
   templateUrl: './step1.component.html'
 })
 export class Step1Component implements OnInit {
+  step1Form: FormGroup;
 
-  constructor() {
-  }
+  constructor(private reportService: ReportService) {}
 
   public simpleList = [
-    [
-      {name: 'status'},
-      {name: 'pre_active_meter_date'},
-      {name: 'meter_active_date'},
-      {name: 'version'},
-      {name: 'meter_discovered'},
-      {name: 'meter_type'}
-    ],
-    [
-      {name: 'dc_number'}
-    ]
+    [], []
   ];
-
-  public fieldList = [
-    {id: 1, name: 'status'},
-    {id: 2, name: 'pre_active_meter_date'},
-    {id: 3, name: 'meter_active_date'},
-    {id: 4, name: 'version'},
-    {id: 5, name: 'meter_discovered'},
-    {id: 6, name: 'meter_type'}
-  ];
-
-  selectedFieldId = 1;
 
   ngOnInit(): void {
+    this.reportService.getColumns(1).subscribe(
+      (res) => {
+        this.simpleList[0] = res;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+    this.step1Form = new FormGroup({
+      reportName: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      reportDescription: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      separator: new FormControl('_', [Validators.required]),
+      prefix: new FormControl('', [Validators.required]),
+      timestamp: new FormControl('yyyyMMddHHmm', [Validators.required]),
+      columns: new FormControl([]),
+      checks: new FormGroup({
+        compressed: new FormControl(false),
+        timestamped: new FormControl(false)
+      })
+    });
+    this.step1Form.controls.columns.setValidators([requiredList]);
+  }
+
+  onSubmit() {
+    this.step1Form.value.columns = this.simpleList[1];
+    console.log(this.step1Form.value);
   }
 
   public removeItem(item: any, list: any[]): void {

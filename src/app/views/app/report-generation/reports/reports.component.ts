@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, Output} from '@angular/core';
 import { ReportService, IReport, IReportResponse } from 'src/app/services/report.service';
 import { ContextMenuComponent } from 'ngx-contextmenu';
+import { NotificationsService, NotificationType } from 'angular2-notifications';
 import {
   FormGroup,
   FormControl,
@@ -46,9 +47,8 @@ export class ReportsComponent implements OnInit {
   totalItem = 0;
   totalPage = 0;
 
-  // @ViewChild('search') search: any;
   @ViewChild('basicMenu') public basicMenu: ContextMenuComponent;
-  constructor(fb: FormBuilder, private reportService: ReportService, private router: Router) {
+  constructor(fb: FormBuilder, private notifications: NotificationsService, private reportService: ReportService, private router: Router) {
     const reportControls = {
       searchName: new FormControl(''),
       searchOwner: new FormControl(''),
@@ -71,6 +71,7 @@ export class ReportsComponent implements OnInit {
           if (res) {
             this.isLoading = false;
             this.reportsList = res.reportsList;
+            this.onDataEmpty(res.reportsList);
             this.totalItem = res.totalItems;
             this.totalPage = res.totalPages;
           } else {
@@ -91,6 +92,7 @@ export class ReportsComponent implements OnInit {
           if (res) {
             this.isLoading = false;
             this.reportsList = res.reportsList;
+            this.onDataEmpty(res.reportsList);
             this.totalItem = res.totalItems;
             this.totalPage = res.totalPages;
           } else {
@@ -101,6 +103,22 @@ export class ReportsComponent implements OnInit {
           this.isLoading = false;
         }
       );
+    }
+  }
+
+  onDataEmpty(list) {
+    if (list.length === 0) {
+      console.log('aaa');
+      this.notifications.create('No reports found !', 'No reports found with search parameters.', NotificationType.Error, { timeOut: 3000, showProgressBar: true });
+    }
+  }
+
+  onSubmit() {
+    console.log(this.reportForm.value);
+    if (!this.isScheduledSelected()) {
+      this.loadData(this.itemsPerPage, 0, this.reportForm.value.searchName, this.reportForm.value.searchOwner, this.RemoveChoose(this.reportForm.value.status));
+    } else {
+      this.loadDataScheduled(this.itemsPerPage, 0, this.reportForm.value.searchName, this.reportForm.value.searchOwner, this.getBoolean(this.RemoveChoose(this.reportForm.value.scheduled)), this.RemoveChoose(this.reportForm.value.status));
     }
   }
 
@@ -161,17 +179,10 @@ export class ReportsComponent implements OnInit {
   }
 
   reportIndex(index) {
-    return index + 1 + this.itemsPerPage * (this.currentPage - 1);
-  }
-
-  onSubmit() {
-    console.log(this.reportForm.value)
-    if (!this.isScheduledSelected()) {
-      this.loadData(this.itemsPerPage, 0, this.reportForm.value.searchName, this.reportForm.value.searchOwner, this.RemoveChoose(this.reportForm.value.status));
-    } else {
-      this.loadDataScheduled(this.itemsPerPage, 0, this.reportForm.value.searchName, this.reportForm.value.searchOwner, this.getBoolean(this.RemoveChoose(this.reportForm.value.scheduled)), this.RemoveChoose(this.reportForm.value.status));
-
+    if (this.currentPage === 0) {
+      return index + 1 + this.itemsPerPage * (this.currentPage);
     }
+    return index + 1 + this.itemsPerPage * (this.currentPage - 1);
   }
 
   isScheduledSelected() {

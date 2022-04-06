@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReportGenerationModule } from '../../report-generation.module';
 import { PaginationModule } from 'ngx-bootstrap';
 import { ContextMenuModule } from 'ngx-contextmenu';
-import { FormsModule as FormsModuleAngular } from '@angular/forms';
+import { FormsModule as FormsModuleAngular, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ArchwizardModule } from 'angular-archwizard';
 import { DndListModule } from 'ngx-drag-and-drop-lists';
@@ -22,6 +22,7 @@ import { Step3Component } from './step3/step3.component';
     CommonModule,
     ReportGenerationModule,
     FormsModuleAngular,
+    ReactiveFormsModule,
     TranslateModule,
     ArchwizardModule,
     ReportGenerationModule,

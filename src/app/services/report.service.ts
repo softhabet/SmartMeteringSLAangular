@@ -6,14 +6,6 @@ import {
 import { map, catchError, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
-
-export interface IReportInstance {
-  id: number;
-  title: string;
-  createdBy: string;
-  date: string;
-}
-
 export interface IReport {
   reportName: string;
   userName: string;
@@ -31,6 +23,12 @@ export interface IReportResponse {
   currentPage: number;
 }
 
+export interface Icolumns {
+  columnId: number;
+  columnName: string;
+  fieldName: string;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +36,8 @@ export interface IReportResponse {
 export class ReportService {
   private reportListUrl = 'http://localhost:8180/report-generation-service/reports/info';
   private reportListScheduledUrl = 'http://localhost:8180/report-generation-service/reports/info/scheduled';
+  private columnsUrl = 'http://localhost:8180/report-generation-service/report-type/columns';
+  private criteriaUrl = 'http://localhost:8180/report-generation-service/report-type/criteria';
 
   constructor(private http: HttpClient) {  }
 
@@ -93,4 +93,28 @@ export class ReportService {
         })
       );
   }
+
+  getColumns(id: number) {
+    return this.http.get(`${this.columnsUrl}/${id}`).pipe(
+      map((res: any) => {
+        return res;
+      }),
+      catchError(errorRes => {
+        return throwError(errorRes);
+      })
+    );
+  }
+
+  getCriteriaSet(id: number) {
+    return this.http.get(`${this.criteriaUrl}/${id}`).pipe(
+      map((res: any) => {
+        return res;
+      }),
+      catchError(errorRes => {
+        return throwError(errorRes);
+      })
+    );
+  }
+
+
 }
