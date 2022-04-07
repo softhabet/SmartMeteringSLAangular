@@ -4,7 +4,8 @@
     <h5 class="mb-4">Filters</h5>
     <!-- Add filter button -->
     <div class="d-flex ml-2">
-      <button type="button" class="btn btn-outline-primary btn-sm mb-3 mr-2" (click)="addGroupItem()">
+      <button *ngIf="checkEmpty()" type="button" class="btn btn-outline-primary btn-sm mb-3 mr-2"
+        (click)="createFilters()">
         Create new filter
       </button>
       <button type="button" class="btn btn-outline-primary btn-sm mb-3">
@@ -13,69 +14,89 @@
     </div>
     <!-- filters accordion group -->
     <div class="card-body">
-      <div class="mb-3" *ngFor="let group of groups">
+      <div class=" mb-3" *ngFor="let filter of filters">
         <!-- filelds dropdown changed m -->
         <div class="d-flex">
           <span class="w-25 d-block mr-5">
             <h6 class="mb-2">Field</h6>
-            <ng-select [items]="fieldsLists[group.id]" bindLabel="name" bindValue="id"
-              [(ngModel)]="selectedFieldIds[group.id]" (click)="change($event, selectedFieldIds[group.id])">
+            <ng-select [items]="criteriaSet" bindLabel="fieldName" bindValue="fieldName" [(ngModel)]="filter.field"
+              (change)="changeField(filter.field, filter, criteriaSet)">
             </ng-select>
           </span>
           <span class="w-25 d-block mr-5">
             <h6 class="mb-2">Operator</h6>
-            <ng-select [items]="operatorsLists[group.id]" bindLabel="name" bindValue="id"
-              [(ngModel)]="selectedOperatorIds[group.id]">
+            <ng-select [items]="getOperators(criteriaSet, filter.field)" bindLabel="operator" bindValue="operator"
+              [(ngModel)]="filter.operator" (change)="changeOperator(filter.operator, filter)">
             </ng-select>
           </span>
           <!-- Filter Value -->
-          <span *ngIf="value" class="w-25 d-block">
+          <span *ngIf="filter.valueType==='listOne'" class="w-25 d-block">
             <h6 class="mb-2">value</h6>
-            <ng-select [items]="valuesLists[group.id]" bindLabel="name" bindValue="id"
-              [(ngModel)]="selectedValueIds[group.id]">
+            <ng-select [items]="getValues(criteriaSet, filter.field)" bindLabel="value" bindValue="value"
+              [(ngModel)]="filter.value" (change)="changeValue(filter.value, filter)">
             </ng-select>
           </span>
+          <span *ngIf="filter.valueType==='listMulti'" class="w-25 d-block">
+            <h6 class="mb-2">value</h6>
+            <ng-select [items]="getValues(criteriaSet, filter.field)" [multiple]="true" bindLabel="value"
+              bindValue="value" [closeOnSelect]="false" [(ngModel)]="filter.value">
+            </ng-select>
+          </span>
+          <span *ngIf="filter.valueType==='string'" class="w-25 d-block">
+            <h6 class="mb-2">value</h6>
+            <input type="text" class="form-control" name="filterValue" placeholder="value" [(ngModel)]="filter.value">
+          </span>
           <!-- Filter Date -->
-          <span *ngIf="date" class="w-25 mr-4 d-block">
+          <span *ngIf="filter.valueType==='date'" class="w-25 d-block">
             <h6 class="mb-2">Date</h6>
             <div class="form-group mb-3">
-              <!-- <input class="form-control" #drp="bsDaterangepicker" bsDaterangepicker [container]="'html'"
-                [(ngModel)]="bsRangeValues[group.id]"> -->
-              <!-- remove [(ngModel)]="bsRangeValues[group.id]" to remove default value -->
-              <input class="form-control" #drp="bsDaterangepicker" bsDaterangepicker [container]="'html'">
+              <input type="text" placeholder="Datepicker" class="form-control" bsDatepicker [container]="'html'"
+                [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD/MM/YYYY' }" [(ngModel)]="filter.value">
+            </div>
+          </span>
+          <span *ngIf="filter.valueType==='dateRange'" class="w-25 d-block">
+            <h6 class="mb-2">Date</h6>
+            <div class="form-group mb-3">
+              <input class="form-control" placeholder="Datepicker" #drp="bsDaterangepicker" bsDaterangepicker
+                [container]="'html'" [(ngModel)]="filter.value">
             </div>
           </span>
           <span *ngIf="time" style="transform: translate(0, 44%);" class="mr-3 d-block">
             <h6 class=" text-nowrap mb-2">Time :</h6>
           </span>
           <span *ngIf="time" style="transform: translate(0, 17%);" class="w-25 d-inline-block">
-            <timepicker class="timepicker" [mousewheel]="true" [(ngModel)]="mouseTimes[group.id]"
+            <timepicker class="timepicker" [mousewheel]="true" [(ngModel)]="mouseTimes[filter.id]"
               [showMeridian]="false">
             </timepicker>
           </span>
+          <!-- deleteFilter button -->
+          <div class="d-inline-block">
+            <button style="font-size: 28px; color: #dc3545; padding: 0.1rem"
+              class="simple-icon-minus btn btn-empty ml-3 mt-4" (click)="deleteFilter(filter)"></button>
+          </div>
           <!-- add Filter button -->
-          <span *ngIf="lastElement(group.id)" class="d-inline-block">
-            <button style="font-size: 28px; color: #145388" class="simple-icon-plus btn btn-empty ml-2 mt-3"
-              type="button" (click)="addGroupItem()"></button>
-          </span>
+          <div class="d-inline-block">
+            <button *ngIf="lastElement(filter)" style="font-size: 28px; color: #145388; padding: 0.1rem"
+              class="simple-icon-plus btn btn-empty ml-2 mt-4" (click)="addFilter(criteriaSet)"></button>
+          </div>
         </div>
       </div>
       <br>
       <!-- Delete Save Filter buttons -->
       <div class="d-flex flex-row-reverse">
-        <button *ngIf="emptyGroup() === false" style="font-size: small;" type="button" class="btn btn-danger ml-1"
-          (click)="deleteGroup()">Delete Filters
-        </button>
-        <button *ngIf="emptyGroup() === true" style="font-size: small;" type="button" class="btn btn-danger ml-1"
-          disabled>Delete Filters
-        </button>
-        <app-state-button *ngIf="emptyGroup() === false" btnClass="btn btn-success"
-          [currentState]="stateButtonCurrentState" [message]="stateButtonMessage" [showMessage]="stateButtonShowMessage"
-          (click)="onStateButtonClick($event)" [isDisabled]="stateButtonDisabled">
+        <app-state-button *ngIf="!checkEmpty()" btnClass="btn btn-success" [currentState]="stateButtonCurrentState"
+          [message]="stateButtonMessage" [showMessage]="stateButtonShowMessage" (click)="onStateButtonClick($event)"
+          [isDisabled]="stateButtonDisabled">
           Save Filters
         </app-state-button>
-        <button *ngIf="emptyGroup() === true" style="font-size: small;" type="button" class="btn btn-success"
-          disabled>Save Filters
+        <button *ngIf="checkEmpty()" style="font-size: small;" type="button" class="btn btn-success" disabled>Save
+          Filters
+        </button>
+        <button *ngIf="!checkEmpty()" style="font-size: small;" type="button" class="btn btn-danger mr-1"
+          (click)="deleteFilters()">Delete Filters
+        </button>
+        <button *ngIf="checkEmpty()" style="font-size: small;" type="button" class="btn btn-danger mr-1" disabled>Delete
+          Filters
         </button>
       </div>
     </div>

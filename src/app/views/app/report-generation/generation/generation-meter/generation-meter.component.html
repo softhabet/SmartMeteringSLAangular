@@ -27,7 +27,8 @@
 
         <div class="text-center">
           <button type="button" class="btn btn-primary mr-1" awPreviousStep>{{ 'wizard.prev' | translate }}</button>
-          <button type="button" class="btn btn-primary" awNextStep>{{ 'wizard.next' | translate }}</button>
+          <button type="button" (click)="submitStep2()" class="btn btn-primary" awNextStep>{{ 'wizard.next' | translate
+            }}</button>
         </div>
       </aw-wizard-step>
 

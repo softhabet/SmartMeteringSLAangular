@@ -4,7 +4,7 @@ import {BsLocaleService} from 'ngx-bootstrap';
 import {defineLocale} from 'ngx-bootstrap/chronos';
 import {frLocale} from 'ngx-bootstrap/locale';
 import {templateJitUrl} from '@angular/compiler';
-import { tr } from 'date-fns/locale';
+import { th, tr } from 'date-fns/locale';
 import { ReportService} from 'src/app/services/report.service';
 
 @Component({
@@ -17,9 +17,7 @@ export class Step2Component implements OnInit {
   stateButtonShowMessage = false;
   stateButtonMessage = '';
   stateButtonDisabled = false;
-  // value or date
-  public value = true;
-  public date = false;
+
   public time = false;
 
   // DatePicker + timePicker
@@ -32,100 +30,12 @@ export class Step2Component implements OnInit {
   public mouseTimes: [Date[]];
   bsInlineValue = new Date();
 
-  // Select list
-  public fieldList = [
-    {id: 0, name: 'status'},
-    {id: 1, name: 'pre_active_meter_date'},
-    {id: 2, name: 'meter_active_date'},
-    {id: 3, name: 'version'},
-    {id: 4, name: 'meter_discovered'},
-    {id: 5, name: 'meter_type'},
-    {id: 6, name: 'meter_status'},
-    {id: 7, name: 'is_installed'},
-    {id: 8, name: 'installation_date'},
-    {id: 9, name: 'manufactory_year'},
-    {id: 10, name: 'in_service'},
-    {id: 11, name: 'meter_region'},
-  ];
-  public operatorList = [
-    {id: 0, name: 'is'},
-    {id: 1, name: 'is not'},
-    {id: 2, name: 'is one of'},
-    {id: 3, name: 'is not one of'},
-    {id: 4, name: 'is between'},
-    {id: 5, name: 'is not between'},
-    {id: 6, name: 'exists'},
-    {id: 7, name: 'does not exist'}
-  ];
-  public valueList = [
-    {id: 0, name: 'true'},
-    {id: 1, name: 'false'}
-  ];
-
-  selectedFieldIds = [0];
-  selectedOperatorIds = [0];
-  selectedValueIds = [0];
-
-  // ngSelect fields
-  public fieldsLists = [];
-  public operatorsLists = [];
-  public valuesLists = [];
-
   // operators accordion
   // always id =operatorNumber-1
-  public groups = [
-    {
-      id: 0,
-      title: 'Filter - 1'
-    },
-  ];
+  public filters = [];
 
-  public filterNumber = 1;
+  criteriaSet = [];
 
-  addGroupItem(): void {
-    this.groups.push({
-      id: this.groups.length,
-      title: `Filter - ${this.filterNumber + 1}`
-    });
-    this.filterNumber++;
-    this.fieldsLists.push(this.fieldList);
-    this.operatorsLists.push(this.operatorList);
-    this.valuesLists.push(this.valueList);
-    this.bsRangeValues.push(this.bsRangeValue);
-    // @ts-ignore
-    this.mouseTimes.push(this.mouseTime);
-    this.selectedFieldIds.push(0);
-    this.selectedOperatorIds.push(0);
-    this.selectedValueIds.push(0);
-  }
-
-  lastElement(id: number): boolean {
-    return id === this.groups[this.groups.length - 1].id;
-  }
-
-  deleteGroupItem(id: number): void {
-    this.groups.splice(id, 1);
-    this.fieldsLists.splice(id, 1);
-    this.operatorsLists.splice(id, 1);
-    this.valuesLists.splice(id, 1);
-    this.bsRangeValues.splice(id, 1);
-    this.mouseTimes.splice(id, 1);
-    this.selectedFieldIds.splice(id, 1);
-    this.selectedOperatorIds.splice(id, 1);
-    this.selectedValueIds.splice(id, 1);
-  }
-
-  deleteGroup(): void {
-    this.groups = [];
-  }
-
-  emptyGroup(): boolean {
-    if (this.groups.length === 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   constructor(private localeService: BsLocaleService, private reportService: ReportService) {
     this.maxDate.setDate(this.maxDate.getDate() + 7);
@@ -138,32 +48,127 @@ export class Step2Component implements OnInit {
   }
 
   ngOnInit(): void {
-    this.reportService.getCriteriaSet(1).subscribe(
-      (res) => {
-        // this.simpleList[0] = res;
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-    this.fieldsLists.push(this.fieldList);
-    this.operatorsLists.push(this.operatorList);
-    this.valuesLists.push(this.valueList);
+    this.getData();
     this.form = new FormGroup({
       basicDate: new FormControl(new Date()),
     });
   }
 
-  // on change item from list
-  change($event: MouseEvent, id: number) {
-    console.log('changed!', this.fieldList[id]);
-    if (this.fieldList[id].name === 'in_service') {
-      this.value = true;
-      this.date = false;
-    } else if (this.fieldList[id].name === 'meter_active_date') {
-      this.value = false;
-      this.date = true;
+  createFilters() {
+    this.getData();
+  }
+
+  getData() {
+    this.reportService.getCriteriaSet(1).subscribe(
+      (res) => {
+        console.log(res);
+        this.criteriaSet = res;
+        this.filters.push({
+          field: this.criteriaSet[0].fieldName,
+          operator: this.criteriaSet[0].operators[0].operator,
+          value: this.criteriaSet[0].values[0].value,
+          valueType: 'listOne'
+        });
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+
+  addFilter(set): void {
+    this.filters.push({
+      field: set[0].fieldName,
+      operator: set[0].operators[0].operator,
+      value: set[0].values[0].value,
+      valueType: 'listOne'
+    });
+    this.bsRangeValues.push(this.bsRangeValue);
+    // @ts-ignore
+    this.mouseTimes.push(this.mouseTime);
+  }
+
+  deleteFilter(filter) {
+    this.filters.splice(this.filters.indexOf(filter), 1);
+  }
+
+  getOperators(set, fieldName) {
+    if (fieldName !== null) {
+      return set.find((crit: any) => crit.fieldName === fieldName).operators;
     }
+  }
+
+  getValues(set, fieldName) {
+    if (fieldName !== null) {
+    return set.find((crit: any) => crit.fieldName === fieldName).values;
+  }
+  }
+
+  lastElement(filter) {
+    return filter === this.filters[this.filters.length - 1];
+  }
+
+  // on change item from list
+  changeField(field, filter, set) {
+    if (field !== null) {
+      filter.field = field;
+      const list = set.find((crit: any) => crit.fieldName === field);
+      filter.operator = list.operators[0].operator;
+      if ( list.values.length === 0) {
+        if (field === 'dc_number' || field === 'meter_name') {
+          filter.valueType = 'string';
+          filter.value = '';
+        } else {
+          filter.valueType = 'date';
+          filter.value = '';
+        }
+      } else {
+        filter.valueType = 'listOne';
+        filter.value = list.values[0].value;
+      }
+    }
+   }
+
+  changeOperator(operator, filter) {
+    filter.operator = operator;
+    if (filter.valueType !== 'string') {
+      if (operator === 'is between' || operator === 'is not between') {
+        filter.valueType = 'dateRange';
+      } else if (operator === 'is one of' || operator === 'is not one of') {
+        filter.valueType = 'listMulti';
+        filter.value = [];
+      } else {
+        if (filter.valueType === 'date' || filter.valueType === 'dateRange') {
+          filter.valueType = 'date';
+        } else {
+          filter.valueType = 'listOne';
+        }
+      }
+    }
+  }
+
+  changeValue(value, filter) {
+    filter.value = value;
+  }
+
+  deleteGroupItem(id: number): void {
+    this.filters.splice(id, 1);
+    this.bsRangeValues.splice(id, 1);
+    this.mouseTimes.splice(id, 1);
+  }
+
+  deleteFilters(): void {
+    this.filters = [];
+  }
+
+  checkEmpty(): boolean {
+    return this.filters.length === 0;
+  }
+
+  getFilters() {
+    console.log(this.filters);
+    return this.filters;
   }
 
   onStateButtonClick(event) {
@@ -172,14 +177,14 @@ export class Step2Component implements OnInit {
     }
     this.stateButtonDisabled = true;
     this.stateButtonCurrentState = 'show-spinner';
-    // this.SearchKeyUp(event);
+    console.log(this.filters);
     setTimeout(() => {
       this.stateButtonCurrentState = 'show-success';
       setTimeout(() => {
         this.stateButtonCurrentState = '';
         this.stateButtonShowMessage = false;
         this.stateButtonDisabled = false;
-      }, 2000);
+      }, 500);
     }, 1000);
   }
 }
