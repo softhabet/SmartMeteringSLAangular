@@ -5,56 +5,66 @@
       <div class="card-body">
         <h5 class="mb-4">Report Generation mode</h5>
         <!-- check-box (need to add checked option) -->
-        <form #f="ngForm">
-          <div class="d-flex mb-4">
+        <form [formGroup]="generationForm" #form="ngForm" (ngSubmit)="onSubmit()">
+          <div class="form-group d-flex mb-4">
             <div class="mr-4 custom-control custom-radio ">
-              <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input"
-                (click)="choose(false)" checked>
+              <input class="custom-control-input" type="radio" id="customRadio1" value="false" name="radio"
+                formControlName="radio" (click)="choose(false)">
               <label style="font-size: 16px; font-weight: 600;" class="custom-control-label" for="customRadio1">On
                 Demand</label>
             </div>
             <div class="custom-control custom-radio">
-              <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input"
-                (click)="choose(true)">
+              <input class="custom-control-input" type="radio" id="customRadio2" value="true" name="radio"
+                formControlName="radio" (click)="choose(true)">
               <label style="font-size: 16px; font-weight: 600;" class="custom-control-label"
                 for="customRadio2">Scheduled</label>
             </div>
           </div>
-        </form>
-        <div *ngIf="scheduled == true">
-          <!-- date for scheduled -->
-          <div class="w-75 d-block mt-2 mb-2">
-            <h6 class="mb-2">Date :</h6>
-            <div class="form-group mb-3">
-              <input class="form-control" #drp="bsDaterangepicker" bsDaterangepicker [container]="'html'"
-                [(ngModel)]="bsRangeValue">
-            </div>
-          </div>
-          <!-- Time-->
-          <div class="d-flex">
-            <!-- Time from -->
-            <div class="w-50">
-              <span style="transform: translate(0, 44%);" class="mr-3 d-block">
-                <h6 class=" text-nowrap mb-2">Time From :</h6>
-              </span>
-              <span style="transform: translate(0, 17%);" class="w-25 d-inline-block">
-                <timepicker class="timepicker" [mousewheel]="true" [(ngModel)]="mouseTime1" [showMeridian]="false">
-                </timepicker>
-              </span>
-            </div>
-            <!-- Time to -->
-            <div class="w-50">
-              <span style="transform: translate(0, 44%);" class="mr-3 d-block">
-                <h6 class=" text-nowrap mb-2">Time To :</h6>
-              </span>
-              <span style="transform: translate(0, 17%);" class="w-25 d-inline-block">
-                <timepicker class="timepicker" [mousewheel]="true" [(ngModel)]="mouseTime2" [showMeridian]="false">
-                </timepicker>
-              </span>
-            </div>
-          </div>
-        </div>
 
+          <div *ngIf="scheduled == true">
+            <!-- date for scheduled -->
+            <div class="w-75 d-block mt-2 mb-2">
+              <h6 class="mb-2">Date :</h6>
+              <div class="form-group mb-3">
+                <input class="form-control" formControlName="scheduledDate" placeholder="Datepicker"
+                  #drp="bsDaterangepicker" bsDaterangepicker [container]="'html'">
+              </div>
+            </div>
+            <!-- Time-->
+            <div class="d-flex">
+              <!-- Time from -->
+              <div class="form-group w-50">
+                <span style="transform: translate(0, 44%);" class="mr-3 d-block">
+                  <h6 class=" text-nowrap mb-2">Time From :</h6>
+                </span>
+                <span style="transform: translate(0, 17%);" class="w-25 d-inline-block">
+                  <timepicker class="timepicker" [mousewheel]="true" [showMeridian]="false" formControlName="timeFrom">
+                  </timepicker>
+                </span>
+              </div>
+              <!-- Time to -->
+              <div class="form-group w-50">
+                <span style="transform: translate(0, 44%);" class="mr-3 d-block">
+                  <h6 class=" text-nowrap mb-2">Time To :</h6>
+                </span>
+                <span style="transform: translate(0, 17%);" class="w-25 d-inline-block">
+                  <timepicker class="timepicker" [mousewheel]="true" [showMeridian]="false" formControlName="timeTo">
+                  </timepicker>
+                </span>
+              </div>
+              <!-- Every -->
+              <div class="form-group w-50">
+                <span style="transform: translate(0, 44%);" class="mr-3 d-block">
+                  <h6 class=" text-nowrap mb-2">Every :</h6>
+                </span>
+                <span style="transform: translate(0, 17%);" class="w-25 d-inline-block">
+                  <timepicker class="timepicker" [mousewheel]="true" [showMeridian]="false" formControlName="timeEvery">
+                  </timepicker>
+                </span>
+              </div>
+            </div>
+          </div>
+        </form>
         <!-- simulation Button -->
         <div class="d-flex mt-4 flex-row-reverse">
           <button style="font-size: small;" type="button" class="btn btn-primary mb-1">Simulate</button>
@@ -102,7 +112,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>

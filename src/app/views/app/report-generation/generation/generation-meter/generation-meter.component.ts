@@ -15,11 +15,19 @@ export class GenerationMeterComponent implements OnInit {
   constructor() { }
 
   submitStep1() {
-    this.step1.onSubmit();
+    return this.step1.onSubmit();
   }
 
   submitStep2() {
-    this.step2.getFilters();
+    return this.step2.getFilters();
+  }
+
+  getReportData() {
+    return this.step3.onSubmit();
+    // const step1 = this.submitStep1();
+    // const step2 = this.submitStep2();
+    // console.log(step1.concat(step2));
+    // return step1.concat(step2);
   }
 
   ngOnInit(): void {

@@ -43,6 +43,7 @@ export class Step1Component implements OnInit {
   onSubmit() {
     this.step1Form.value.columns = this.simpleList[1];
     console.log(this.step1Form.value);
+    return this.step1Form.value;
   }
 
   public removeItem(item: any, list: any[]): void {

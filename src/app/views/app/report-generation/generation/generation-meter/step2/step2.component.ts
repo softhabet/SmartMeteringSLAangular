@@ -13,11 +13,13 @@ import { ReportService} from 'src/app/services/report.service';
 })
 export class Step2Component implements OnInit {
 
+  // save filter button
   stateButtonCurrentState = '';
   stateButtonShowMessage = false;
   stateButtonMessage = '';
   stateButtonDisabled = false;
 
+  // show time
   public time = false;
 
   // DatePicker + timePicker
@@ -58,6 +60,7 @@ export class Step2Component implements OnInit {
     this.getData();
   }
 
+  // get criteriaSet
   getData() {
     this.reportService.getCriteriaSet(1).subscribe(
       (res) => {
@@ -75,7 +78,6 @@ export class Step2Component implements OnInit {
       }
     );
   }
-
 
   addFilter(set): void {
     this.filters.push({
@@ -102,7 +104,7 @@ export class Step2Component implements OnInit {
   getValues(set, fieldName) {
     if (fieldName !== null) {
     return set.find((crit: any) => crit.fieldName === fieldName).values;
-  }
+    }
   }
 
   lastElement(filter) {
