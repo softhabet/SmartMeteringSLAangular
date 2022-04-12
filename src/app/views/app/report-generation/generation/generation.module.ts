@@ -11,6 +11,7 @@ import { GenerationComponent } from './generation.component';
 import { FormsModule as FormsModuleAngular } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ArchwizardModule } from 'angular-archwizard';
+import { SimpleNotificationsModule } from 'angular2-notifications';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { ArchwizardModule } from 'angular-archwizard';
     FormsModuleAngular,
     TranslateModule,
     ArchwizardModule,
+    SimpleNotificationsModule.forRoot(),
     PaginationModule.forRoot(),
     ContextMenuModule.forRoot({
       useBootstrap4: true,

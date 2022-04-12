@@ -24,9 +24,7 @@ export class Step3Component implements OnInit {
 
   @Input() value: string;
 
-  public scheduled = false;
-
-  reportType: [false, true];
+  scheduled = false;
 
   constructor(private localeService: BsLocaleService) {
     this.maxDate.setDate(this.maxDate.getDate() + 7);
@@ -39,7 +37,7 @@ export class Step3Component implements OnInit {
 
   ngOnInit(): void {
     this.generationForm = new FormGroup({
-      radio: new FormControl('false', [Validators.required]),
+      scheduled: new FormControl(false, [Validators.required]),
       scheduledDate: new FormControl(null, [Validators.required]),
       timeFrom: new FormControl(null, [timeRequired()]),
       timeTo: new FormControl(null, [timeRequired()]),
@@ -48,7 +46,25 @@ export class Step3Component implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.generationForm.value);
+    if (this.generationForm.value.scheduled === false) {
+      this.generationForm.value.scheduledDate = null;
+      this.generationForm.value.timeEvery = null;
+      this.generationForm.value.timeFrom = null;
+      this.generationForm.value.timeTo = null;
+    } else {
+      this.generationForm.value.scheduledDate[0] = this.getDateNoTime(this.generationForm.value.scheduledDate[0]);
+      this.generationForm.value.scheduledDate[1] = this.getDateNoTime(this.generationForm.value.scheduledDate[1]);
+    }
+    return this.generationForm.value;
+  }
+
+  getHoursAndMinutes(time) {
+    return  time.getHours() + ':' + time.getMinutes();
+  }
+
+  getDateNoTime(date) {
+    const timePortion = (date.getTime() - date.getTimezoneOffset() * 60 * 1000) % (3600 * 1000 * 24);
+    return (new Date(date - timePortion));
   }
 
   choose( check: boolean ): void {

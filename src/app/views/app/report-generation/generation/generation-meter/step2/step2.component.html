@@ -19,46 +19,47 @@
         <div class="d-flex">
           <span class="w-25 d-block mr-5">
             <h6 class="mb-2">Field</h6>
-            <ng-select [items]="criteriaSet" bindLabel="fieldName" bindValue="fieldName" [(ngModel)]="filter.field"
-              (change)="changeField(filter.field, filter, criteriaSet)">
+            <ng-select [items]="criteriaSet" bindLabel="fieldName" bindValue="fieldName" [(ngModel)]="filter.fieldName"
+              (change)="changeField(filter.fieldName, filter, criteriaSet)">
             </ng-select>
           </span>
           <span class="w-25 d-block mr-5">
             <h6 class="mb-2">Operator</h6>
-            <ng-select [items]="getOperators(criteriaSet, filter.field)" bindLabel="operator" bindValue="operator"
+            <ng-select [items]="getOperators(criteriaSet, filter.fieldName)" bindLabel="operator" bindValue="operator"
               [(ngModel)]="filter.operator" (change)="changeOperator(filter.operator, filter)">
             </ng-select>
           </span>
           <!-- Filter Value -->
-          <span *ngIf="filter.valueType==='listOne'" class="w-25 d-block">
+          <span *ngIf="filter.filterType==='listOne'" class="w-25 d-block">
             <h6 class="mb-2">value</h6>
-            <ng-select [items]="getValues(criteriaSet, filter.field)" bindLabel="value" bindValue="value"
-              [(ngModel)]="filter.value" (change)="changeValue(filter.value, filter)">
+            <ng-select [items]="getValues(criteriaSet, filter.fieldName)" bindLabel="value" bindValue="value"
+              [(ngModel)]="filter.filterValue" (change)="changeValue(filter.filterValue, filter)">
             </ng-select>
           </span>
-          <span *ngIf="filter.valueType==='listMulti'" class="w-25 d-block">
+          <span *ngIf="filter.filterType==='listMulti'" class="w-25 d-block">
             <h6 class="mb-2">value</h6>
-            <ng-select [items]="getValues(criteriaSet, filter.field)" [multiple]="true" bindLabel="value"
-              bindValue="value" [closeOnSelect]="false" [(ngModel)]="filter.value">
+            <ng-select [items]="getValues(criteriaSet, filter.fieldName)" [multiple]="true" bindLabel="value"
+              bindValue="value" [closeOnSelect]="false" [(ngModel)]="filter.filterValue">
             </ng-select>
           </span>
-          <span *ngIf="filter.valueType==='string'" class="w-25 d-block">
+          <span *ngIf="filter.filterType==='string'" class="w-25 d-block">
             <h6 class="mb-2">value</h6>
-            <input type="text" class="form-control" name="filterValue" placeholder="value" [(ngModel)]="filter.value">
+            <input type="text" class="form-control" name="filterValue" placeholder="value"
+              [(ngModel)]="filter.filterValue">
           </span>
           <!-- Filter Date -->
-          <span *ngIf="filter.valueType==='date'" class="w-25 d-block">
+          <span *ngIf="filter.filterType==='date'" class="w-25 d-block">
             <h6 class="mb-2">Date</h6>
             <div class="form-group mb-3">
               <input type="text" placeholder="Datepicker" class="form-control" bsDatepicker [container]="'html'"
-                [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD/MM/YYYY' }" [(ngModel)]="filter.value">
+                [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD/MM/YYYY' }" [(ngModel)]="filter.filterValue">
             </div>
           </span>
-          <span *ngIf="filter.valueType==='dateRange'" class="w-25 d-block">
+          <span *ngIf="filter.filterType==='dateRange'" class="w-25 d-block">
             <h6 class="mb-2">Date</h6>
             <div class="form-group mb-3">
               <input class="form-control" placeholder="Datepicker" #drp="bsDaterangepicker" bsDaterangepicker
-                [container]="'html'" [(ngModel)]="filter.value">
+                [container]="'html'" [(ngModel)]="filter.filterValue">
             </div>
           </span>
           <!-- Filter Time removed -->

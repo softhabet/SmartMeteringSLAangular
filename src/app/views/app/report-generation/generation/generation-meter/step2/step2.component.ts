@@ -64,13 +64,12 @@ export class Step2Component implements OnInit {
   getData() {
     this.reportService.getCriteriaSet(1).subscribe(
       (res) => {
-        console.log(res);
         this.criteriaSet = res;
         this.filters.push({
-          field: this.criteriaSet[0].fieldName,
+          fieldName: this.criteriaSet[0].fieldName,
           operator: this.criteriaSet[0].operators[0].operator,
-          value: this.criteriaSet[0].values[0].value,
-          valueType: 'listOne'
+          filterValue: this.criteriaSet[0].values[0].value,
+          filterType: 'listOne'
         });
       },
       (err) => {
@@ -81,10 +80,10 @@ export class Step2Component implements OnInit {
 
   addFilter(set): void {
     this.filters.push({
-      field: set[0].fieldName,
+      fieldName: set[0].fieldName,
       operator: set[0].operators[0].operator,
-      value: set[0].values[0].value,
-      valueType: 'listOne'
+      filterValue: set[0].values[0].value,
+      filterType: 'listOne'
     });
     this.bsRangeValues.push(this.bsRangeValue);
     // @ts-ignore
@@ -114,44 +113,44 @@ export class Step2Component implements OnInit {
   // on change item from list
   changeField(field, filter, set) {
     if (field !== null) {
-      filter.field = field;
+      filter.fieldName = field;
       const list = set.find((crit: any) => crit.fieldName === field);
       filter.operator = list.operators[0].operator;
       if ( list.values.length === 0) {
         if (field === 'dc_number' || field === 'meter_name') {
-          filter.valueType = 'string';
-          filter.value = '';
+          filter.filterType = 'string';
+          filter.filterValue = '';
         } else {
-          filter.valueType = 'date';
-          filter.value = '';
+          filter.filterType = 'date';
+          filter.filterValue = '';
         }
       } else {
-        filter.valueType = 'listOne';
-        filter.value = list.values[0].value;
+        filter.filterType = 'listOne';
+        filter.filterValue = list.values[0].value;
       }
     }
    }
 
   changeOperator(operator, filter) {
     filter.operator = operator;
-    if (filter.valueType !== 'string') {
+    if (filter.filterType !== 'string') {
       if (operator === 'is between' || operator === 'is not between') {
-        filter.valueType = 'dateRange';
+        filter.filterType = 'dateRange';
       } else if (operator === 'is one of' || operator === 'is not one of') {
-        filter.valueType = 'listMulti';
-        filter.value = [];
+        filter.filterType = 'listMulti';
+        filter.filterValue = [];
       } else {
-        if (filter.valueType === 'date' || filter.valueType === 'dateRange') {
-          filter.valueType = 'date';
+        if (filter.filterType === 'date' || filter.filterType === 'dateRange') {
+          filter.filterType = 'date';
         } else {
-          filter.valueType = 'listOne';
+          filter.filterType = 'listOne';
         }
       }
     }
   }
 
   changeValue(value, filter) {
-    filter.value = value;
+    filter.filterValue = value;
   }
 
   deleteGroupItem(id: number): void {
@@ -168,9 +167,22 @@ export class Step2Component implements OnInit {
     return this.filters.length === 0;
   }
 
+  // return
   getFilters() {
-    console.log(this.filters);
+    this.filters.map((filter) => {
+      if (filter.filterType === 'date') {
+        filter.filterValue = this.getDateNoTime(filter.filterValue);
+      } else if (filter.filterType === 'dateRange') {
+        filter.filterValue[0] = this.getDateNoTime(filter.filterValue[0]);
+        filter.filterValue[1] = this.getDateNoTime(filter.filterValue[1]);
+      }
+    });
     return this.filters;
+  }
+
+  getDateNoTime(date) {
+    const timePortion = (date.getTime() - date.getTimezoneOffset() * 60 * 1000) % (3600 * 1000 * 24);
+    return (new Date(date - timePortion));
   }
 
   onStateButtonClick(event) {
@@ -179,7 +191,6 @@ export class Step2Component implements OnInit {
     }
     this.stateButtonDisabled = true;
     this.stateButtonCurrentState = 'show-spinner';
-    console.log(this.filters);
     setTimeout(() => {
       this.stateButtonCurrentState = 'show-success';
       setTimeout(() => {

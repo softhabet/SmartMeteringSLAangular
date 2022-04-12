@@ -8,14 +8,14 @@
         <form [formGroup]="generationForm" #form="ngForm" (ngSubmit)="onSubmit()">
           <div class="form-group d-flex mb-4">
             <div class="mr-4 custom-control custom-radio ">
-              <input class="custom-control-input" type="radio" id="customRadio1" value="false" name="radio"
-                formControlName="radio" (click)="choose(false)">
+              <input class="custom-control-input" type="radio" id="customRadio1" [value]=false name="scheduled"
+                formControlName="scheduled" (click)="choose(false)">
               <label style="font-size: 16px; font-weight: 600;" class="custom-control-label" for="customRadio1">On
                 Demand</label>
             </div>
             <div class="custom-control custom-radio">
-              <input class="custom-control-input" type="radio" id="customRadio2" value="true" name="radio"
-                formControlName="radio" (click)="choose(true)">
+              <input class="custom-control-input" type="radio" id="customRadio2" [value]=true name="scheduled"
+                formControlName="scheduled" (click)="choose(true)">
               <label style="font-size: 16px; font-weight: 600;" class="custom-control-label"
                 for="customRadio2">Scheduled</label>
             </div>

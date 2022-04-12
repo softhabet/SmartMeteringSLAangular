@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { NgForm, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import {requiredList} from './../custom.validators';
-import { ReportService} from 'src/app/services/report.service';
+import { ReportService, Icolumns} from 'src/app/services/report.service';
 
 @Component({
   selector: 'app-step1',
@@ -12,9 +12,7 @@ export class Step1Component implements OnInit {
 
   constructor(private reportService: ReportService) {}
 
-  public simpleList = [
-    [], []
-  ];
+  public simpleList: Icolumns[][] = [[], []];
 
   ngOnInit(): void {
     this.reportService.getColumns(1).subscribe(
@@ -42,7 +40,6 @@ export class Step1Component implements OnInit {
 
   onSubmit() {
     this.step1Form.value.columns = this.simpleList[1];
-    console.log(this.step1Form.value);
     return this.step1Form.value;
   }
 

@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
 import { LayoutContainersModule } from './containers/layout/layout.containers.module';
+import { AutocompleteOffDirective } from './directives/autocomplete-off.directive';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { LayoutContainersModule } from './containers/layout/layout.containers.mo
     AngularFireModule.initializeApp(environment.firebase)
   ],
   declarations: [
-    AppComponent
+    AppComponent,
+    AutocompleteOffDirective
   ],
   providers: [],
   bootstrap: [AppComponent]

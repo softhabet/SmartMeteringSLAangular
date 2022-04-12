@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, EventEmitter, Output} from '@angular/core';
-import { ReportService, IReport, IReportResponse } from 'src/app/services/report.service';
+import { ReportService, IReportInfo, IReportResponse } from 'src/app/services/report.service';
 import { ContextMenuComponent } from 'ngx-contextmenu';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
 import {
@@ -39,7 +39,7 @@ export class ReportsComponent implements OnInit {
 
   displayMode = 'list';
   res: IReportResponse[] = [];
-  reportsList: IReport[] = [];
+  reportsList: IReportInfo[] = [];
   currentPage = 0;
   itemsPerPage = 10;
   isLoading: boolean;
@@ -108,7 +108,6 @@ export class ReportsComponent implements OnInit {
 
   onDataEmpty(list) {
     if (list.length === 0) {
-      console.log('aaa');
       this.notifications.create('No reports found !', 'No reports found with search parameters.', NotificationType.Error, { timeOut: 3000, showProgressBar: true });
     }
   }
@@ -147,8 +146,9 @@ export class ReportsComponent implements OnInit {
 
   formatDate(date) {
     if (typeof date !== 'undefined') {
-      const dates = date.split('+');
-      return dates[0].replace('T', ' ');
+      const dates1 = date.split('+');
+      const dates2 = dates1[0].split('.');
+      return dates2[0].replace('T', ' ');
     }
   }
 
@@ -238,6 +238,30 @@ export class ReportsComponent implements OnInit {
   }
 
   onContextMenuClick(action: string, event) {
+    if (action === 'delete') {
+      this.reportService.deleteReport(event.reportName).subscribe(
+        (res) => {
+          console.log(res);
+          const index = this.reportsList.indexOf(event);
+          if (index > -1) {
+            this.reportsList.splice(index, 1);
+          }
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    } else if (action === 'details') {
+      this.reportService.getReportDetails(event.reportName).subscribe(
+        (res) => {
+          console.log(res);
+          window.location.href = 'http://localhost:8180/report-generation-service/reports/details/' + event.reportName;
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
     console.log('onContextMenuClick -> action :  ', action, ', item.row :', event.reportName);
   }
 

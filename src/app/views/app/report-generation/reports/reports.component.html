@@ -10,7 +10,7 @@
         <!-- search reports -->
         <h3 class="mb-4">{{ 'reports-generation.search-reports' | translate}}</h3>
         <!-- form begin -->
-        <form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="reportForm" (ngSubmit)="onSubmit()" autocomplete="off">
           <div class="d-flex">
             <!-- search report name -->
             <div class="form-group d-block mr-3 w-25">

@@ -1,12 +1,39 @@
 import { Injectable } from '@angular/core';
 import {
   HttpClient,
+  HttpHeaders,
   HttpParams
 } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
-export interface IReport {
+export class report {
+  reportName: string;
+  reportDescription: string;
+  isScheduled: boolean;
+  scheduleStart: number;
+  scheduleEnd: number;
+  scheduleEvery: number;
+  isCompressedExport: boolean;
+  isTimeStampedFolder: boolean;
+  reportFolderPath: string;
+  reportType: IReportType;
+  selectedColumns: Icolumns[];
+  filters: IFilter[];
+}
+
+export interface IReportType {
+  typeId: number;
+}
+
+export interface IFilter {
+  fieldName: string;
+  operator: string;
+  filterValue: string;
+  filterType: string;
+}
+
+export interface IReportInfo {
   reportName: string;
   userName: string;
   reportType: string;
@@ -17,7 +44,7 @@ export interface IReport {
 
 export interface IReportResponse {
   totalItems: number;
-  reportsList: IReport[];
+  reportsList: IReportInfo[];
   totalPages: number;
   pageSize: number;
   currentPage: number;
@@ -35,9 +62,12 @@ export interface Icolumns {
 })
 export class ReportService {
   private reportListUrl = 'http://localhost:8180/report-generation-service/reports/info';
+  private reportDetailsUrl = 'http://localhost:8180/report-generation-service/reports/details';
   private reportListScheduledUrl = 'http://localhost:8180/report-generation-service/reports/info/scheduled';
   private columnsUrl = 'http://localhost:8180/report-generation-service/report-type/columns';
   private criteriaUrl = 'http://localhost:8180/report-generation-service/report-type/criteria';
+  private createReportUrl = 'http://localhost:8180/report-generation-service/reports';
+  private deleteReportUrl = 'http://localhost:8180/report-generation-service/reports/name';
 
   constructor(private http: HttpClient) {  }
 
@@ -96,7 +126,7 @@ export class ReportService {
 
   getColumns(id: number) {
     return this.http.get(`${this.columnsUrl}/${id}`).pipe(
-      map((res: any) => {
+      map((res: Icolumns[]) => {
         return res;
       }),
       catchError(errorRes => {
@@ -116,5 +146,22 @@ export class ReportService {
     );
   }
 
+  createReport(r: report, id: number) {
+    return this.http.post(`${this.createReportUrl}/${id}`, r, { responseType: 'text' });
+  }
 
+  deleteReport(name: string) {
+    return this.http.delete(`${this.deleteReportUrl}/${name}`, { responseType: 'text' });
+  }
+
+  getReportDetails(name: string) {
+    return this.http.get(`${this.reportDetailsUrl}/${name}`).pipe(
+      map((res: any) => {
+        return res;
+      }),
+      catchError(errorRes => {
+        return throwError(errorRes);
+      })
+    );
+  }
 }
