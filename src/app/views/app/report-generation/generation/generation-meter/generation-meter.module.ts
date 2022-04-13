@@ -13,6 +13,7 @@ import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { Step1Component } from './step1/step1.component';
 import { Step2Component } from './step2/step2.component';
 import { Step3Component } from './step3/step3.component';
+import { SimpleNotificationsModule } from 'angular2-notifications';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { Step3Component } from './step3/step3.component';
     ReportGenerationModule,
     DndListModule,
     NgSelectModule,
+    SimpleNotificationsModule.forRoot(),
     BsDatepickerModule.forRoot(),
     TimepickerModule.forRoot(),
     PaginationModule.forRoot(),

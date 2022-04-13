@@ -12,10 +12,10 @@
           <div class="form-group">
             <input type="text" class="form-control" name="reportName" formControlName="reportName"
               placeholder="{{'reports-generation.report-name' | translate}}">
+            <div #nameRequiredAlert *ngIf="reportName.errors?.required && formSubmitAttempt"></div>
+            <div #nameLengthAlert *ngIf="step1Form.get('reportName').errors?.minlength && formSubmitAttempt"></div>
             <!-- <div *ngIf="step1Form.get('reportName').errors?.required && form.submitted" class="invalid-tooltip">Report
-              Name is required!</div>
-            <div *ngIf="step1Form.get('reportName').errors?.minlength && form.submitted" class="invalid-tooltip">
-              ReportName must contain at least 2 characters!</div> -->
+              Name is required!</div> -->
           </div>
         </span>
 
@@ -24,14 +24,8 @@
           <div class="input-group">
             <input type="text" class="form-control" name="reportDescription" formControlName="reportDescription"
               placeholder="{{'reports-generation.report-description' | translate}}">
-            <!-- <div *ngIf="step1Form.get('reportDescription').errors?.required && form.submitted" class="invalid-tooltip">
-              Report
-              Description is
-              required!</div>
-            <div *ngIf="step1Form.get('reportDescription').errors?.minlength && form.submitted" class="invalid-tooltip">
-              Report
-              Description must
-              contain at least 2 characters!</div> -->
+            <div #descriptionRequiredAlert *ngIf="reportDescription.errors?.required && formSubmitAttempt"></div>
+            <div #descriptionLengthAlert *ngIf="reportDescription.errors?.minlength && formSubmitAttempt"></div>
           </div>
         </span>
 
@@ -76,6 +70,8 @@
                 <div class="input-group">
                   <input type="text" class="form-control" placeholder="Prefix" class="form-control" name="prefix"
                     formControlName="prefix">
+                  <div #prefixRequiredAlert *ngIf="prefix.errors?.required && formSubmitAttempt"></div>
+                  <div #prefixLengthAlert *ngIf="prefix.errors?.minlength && formSubmitAttempt"></div>
                 </div>
               </span>
             </td>
@@ -154,7 +150,9 @@
             [dndDraggable] [dndObject]="item">{{item.columnName}}</div>
         </div>
       </div>
+      <div #columnsEmptyAlert *ngIf="!columnsNotEmpty && formSubmitAttempt"></div>
     </accordion-group>
   </accordion>
-  <!-- <button class="btn btn-primary" type="submit">"forms.submit"</button> -->
+  <!-- <button class="btn btn-primary" type="submit">submit</button> -->
 </form>
+<simple-notifications></simple-notifications>

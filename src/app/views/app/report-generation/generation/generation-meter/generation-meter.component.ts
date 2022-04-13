@@ -28,17 +28,26 @@ export class GenerationMeterComponent implements OnInit {
 
   onNextStep1() {
     this.step1.onSubmit();
-    this.wizard.goToNextStep();
+    if (this.step1.step1Form.valid && this.step1.columnsNotEmpty) {
+      this.wizard.goToNextStep();
+    }
+    // this.wizard.goToNextStep();
   }
 
   onNextStep2() {
     this.step2.getFilters();
-    this.wizard.goToNextStep();
+    if (this.step2.checkFilters()) {
+      this.wizard.goToNextStep();
+    }
+    // this.wizard.goToNextStep();
   }
 
   onNextStep3() {
     this.step3.onSubmit();
-    this.postReport();
+    if (this.step3.generationForm.valid) {
+      this.postReport();
+    }
+    // this.postReport();
   }
 
   postReport() {

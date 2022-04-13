@@ -29,6 +29,7 @@
                 <input class="form-control" formControlName="scheduledDate" placeholder="Datepicker"
                   #drp="bsDaterangepicker" bsDaterangepicker [container]="'html'">
               </div>
+              <div #dateRequiredAlert *ngIf="scheduledDate.errors?.required && formSubmitAttempt"></div>
             </div>
             <!-- Time-->
             <div class="d-flex">
@@ -40,6 +41,7 @@
                 <span style="transform: translate(0, 17%);" class="w-25 d-inline-block">
                   <timepicker class="timepicker" [mousewheel]="true" [showMeridian]="false" formControlName="timeFrom">
                   </timepicker>
+                  <div #timeFromRequiredAlert *ngIf="timeFrom.errors?.required && formSubmitAttempt"></div>
                 </span>
               </div>
               <!-- Time to -->
@@ -50,6 +52,7 @@
                 <span style="transform: translate(0, 17%);" class="w-25 d-inline-block">
                   <timepicker class="timepicker" [mousewheel]="true" [showMeridian]="false" formControlName="timeTo">
                   </timepicker>
+                  <div #timeToRequiredAlert *ngIf="timeTo.errors?.required && formSubmitAttempt"></div>
                 </span>
               </div>
               <!-- Every -->
@@ -60,6 +63,7 @@
                 <span style="transform: translate(0, 17%);" class="w-25 d-inline-block">
                   <timepicker class="timepicker" [mousewheel]="true" [showMeridian]="false" formControlName="timeEvery">
                   </timepicker>
+                  <div #timeEveryRequiredAlert *ngIf="timeEvery.errors?.required && formSubmitAttempt"></div>
                 </span>
               </div>
             </div>
@@ -116,3 +120,4 @@
     </div>
   </div>
 </div>
+<simple-notifications></simple-notifications>

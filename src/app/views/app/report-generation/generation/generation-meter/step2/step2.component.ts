@@ -1,17 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, AfterContentChecked, Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {BsLocaleService} from 'ngx-bootstrap';
 import {defineLocale} from 'ngx-bootstrap/chronos';
 import {frLocale} from 'ngx-bootstrap/locale';
-import {templateJitUrl} from '@angular/compiler';
 import { th, tr } from 'date-fns/locale';
 import { ReportService} from 'src/app/services/report.service';
+import { NotificationsService, NotificationType } from 'angular2-notifications';
 
 @Component({
   selector: 'app-step2',
   templateUrl: './step2.component.html'
 })
-export class Step2Component implements OnInit {
+export class Step2Component implements OnInit, AfterContentChecked {
 
   // save filter button
   stateButtonCurrentState = '';
@@ -38,8 +38,7 @@ export class Step2Component implements OnInit {
 
   criteriaSet = [];
 
-
-  constructor(private localeService: BsLocaleService, private reportService: ReportService) {
+  constructor(private notifications: NotificationsService, private localeService: BsLocaleService, private changeDetector: ChangeDetectorRef, private reportService: ReportService) {
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
     this.bsRangeValues = [this.bsRangeValue];
@@ -47,6 +46,10 @@ export class Step2Component implements OnInit {
     this.mouseTimes = [this.mouseTime];
     defineLocale('fr', frLocale);
     this.localeService.use('fr');
+  }
+
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
   }
 
   ngOnInit(): void {
@@ -78,16 +81,48 @@ export class Step2Component implements OnInit {
     );
   }
 
+  // addFilter(set): void {
+  //   if (!this.checkEmpty()) {
+  //     if (this.getLastFilter().filterValue === '' || this.getLastFilter().filterValue === null || this.getLastFilter().filterValue === []) {
+  //       this.onWarning('filterValueRequiredAlert');
+  //     } else {
+  //       this.filters.push({
+  //         fieldName: set[0].fieldName,
+  //         operator: set[0].operators[0].operator,
+  //         filterValue: set[0].values[0].value,
+  //         filterType: 'listOne'
+  //       });
+  //       this.bsRangeValues.push(this.bsRangeValue);
+  //       // @ts-ignore
+  //       this.mouseTimes.push(this.mouseTime);
+  //     }
+  //   } else {
+  //     this.filters.push({
+  //       fieldName: set[0].fieldName,
+  //       operator: set[0].operators[0].operator,
+  //       filterValue: set[0].values[0].value,
+  //       filterType: 'listOne'
+  //     });
+  //     this.bsRangeValues.push(this.bsRangeValue);
+  //     // @ts-ignore
+  //     this.mouseTimes.push(this.mouseTime);
+  //   }
+  // }
+
   addFilter(set): void {
-    this.filters.push({
-      fieldName: set[0].fieldName,
-      operator: set[0].operators[0].operator,
-      filterValue: set[0].values[0].value,
-      filterType: 'listOne'
-    });
-    this.bsRangeValues.push(this.bsRangeValue);
-    // @ts-ignore
-    this.mouseTimes.push(this.mouseTime);
+      this.filters.push({
+        fieldName: set[0].fieldName,
+        operator: set[0].operators[0].operator,
+        filterValue: set[0].values[0].value,
+        filterType: 'listOne'
+      });
+      this.bsRangeValues.push(this.bsRangeValue);
+      // @ts-ignore
+      this.mouseTimes.push(this.mouseTime);
+  }
+
+  getLastFilter() {
+    return this.filters[this.filters.length - 1];
   }
 
   deleteFilter(filter) {
@@ -136,21 +171,29 @@ export class Step2Component implements OnInit {
     if (filter.filterType !== 'string') {
       if (operator === 'is between' || operator === 'is not between') {
         filter.filterType = 'dateRange';
+        filter.filterValue = [];
       } else if (operator === 'is one of' || operator === 'is not one of') {
         filter.filterType = 'listMulti';
         filter.filterValue = [];
       } else {
         if (filter.filterType === 'date' || filter.filterType === 'dateRange') {
           filter.filterType = 'date';
+          filter.filterValue = '';
         } else {
           filter.filterType = 'listOne';
+          filter.filterValue = '';
         }
       }
+    } else {
+      filter.filterValue = '';
     }
   }
 
   changeValue(value, filter) {
     filter.filterValue = value;
+    // if (filter.filterValue === '' || filter.filterValue === null || filter.filterValue === []) {
+    //   this.onWarning('filterValueRequiredAlert');
+    // }
   }
 
   deleteGroupItem(id: number): void {
@@ -163,21 +206,108 @@ export class Step2Component implements OnInit {
     this.filters = [];
   }
 
+  // yes if array empty
   checkEmpty(): boolean {
     return this.filters.length === 0;
   }
 
-  // return
+  // return filters to wizard
   getFilters() {
     this.filters.map((filter) => {
       if (filter.filterType === 'date') {
-        filter.filterValue = this.getDateNoTime(filter.filterValue);
+        console.log(filter.filterValue);
+        if (filter.filterValue !== '' && filter.filterValue !== null) {
+          filter.filterValue = this.getDateNoTime(filter.filterValue);
+        }
       } else if (filter.filterType === 'dateRange') {
-        filter.filterValue[0] = this.getDateNoTime(filter.filterValue[0]);
-        filter.filterValue[1] = this.getDateNoTime(filter.filterValue[1]);
+        if (filter.filterValue !== null && filter.filterValue.length !== 0) {
+          filter.filterValue[0] = this.getDateNoTime(filter.filterValue[0]);
+          filter.filterValue[1] = this.getDateNoTime(filter.filterValue[1]);
+        }
       }
     });
+    // this.checkFilters();
     return this.filters;
+  }
+
+  // check if filters are valid
+  checkFilters(): boolean {
+    if (this.checkEmpty()) {
+      this.onWarning('filtersRequiredAlert');
+      return false;
+    } else {
+      if (this.checkDuplicateField() && this.checkEmptyFieldValue() && this.checkEmptyFieldName()) {
+        this.onWarning('filterDuplicateAlert');
+        this.onWarning('filterNameRequiredAlert');
+        this.onWarning('filterValueRequiredAlert');
+        return false;
+      } else if (this.checkDuplicateField() && this.checkEmptyFieldValue()) {
+        this.onWarning('filterDuplicateAlert');
+        this.onWarning('filterValueRequiredAlert');
+        return false;
+      } else if (this.checkDuplicateField() && this.checkEmptyFieldName()) {
+        this.onWarning('filterDuplicateAlert');
+        this.onWarning('filterValueRequiredAlert');
+        return false;
+      } else if (this.checkEmptyFieldValue() && this.checkEmptyFieldName()) {
+        this.onWarning('filterNameRequiredAlert');
+        this.onWarning('filterValueRequiredAlert');
+        return false;
+      } else if (this.checkDuplicateField()) {
+        this.onWarning('filterDuplicateAlert');
+        return false;
+      } else if (this.checkEmptyFieldValue()) {
+        this.onWarning('filterValueRequiredAlert');
+        return false;
+      } else if (this.checkEmptyFieldName()) {
+        this.onWarning('filterNameRequiredAlert');
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
+
+  // check if duplicate field return true if yes
+  checkDuplicateField(): boolean {
+    const fieldNames = this.filters.map((filter) => (filter.fieldName));
+    return (new Set(fieldNames).size !== fieldNames.length);
+  }
+
+  // check if empty field name return true if yes
+  checkEmptyFieldName(): boolean {
+    const fieldNames = this.filters.map((filter) => (filter.fieldName));
+    const emptyValues = [];
+    fieldNames.forEach((value) => {
+      if (value === '' || value === null) {
+        emptyValues.push(1);
+      }
+    });
+    return (emptyValues.length !== 0);
+  }
+
+  // check if empty flter value return true if yes
+  checkEmptyFieldValue(): boolean {
+    const filterValues = this.filters.map((filter) => (filter.filterValue));
+    const emptyValues = [];
+    filterValues.forEach((value) => {
+      if (value === '' || value === null || value.length === 0) {
+        emptyValues.push(1);
+      }
+    });
+    return (emptyValues.length !== 0);
+  }
+
+  onWarning(name) {
+    if (name === 'filtersRequiredAlert') {
+      this.notifications.create('Filters Required!', 'At least one filter must be selected.', NotificationType.Warn, { timeOut: 3000, showProgressBar: true });
+    } else if (name === 'filterDuplicateAlert') {
+      this.notifications.create('Filter Duplicated !', 'Only one filter per Field is permitted.', NotificationType.Warn, { timeOut: 3000, showProgressBar: true });
+    } else if (name === 'filterValueRequiredAlert') {
+      this.notifications.create('Filter Value Required !', 'Please insert filter value.', NotificationType.Warn, { timeOut: 3000, showProgressBar: true });
+    } else if (name === 'filterNameRequiredAlert') {
+      this.notifications.create('Field Name Required!', 'Please do not leave Filter Field empty.', NotificationType.Warn, { timeOut: 3000, showProgressBar: true });
+    }
   }
 
   getDateNoTime(date) {
