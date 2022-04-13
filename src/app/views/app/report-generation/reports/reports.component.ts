@@ -62,6 +62,7 @@ export class ReportsComponent implements OnInit {
     this.loadData(this.itemsPerPage, this.currentPage);
   }
 
+  // get data paginated from back
   loadData(pageSize: number = 10, currentPage: number = 0, searchName: string = '', searchOwner: string = '', status: string = '') {
     this.itemsPerPage = pageSize;
     this.currentPage = currentPage;
@@ -85,6 +86,7 @@ export class ReportsComponent implements OnInit {
     }
   }
 
+  // get data paginated from back when scheduled active
   loadDataScheduled(pageSize: number = 10, currentPage: number = 0, searchName: string = '', searchOwner: string = '', scheduled: boolean = this.isScheduled, status: string = '') {
     if (this.isScheduledSelected()) {
       this.reportService.getReportsScheduled(pageSize, currentPage, searchName, searchOwner, scheduled, status).subscribe(
@@ -106,12 +108,14 @@ export class ReportsComponent implements OnInit {
     }
   }
 
+  // pop up when no reports available
   onDataEmpty(list) {
     if (list.length === 0) {
       this.notifications.create('No reports found !', 'No reports found with search parameters.', NotificationType.Error, { timeOut: 3000, showProgressBar: true });
     }
   }
 
+  // on click search submit form
   onSubmit() {
     console.log(this.reportForm.value);
     if (!this.isScheduledSelected()) {
@@ -121,6 +125,7 @@ export class ReportsComponent implements OnInit {
     }
   }
 
+  // on click clear
   clearForm() {
     this.reportForm.value.searchName = '';
     this.reportForm.value.searchOwner = '';
@@ -136,6 +141,7 @@ export class ReportsComponent implements OnInit {
     this.loadData(this.itemsPerPage, this.currentPage);
   }
 
+  // change select scheduled
   onChangeScheduled(value) {
     if (value === 'false') {
       this.isScheduled = true;
@@ -144,6 +150,7 @@ export class ReportsComponent implements OnInit {
     }
   }
 
+  // format date for table
   formatDate(date) {
     if (typeof date !== 'undefined') {
       const dates1 = date.split('+');
@@ -152,6 +159,7 @@ export class ReportsComponent implements OnInit {
     }
   }
 
+  // generate pills colors
   typeColor(type) {
     if (type === 'METER') {
       return 'primary';
@@ -178,6 +186,7 @@ export class ReportsComponent implements OnInit {
     }
   }
 
+  // generate indexes for reports
   reportIndex(index) {
     if (this.currentPage === 0) {
       return index + 1 + this.itemsPerPage * (this.currentPage);
@@ -185,10 +194,12 @@ export class ReportsComponent implements OnInit {
     return index + 1 + this.itemsPerPage * (this.currentPage - 1);
   }
 
+  // enable or disable status
   isScheduledSelected() {
     return (this.reportForm.value.scheduled !== ('Choose...') && this.reportForm.value.scheduled !== (''));
   }
 
+  // remove choose from form form values
   RemoveChoose(val) {
     if (val === 'Choose...') {
       return '';
@@ -197,11 +208,12 @@ export class ReportsComponent implements OnInit {
     }
   }
 
+  // get boolean value of is scheduled
   getBoolean(string) {
     return string === 'true';
   }
 
-
+// on click search
   onStateButtonClick(event) {
     if (this.stateButtonDisabled) {
       return;

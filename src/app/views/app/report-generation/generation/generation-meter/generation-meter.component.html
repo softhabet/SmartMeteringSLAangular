@@ -8,7 +8,7 @@
 
 <div class="card mb-5">
   <div class="card-body">
-    <aw-wizard>
+    <aw-wizard #wizard>
       <aw-wizard-step stepTitle="{{ 'wizard.step-name-1' | translate }}" style="min-height: 120px;">
 
         <app-step1></app-step1>
@@ -16,7 +16,8 @@
         <div class="text-center">
           <button type="button" class="btn btn-primary mr-1" awPreviousStep disabled>{{ 'wizard.prev' |
             translate}}</button>
-          <button type="button" (click)="submitStep1()" class="btn btn-primary" awNextStep>{{ 'wizard.next' | translate
+          <button type="button" class="btn btn-primary" (click)="onNextStep1()">{{ 'wizard.next'
+            | translate
             }}</button>
         </div>
       </aw-wizard-step>
@@ -27,7 +28,8 @@
 
         <div class="text-center">
           <button type="button" class="btn btn-primary mr-1" awPreviousStep>{{ 'wizard.prev' | translate }}</button>
-          <button type="button" (click)="submitStep2()" class="btn btn-primary" awNextStep>{{ 'wizard.next' | translate
+          <button type="button" class="btn btn-primary" (click)="onNextStep2()">{{ 'wizard.next'
+            | translate
             }}</button>
         </div>
       </aw-wizard-step>
@@ -38,7 +40,7 @@
 
         <div class="text-center">
           <button type="button" class="btn btn-primary mr-1" awPreviousStep>{{ 'wizard.prev' | translate }}</button>
-          <button type="button" class="btn btn-primary" (click)="postReport()">Generate</button>
+          <button type="button" class="btn btn-primary" (click)="onNextStep3()">Generate</button>
         </div>
       </aw-wizard-step>
 

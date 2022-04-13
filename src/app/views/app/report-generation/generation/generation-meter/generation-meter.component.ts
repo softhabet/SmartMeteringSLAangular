@@ -5,6 +5,7 @@ import {Step3Component} from './step3/step3.component';
 import { Router } from '@angular/router';
 import { ReportService, report, IReportType, Icolumns, IFilter } from 'src/app/services/report.service';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
+import { WizardComponent as ArcWizardComponent } from 'angular-archwizard';
 
 @Component({
   selector: 'app-generation-meter',
@@ -15,6 +16,7 @@ export class GenerationMeterComponent implements OnInit {
   @ViewChild(Step1Component) step1: Step1Component;
   @ViewChild(Step2Component) step2: Step2Component;
   @ViewChild(Step3Component) step3: Step3Component;
+  @ViewChild('wizard') wizard: ArcWizardComponent;
   constructor(private reportService: ReportService, private notifications: NotificationsService, private router: Router) { }
 
   report: report = new report();
@@ -24,16 +26,19 @@ export class GenerationMeterComponent implements OnInit {
   selectedColumns: Icolumns[];
   filters: IFilter[];
 
-  submitStep1() {
-    return this.step1.onSubmit();
+  onNextStep1() {
+    this.step1.onSubmit();
+    this.wizard.goToNextStep();
   }
 
-  submitStep2() {
-    return console.log(this.step2.getFilters());
+  onNextStep2() {
+    this.step2.getFilters();
+    this.wizard.goToNextStep();
   }
 
-  submitStep3() {
-    return this.step3.onSubmit();
+  onNextStep3() {
+    this.step3.onSubmit();
+    this.postReport();
   }
 
   postReport() {
@@ -61,9 +66,9 @@ export class GenerationMeterComponent implements OnInit {
   }
 
   getReportData() {
-    const step1 = this.submitStep1();
+    const step1 = this.step1.onSubmit();
     const step2 = this.step2.getFilters();
-    const step3 = this.submitStep3();
+    const step3 = this.step3.onSubmit();
     this.report.reportName = step1.reportName;
     this.report.reportDescription = step1.reportDescription;
     this.report.reportFolderPath = this.getFileNameParts(step1.prefix, step1.separator, step1.timestamp);
