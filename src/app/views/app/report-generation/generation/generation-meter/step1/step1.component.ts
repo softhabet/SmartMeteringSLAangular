@@ -1,6 +1,5 @@
 import {ChangeDetectorRef, AfterContentChecked, Component, OnInit, ViewChild} from '@angular/core';
 import { NgForm, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import {requiredList} from './../custom.validators';
 import { ReportService, Icolumns} from 'src/app/services/report.service';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
 
@@ -19,6 +18,7 @@ export class Step1Component implements OnInit, AfterContentChecked {
 
   formSubmitAttempt: boolean;
   columnsNotEmpty: boolean;
+  reportExists: boolean;
 
   constructor(private notifications: NotificationsService, private changeDetector: ChangeDetectorRef, private reportService: ReportService) {}
 
@@ -49,30 +49,59 @@ export class Step1Component implements OnInit, AfterContentChecked {
         timestamped: new FormControl(false)
       })
     });
-    // this.step1Form.controls.columns.setValidators([requiredList]);
+  }
+
+  // checkReportNameExisting(reportName) {
+  //   this.reportService.checkReportName(reportName).subscribe(
+  //     (res) => {
+  //       this.reportExistsRes.push(res);
+  //       }
+  //     },
+  //     (err) => {
+  //       console.log(err);
+  //     }
+  //   );
+  // }
+
+  checkReportNameExisting(reportName) {
+    return this.reportService.checkReportName(reportName).toPromise();
+  }
+
+  checkReportExists(reportExistsRes) {
+    this.reportExists = reportExistsRes[reportExistsRes.length - 1];
   }
 
   onSubmit() {
-    this.formSubmitAttempt = true;
-    this.step1Form.value.columns = this.simpleList[1];
-    if (this.step1Form.value.columns.length === 0) {
-      this.columnsNotEmpty = false;
+    if (this.reportName.value !== '') {
+      this.checkReportNameExisting(this.reportName.value).then((data) => {
+        this.reportExists = data;
+        this.formSubmitAttempt = true;
+        this.step1Form.value.columns = this.simpleList[1];
+        if (this.step1Form.value.columns.length === 0) {
+        this.columnsNotEmpty = false;
+        } else {
+          this.columnsNotEmpty = true;
+        }
+      });
     } else {
-      this.columnsNotEmpty = true;
+      this.formSubmitAttempt = true;
+      this.step1Form.value.columns = this.simpleList[1];
+      if (this.step1Form.value.columns.length === 0) {
+        this.columnsNotEmpty = false;
+      } else {
+        this.columnsNotEmpty = true;
+      }
     }
     return this.step1Form.value;
   }
-
-  // onWarningNameRequired() {
-  //   this.notifications.create('Report Name!', 'Report Name is required.', NotificationType.Warn, { timeOut: 3000, showProgressBar: true });
-  //   this.formSubmitAttempt = false;
-  // }
 
   onWarning(name) {
     if (name === 'nameRequiredAlert') {
       this.notifications.create('Report Name !', 'Report Name is required.', NotificationType.Warn, { timeOut: 3000, showProgressBar: true });
     } else if (name === 'nameLengthAlert') {
       this.notifications.create('Report Name !', 'Report Name must contain at least 2 characters.', NotificationType.Warn, { timeOut: 3000, showProgressBar: true });
+    } else if (name === 'nameExistsAlert') {
+      this.notifications.create('Report Name !', 'Report Name already Exists please choose a new one.', NotificationType.Warn, { timeOut: 3000, showProgressBar: true });
     } else if (name === 'descriptionRequiredAlert') {
       this.notifications.create('Report Description !', 'Report Description is required.', NotificationType.Warn, { timeOut: 3000, showProgressBar: true });
     } else if (name === 'descriptionLengthAlert') {
@@ -95,6 +124,11 @@ export class Step1Component implements OnInit, AfterContentChecked {
   @ViewChild('nameLengthAlert') set nameLengthAlert(element) {
     if (element) {
       this.onWarning('nameLengthAlert');
+    }
+  }
+  @ViewChild('nameExistsAlert') set nameExistsAlert(element) {
+    if (element) {
+      this.onWarning('nameExistsAlert');
     }
   }
   @ViewChild('descriptionRequiredAlert') set descriptionRequiredAlert(element) {

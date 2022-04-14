@@ -5,7 +5,7 @@ import {
   HttpParams
 } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 
 export class report {
   reportName: string;
@@ -56,6 +56,9 @@ export interface Icolumns {
   fieldName: string;
 }
 
+export interface IbooleanReturn {
+  retData: boolean;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -68,6 +71,7 @@ export class ReportService {
   private criteriaUrl = 'http://localhost:8180/report-generation-service/report-type/criteria';
   private createReportUrl = 'http://localhost:8180/report-generation-service/reports';
   private deleteReportUrl = 'http://localhost:8180/report-generation-service/reports/name';
+  private checkReportUrl = 'http://localhost:8180/report-generation-service/reports/name';
 
   constructor(private http: HttpClient) {  }
 
@@ -152,6 +156,10 @@ export class ReportService {
 
   deleteReport(name: string) {
     return this.http.delete(`${this.deleteReportUrl}/${name}`, { responseType: 'text' });
+  }
+
+  checkReportName(name: string) {
+    return this.http.get<boolean>(`${this.checkReportUrl}/${name}`);
   }
 
   getReportDetails(name: string) {

@@ -28,10 +28,17 @@ export class GenerationMeterComponent implements OnInit {
 
   onNextStep1() {
     this.step1.onSubmit();
-    if (this.step1.step1Form.valid && this.step1.columnsNotEmpty) {
-      this.wizard.goToNextStep();
+    if (this.step1.reportName.value !== '') {
+      this.step1.checkReportNameExisting(this.step1.reportName.value).then( (data) => {
+        if (this.step1.step1Form.valid && this.step1.columnsNotEmpty && !data) {
+          this.wizard.goToNextStep();
+        }
+      });
+    } else {
+      if (this.step1.step1Form.valid && this.step1.columnsNotEmpty) {
+        this.wizard.goToNextStep();
+      }
     }
-    // this.wizard.goToNextStep();
   }
 
   onNextStep2() {
@@ -39,15 +46,17 @@ export class GenerationMeterComponent implements OnInit {
     if (this.step2.checkFilters()) {
       this.wizard.goToNextStep();
     }
-    // this.wizard.goToNextStep();
   }
 
   onNextStep3() {
     this.step3.onSubmit();
-    if (this.step3.generationForm.valid) {
+    if (this.step3.FormScheduled.value) {
+      if (this.step3.generationForm.valid) {
+        this.postReport();
+      }
+    } else {
       this.postReport();
     }
-    // this.postReport();
   }
 
   postReport() {

@@ -13,6 +13,7 @@ import { NotificationsService, NotificationType } from 'angular2-notifications';
 export class Step3Component implements OnInit, AfterContentChecked {
   // form
   generationForm: FormGroup;
+  get FormScheduled() { return this.generationForm.get('scheduled'); }
   get scheduledDate() { return this.generationForm.get('scheduledDate'); }
   get timeFrom() { return this.generationForm.get('timeFrom'); }
   get timeTo() { return this.generationForm.get('timeTo'); }

@@ -14,6 +14,7 @@
               placeholder="{{'reports-generation.report-name' | translate}}">
             <div #nameRequiredAlert *ngIf="reportName.errors?.required && formSubmitAttempt"></div>
             <div #nameLengthAlert *ngIf="step1Form.get('reportName').errors?.minlength && formSubmitAttempt"></div>
+            <div #nameExistsAlert *ngIf="reportExists && formSubmitAttempt"></div>
             <!-- <div *ngIf="step1Form.get('reportName').errors?.required && form.submitted" class="invalid-tooltip">Report
               Name is required!</div> -->
           </div>
