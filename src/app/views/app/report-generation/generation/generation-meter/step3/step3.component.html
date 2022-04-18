@@ -27,7 +27,8 @@
               <h6 class="mb-2">Date :</h6>
               <div class="form-group mb-3">
                 <input class="form-control" formControlName="scheduledDate" placeholder="Datepicker"
-                  #drp="bsDaterangepicker" bsDaterangepicker [container]="'html'">
+                  #drp="bsDaterangepicker" bsDaterangepicker [container]="'html'" [minDate]="minDate"
+                  [bsConfig]="{showWeekNumbers: false, displayOneMonthRange: true, displayMonths : 1}">
               </div>
               <div #dateRequiredAlert *ngIf="scheduledDate.errors?.required && formSubmitAttempt"></div>
             </div>

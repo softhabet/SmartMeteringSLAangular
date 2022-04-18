@@ -6,6 +6,7 @@ import {frLocale} from 'ngx-bootstrap/locale';
 import { th, tr } from 'date-fns/locale';
 import { ReportService} from 'src/app/services/report.service';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
+import {timeRequired} from './../custom.validators';
 
 @Component({
   selector: 'app-step2',
@@ -28,9 +29,11 @@ export class Step2Component implements OnInit, AfterContentChecked {
   bsRangeValue: Date[];
   public bsRangeValues: [Date[]];
   maxDate = new Date();
-  mouseTime = new Date();
-  public mouseTimes: [Date[]];
+  mouseTime: Date = null;
+  public mouseTimes1: Date[];
+  public mouseTimes2: Date[];
   bsInlineValue = new Date();
+  minDate = new Date();
 
   // operators accordion
   // always id =operatorNumber-1
@@ -42,8 +45,8 @@ export class Step2Component implements OnInit, AfterContentChecked {
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
     this.bsRangeValues = [this.bsRangeValue];
-    // @ts-ignore
-    this.mouseTimes = [this.mouseTime];
+    this.mouseTimes1 = [this.mouseTime];
+    this.mouseTimes2 = [this.mouseTime];
     defineLocale('fr', frLocale);
     this.localeService.use('fr');
   }
@@ -54,6 +57,7 @@ export class Step2Component implements OnInit, AfterContentChecked {
 
   ngOnInit(): void {
     this.getData();
+
     this.form = new FormGroup({
       basicDate: new FormControl(new Date()),
     });
@@ -117,8 +121,8 @@ export class Step2Component implements OnInit, AfterContentChecked {
         filterType: 'listOne'
       });
       this.bsRangeValues.push(this.bsRangeValue);
-      // @ts-ignore
-      this.mouseTimes.push(this.mouseTime);
+      this.mouseTimes1.push(this.mouseTime);
+      this.mouseTimes2.push(this.mouseTime);
   }
 
   getLastFilter() {
@@ -127,6 +131,9 @@ export class Step2Component implements OnInit, AfterContentChecked {
 
   deleteFilter(filter) {
     this.filters.splice(this.filters.indexOf(filter), 1);
+    this.bsRangeValues.splice(this.filters.indexOf(filter), 1);
+    this.mouseTimes1.splice(this.filters.indexOf(filter), 1);
+    this.mouseTimes2.splice(this.filters.indexOf(filter), 1);
   }
 
   getOperators(set, fieldName) {
@@ -166,22 +173,23 @@ export class Step2Component implements OnInit, AfterContentChecked {
     }
    }
 
-  changeOperator(operator, filter) {
+  changeOperator(operator, filter, field, set) {
     filter.operator = operator;
+    const list = set.find((crit: any) => crit.fieldName === field);
     if (filter.filterType !== 'string') {
       if (operator === 'is between' || operator === 'is not between') {
         filter.filterType = 'dateRange';
         filter.filterValue = [];
       } else if (operator === 'is one of' || operator === 'is not one of') {
         filter.filterType = 'listMulti';
-        filter.filterValue = [];
+        filter.filterValue = [list.values[0].value];
       } else {
         if (filter.filterType === 'date' || filter.filterType === 'dateRange') {
           filter.filterType = 'date';
           filter.filterValue = '';
         } else {
           filter.filterType = 'listOne';
-          filter.filterValue = '';
+          filter.filterValue = list.values[0].value;
         }
       }
     } else {
@@ -191,19 +199,13 @@ export class Step2Component implements OnInit, AfterContentChecked {
 
   changeValue(value, filter) {
     filter.filterValue = value;
-    // if (filter.filterValue === '' || filter.filterValue === null || filter.filterValue === []) {
-    //   this.onWarning('filterValueRequiredAlert');
-    // }
-  }
-
-  deleteGroupItem(id: number): void {
-    this.filters.splice(id, 1);
-    this.bsRangeValues.splice(id, 1);
-    this.mouseTimes.splice(id, 1);
   }
 
   deleteFilters(): void {
     this.filters = [];
+    this.bsRangeValues = [[]];
+    this.mouseTimes1 = [];
+    this.mouseTimes2 = [];
   }
 
   // yes if array empty
@@ -213,21 +215,48 @@ export class Step2Component implements OnInit, AfterContentChecked {
 
   // return filters to wizard
   getFilters() {
-    this.filters.map((filter) => {
+    this.filters.map((filter, index) => {
       if (filter.filterType === 'date') {
-        console.log(filter.filterValue);
-        if (filter.filterValue !== '' && filter.filterValue !== null) {
+        const time1 = this.mouseTimes1[index];
+        if (filter.filterValue !== '' && filter.filterValue !== null && time1 == null) {
           filter.filterValue = this.getDateNoTime(filter.filterValue);
+          console.log(filter.filterValue);
+        } else if (filter.filterValue !== '' && filter.filterValue !== null && time1 != null) {
+          filter.filterValue = this.getDatePlusTime(filter.filterValue, time1);
+          console.log(filter.filterValue);
         }
       } else if (filter.filterType === 'dateRange') {
+        const time1 = this.mouseTimes1[index];
+        const time2 = this.mouseTimes2[index];
         if (filter.filterValue !== null && filter.filterValue.length !== 0) {
-          filter.filterValue[0] = this.getDateNoTime(filter.filterValue[0]);
-          filter.filterValue[1] = this.getDateNoTime(filter.filterValue[1]);
+          if (time1 == null && time2 == null) {
+            filter.filterValue[0] = this.getDateNoTime(filter.filterValue[0]);
+            filter.filterValue[1] = this.getDateNoTime(filter.filterValue[1]);
+          } else if (time1 == null && time2 != null ) {
+            filter.filterValue[0] = this.getDateNoTime(filter.filterValue[0]);
+            filter.filterValue[1] = this.getDatePlusTime(filter.filterValue[1], time2);
+          } else if (time1 != null && time2 == null ) {
+            filter.filterValue[0] = this.getDatePlusTime(filter.filterValue[0], time1);
+            filter.filterValue[1] = this.getDateNoTime(filter.filterValue[1]);
+          } else {
+            filter.filterValue[0] = this.getDatePlusTime(filter.filterValue[0], time1);
+            filter.filterValue[1] = this.getDatePlusTime(filter.filterValue[1], time2);
+          }
+          console.log(filter.filterValue);
         }
       }
     });
     // this.checkFilters();
     return this.filters;
+  }
+
+  getDateNoTime(date) {
+    const timePortion = (date.getTime() - date.getTimezoneOffset() * 60 * 1000) % (3600 * 1000 * 24);
+    return (new Date(date - timePortion));
+  }
+
+  getDatePlusTime(date, time) {
+    return new Date(date.setHours(time.getHours(), time.getMinutes(), 0));
   }
 
   // check if filters are valid
@@ -308,11 +337,6 @@ export class Step2Component implements OnInit, AfterContentChecked {
     } else if (name === 'filterNameRequiredAlert') {
       this.notifications.create('Field Name Required!', 'Please do not leave Filter Field empty.', NotificationType.Warn, { timeOut: 3000, showProgressBar: true });
     }
-  }
-
-  getDateNoTime(date) {
-    const timePortion = (date.getTime() - date.getTimezoneOffset() * 60 * 1000) % (3600 * 1000 * 24);
-    return (new Date(date - timePortion));
   }
 
   onStateButtonClick(event) {

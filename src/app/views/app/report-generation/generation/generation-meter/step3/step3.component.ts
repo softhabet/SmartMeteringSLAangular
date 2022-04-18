@@ -22,6 +22,7 @@ export class Step3Component implements OnInit, AfterContentChecked {
   bsValue = new Date();
   bsRangeValue: Date[];
   maxDate = new Date();
+  minDate = new Date();
   mouseTime1 = new Date();
   mouseTime2 = new Date();
   mouseTime3 = new Date();

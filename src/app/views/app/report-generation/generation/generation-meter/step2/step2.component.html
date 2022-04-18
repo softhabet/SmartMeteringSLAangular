@@ -20,20 +20,21 @@
           <span class="w-25 d-block mr-5">
             <h6 class="mb-2">Field</h6>
             <ng-select [items]="criteriaSet" bindLabel="fieldName" bindValue="fieldName" [(ngModel)]="filter.fieldName"
-              (change)="changeField(filter.fieldName, filter, criteriaSet)">
+              (change)="changeField(filter.fieldName, filter, criteriaSet)" [clearable]="false">
             </ng-select>
           </span>
           <span class="w-25 d-block mr-5">
             <h6 class="mb-2">Operator</h6>
             <ng-select [items]="getOperators(criteriaSet, filter.fieldName)" bindLabel="operator" bindValue="operator"
-              [(ngModel)]="filter.operator" (change)="changeOperator(filter.operator, filter)">
+              [(ngModel)]="filter.operator"
+              (change)="changeOperator(filter.operator, filter, filter.fieldName, criteriaSet)" [clearable]="false">
             </ng-select>
           </span>
           <!-- Filter Value -->
           <span *ngIf="filter.filterType==='listOne'" class="w-25 d-block">
             <h6 class="mb-2">value</h6>
             <ng-select [items]="getValues(criteriaSet, filter.fieldName)" bindLabel="value" bindValue="value"
-              [(ngModel)]="filter.filterValue" (change)="changeValue(filter.filterValue, filter)">
+              [(ngModel)]="filter.filterValue" (change)="changeValue(filter.filterValue, filter)" [clearable]="false">
             </ng-select>
           </span>
           <span *ngIf="filter.filterType==='listMulti'" class="w-25 d-block">
@@ -45,31 +46,58 @@
           <span *ngIf="filter.filterType==='string'" class="w-25 d-block">
             <h6 class="mb-2">value</h6>
             <input type="text" class="form-control" name="filterValue" placeholder="value"
-              [(ngModel)]="filter.filterValue">
+              [(ngModel)]="filter.filterValue" (change)="changeValue(filter.filterValue, filter)">
           </span>
-          <!-- Filter Date -->
-          <span *ngIf="filter.filterType==='date'" class="w-25 d-block">
-            <h6 class="mb-2">Date</h6>
-            <div class="form-group mb-3">
+          <!-- Filter Date and time -->
+          <!-- one date -->
+          <span *ngIf="filter.filterType==='date'" class="d-flex">
+            <div class="form-group mb-3 d-block">
+              <h6 class="text-nowrap mb-2">Date and Time :</h6>
               <input type="text" placeholder="Datepicker" class="form-control" bsDatepicker [container]="'html'"
-                [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD/MM/YYYY' }" [(ngModel)]="filter.filterValue">
+                [bsConfig]="{showWeekNumbers: false, adaptivePosition: true, dateInputFormat: 'DD/MM/YYYY'}"
+                [(ngModel)]="filter.filterValue">
+            </div>
+            <div style="transform: translate(0, 17%);" class="d-block ml-2">
+              <timepicker class="timepicker" [mousewheel]="true" [(ngModel)]="mouseTimes1[filters.indexOf(filter)]"
+                [showMeridian]="false">
+              </timepicker>
             </div>
           </span>
-          <span *ngIf="filter.filterType==='dateRange'" class="w-25 d-block">
-            <h6 class="mb-2">Date</h6>
-            <div class="form-group mb-3">
+          <!-- date range -->
+          <span *ngIf="filter.filterType==='dateRange'" class="d-bloc">
+            <!-- from -->
+            <div class="d-flex">
+              <div class="form-group mb-3 d-block">
+                <h6 class="text-nowrap mb-2">Date and Time :</h6>
+                <input type="text" placeholder="Datepicker From" class="form-control" bsDatepicker [container]="'html'"
+                  [bsConfig]="{showWeekNumbers: false, adaptivePosition: true, dateInputFormat: 'DD/MM/YYYY'}"
+                  [(ngModel)]="filter.filterValue[0]">
+              </div>
+              <div style="transform: translate(0, 17%);" class="d-block ml-2">
+                <timepicker class="timepicker" [mousewheel]="true" [(ngModel)]="mouseTimes1[filters.indexOf(filter)]"
+                  [showMeridian]="false">
+                </timepicker>
+              </div>
+            </div>
+            <!-- To -->
+            <div class="d-flex">
+              <div class="form-group mt-4 d-block">
+                <input type="text" placeholder="Datepicker To" class="form-control" bsDatepicker [container]="'html'"
+                  [bsConfig]="{showWeekNumbers: false, adaptivePosition: true, dateInputFormat: 'DD/MM/YYYY'}"
+                  [(ngModel)]="filter.filterValue[1]" [minDate]="filter.filterValue[0]">
+              </div>
+              <div style="transform: translate(0, 12%);" class="d-block ml-2">
+                <timepicker class="timepicker" [mousewheel]="true" [(ngModel)]="mouseTimes2[filters.indexOf(filter)]"
+                  [min]="mouseTimes1[filters.indexOf(filter)]" [showMeridian]="false">
+                </timepicker>
+              </div>
+            </div>
+            <!-- <div class="form-group mb-3">
               <input class="form-control" placeholder="Datepicker" #drp="bsDaterangepicker" bsDaterangepicker
-                [container]="'html'" [(ngModel)]="filter.filterValue">
-            </div>
-          </span>
-          <!-- Filter Time removed -->
-          <span *ngIf="time" style="transform: translate(0, 44%);" class="mr-3 d-block">
-            <h6 class=" text-nowrap mb-2">Time :</h6>
-          </span>
-          <span *ngIf="time" style="transform: translate(0, 17%);" class="w-25 d-inline-block">
-            <timepicker class="timepicker" [mousewheel]="true" [(ngModel)]="mouseTimes[filter.id]"
-              [showMeridian]="false">
-            </timepicker>
+                [container]="'html'"
+                [bsConfig]="{showWeekNumbers: false, displayOneMonthRange: true, displayMonths : 1}"
+                [(ngModel)]=" filter.filterValue">
+            </div> -->
           </span>
           <!-- deleteFilter button -->
           <div class="d-inline-block">
