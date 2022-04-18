@@ -72,6 +72,9 @@ export class ReportService {
   private createReportUrl = 'http://localhost:8180/report-generation-service/reports';
   private deleteReportUrl = 'http://localhost:8180/report-generation-service/reports/name';
   private checkReportUrl = 'http://localhost:8180/report-generation-service/reports/name';
+  private reportSeparatorsUrl = 'http://localhost:8180/report-generation-service/reports/separators';
+  private reportTimestampsUrl = 'http://localhost:8180/report-generation-service/reports/timestamps';
+  private reportFileNamesUrl = 'http://localhost:8180/report-generation-service/reports/reportFileNames';
 
   constructor(private http: HttpClient) {  }
 
@@ -164,6 +167,39 @@ export class ReportService {
 
   getReportDetails(name: string) {
     return this.http.get(`${this.reportDetailsUrl}/${name}`).pipe(
+      map((res: any) => {
+        return res;
+      }),
+      catchError(errorRes => {
+        return throwError(errorRes);
+      })
+    );
+  }
+
+  getReportSeparators() {
+    return this.http.get(`${this.reportSeparatorsUrl}`).pipe(
+      map((res: any) => {
+        return res;
+      }),
+      catchError(errorRes => {
+        return throwError(errorRes);
+      })
+    );
+  }
+
+  getReportTimeStamps() {
+    return this.http.get(`${this.reportTimestampsUrl}`).pipe(
+      map((res: any) => {
+        return res;
+      }),
+      catchError(errorRes => {
+        return throwError(errorRes);
+      })
+    );
+  }
+
+  getReportFileNames() {
+    return this.http.get(`${this.reportFileNamesUrl}`).pipe(
       map((res: any) => {
         return res;
       }),

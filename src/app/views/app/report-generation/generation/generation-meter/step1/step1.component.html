@@ -45,22 +45,29 @@
   <accordion class="mt-4 mb-4" [isAnimated]="true">
     <!-- Report file Name card -->
     <accordion-group heading="Report file Name Specification" [panelClass]="'border'">
-      <span class="d-inline-block ml-1 mb-4">
+      <span class=" d-inline-block ml-1 mb-4">
         <div class="d-flex flex-row">
           <h6 class="text-nowrap mt-2 mr-4">Report file name separator: </h6>
 
           <div class="form-group">
-            <select id="separator" class="form-control" formControlName="separator">
-              <option value="_" selected>UnderScore(_)</option>
+            <select id="separator" class="form-control" formControlName="separator" (change)="onChangeFileName()">
+              <option *ngFor="let separator of separators" [value]="separator.value">
+                {{separator.name}}
+              </option>
+              <!-- <option value="_" selected>UnderScore (_)</option>
               <option value="-">Dash (-)</option>
-              <option value="/">Slash (/)</option>
+              <option value="/">Slash (/)</option> -->
             </select>
           </div>
         </div>
       </span>
 
-      <h6 class="text-nowrap mb-4 ml-1">Report file name parts: </h6>
+      <div class="mb-5 ml-1">
+        <h6 class="d-inline text-nowrap mr-3">Generated report file name: </h6>
+        <h6 class="d-inline text-nowrap">{{reportFileName}}</h6>
+      </div>
 
+      <h6 class="text-nowrap mt-1 mb-4 ml-1">Report file name parts: </h6>
       <table class="mb-2 ml-2 mr-2" style="table-layout: fixed; width: 100%;">
         <tbody>
           <tr>
@@ -70,9 +77,11 @@
                 <h6 class="mb-2">Prefix</h6>
                 <div class="input-group">
                   <input type="text" class="form-control" placeholder="Prefix" class="form-control" name="prefix"
-                    formControlName="prefix">
+                    formControlName="prefix" (change)="onChangePrefix()">
                   <div #prefixRequiredAlert *ngIf="prefix.errors?.required && formSubmitAttempt"></div>
                   <div #prefixLengthAlert *ngIf="prefix.errors?.minlength && formSubmitAttempt"></div>
+                  <div *ngIf="reportFileNameExists" [hidden]="prefix.pristine">Report file name exists! use random Id.
+                  </div>
                 </div>
               </span>
             </td>
@@ -81,18 +90,26 @@
               <span class="d-block mr-5">
                 <h6 class="mb-2">Timestamp</h6>
                 <div class="form-group">
-                  <select id="separator" class="form-control" formControlName="timestamp">
-                    <option value="yyyyMMddHHmm" selected>yyyyMMddHHmm</option>
+                  <select id="timestamp" class="form-control" formControlName="timestamp" (change)="onChangeFileName()">
+                    <option *ngFor="let timestamp of timestamps" [value]="timestamp.value">
+                      {{timestamp.name}}
+                    </option>
+                    <!-- <option value="yyyyMMddHHmm" selected>yyyyMMddHHmm</option>
                     <option value="ddMMyyyyHHmm">ddMMyyyyHHmm</option>
-                    <option value="MMddyyyyHHmm">MMddyyyyHHmm</option>
+                    <option value="MMddyyyyHHmm">MMddyyyyHHmm</option> -->
                   </select>
                 </div>
               </span>
             </td>
             <td
               style="text-align: left; padding-top:0px; padding-bottom:0; vertical-align:middle; padding:30px; background-color: #f0eeee; border-radius: 10px; border-left: 10px solid white;">
-              <span class="d-block mr-5">
-                <h6 class="mb-2">RandomId</h6>
+              <span class="d-block mr-5" formGroupName="random">
+                <!-- <h6 class="mb-2">RandomId</h6> -->
+                <div class="custom-control custom-checkbox mb-2">
+                  <input type="checkbox" class="custom-control-input" id="random" formControlName="random"
+                    (change)="onChangeFileName()">
+                  <label style="font-size: 1rem" class="custom-control-label" for="random">RandomId</label>
+                </div>
                 <p style="color:#8f8f8f; font-size: 14px; padding: 0; line-height: 1.6; margin:0; ">
                   = A 13 Digit number<br>
                   To randomize the report name
