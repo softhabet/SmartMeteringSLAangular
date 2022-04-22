@@ -17,7 +17,9 @@ export class Step3Component implements OnInit, AfterContentChecked {
   get scheduledDate() { return this.generationForm.get('scheduledDate'); }
   get timeFrom() { return this.generationForm.get('timeFrom'); }
   get timeTo() { return this.generationForm.get('timeTo'); }
+  get every() { return this.generationForm.get('every'); }
   get timeEvery() { return this.generationForm.get('timeEvery'); }
+  get numberEvery() { return this.generationForm.get('numberEvery'); }
   // DatePicker + timePicker
   bsValue = new Date();
   bsRangeValue: Date[];
@@ -53,7 +55,9 @@ export class Step3Component implements OnInit, AfterContentChecked {
       scheduledDate: new FormControl(null, [Validators.required]),
       timeFrom: new FormControl(null, [timeRequired()]),
       timeTo: new FormControl(null, [timeRequired()]),
-      timeEvery: new FormControl(null, [timeRequired()])
+      timeEvery: new FormControl(null, [timeRequired()]),
+      every: new FormControl('month', [Validators.required]),
+      numberEvery: new FormControl(1, [Validators.required])
     });
   }
 
@@ -64,10 +68,19 @@ export class Step3Component implements OnInit, AfterContentChecked {
       this.generationForm.value.timeEvery = null;
       this.generationForm.value.timeFrom = null;
       this.generationForm.value.timeTo = null;
+      this.generationForm.value.every = null;
+      this.generationForm.value.numberEvery = null;
     } else {
       if (this.generationForm.value.scheduledDate !== null && this.generationForm.value.scheduledDate.length !== 0) {
         this.generationForm.value.scheduledDate[0] = this.getDateNoTime(this.generationForm.value.scheduledDate[0]);
         this.generationForm.value.scheduledDate[1] = this.getDateNoTime(this.generationForm.value.scheduledDate[1]);
+        if (this.every.value === 'month' || this.every.value === 'week' || this.every.value === 'day') {
+          this.generationForm.value.timeEvery = new Date();
+          this.timeEvery.setErrors(null);
+        } else if (this.every.value === 'time') {
+          this.generationForm.value.numberEvery = 1;
+          this.numberEvery.setErrors(null);
+        }
       }
     }
     return this.generationForm.value;
@@ -82,6 +95,8 @@ export class Step3Component implements OnInit, AfterContentChecked {
       this.notifications.create('Time To !', 'Time To is required.', NotificationType.Warn, { timeOut: 3000, showProgressBar: true });
     } else if (name === 'timeEveryRequiredAlert') {
       this.notifications.create('Time Every !', 'Time Every is required.', NotificationType.Warn, { timeOut: 3000, showProgressBar: true });
+    } else if (name === 'numberEveryRequiredAlert') {
+      this.notifications.create('Select Number !', 'Number of months/weeks/days is required.', NotificationType.Warn, { timeOut: 3000, showProgressBar: true });
     }
     this.formSubmitAttempt = false;
   }
@@ -107,6 +122,12 @@ export class Step3Component implements OnInit, AfterContentChecked {
   @ViewChild('timeEveryRequiredAlert') set timeEveryRequiredAlert(element) {
     if (element) {
       this.onWarning('timeEveryRequiredAlert');
+    }
+  }
+
+  @ViewChild('numberEveryRequiredAlert') set numberEveryRequiredAlert(element) {
+    if (element) {
+      this.onWarning('numberEveryRequiredAlert');
     }
   }
   getHoursAndMinutes(time) {

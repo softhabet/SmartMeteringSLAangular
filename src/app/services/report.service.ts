@@ -16,7 +16,7 @@ export class report {
   scheduleEvery: number;
   isCompressedExport: boolean;
   isTimeStampedFolder: boolean;
-  reportFolderPath: string;
+  reportFileName: string;
   reportType: IReportType;
   selectedColumns: Icolumns[];
   filters: IFilter[];

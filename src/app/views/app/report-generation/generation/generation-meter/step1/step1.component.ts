@@ -65,7 +65,7 @@ export class Step1Component implements OnInit, AfterContentChecked {
     );
     this.reportService.getReportFileNames().subscribe(
       (res) => {
-        res.map((name) => this.reportFileNames.push(name));
+        res.map((name) => this.reportFileNames.push(name.reportFileName));
         // this.timestamps = res;
       },
       (err) => {

@@ -26,7 +26,7 @@
             <div class="w-75 d-block mt-2 mb-2">
               <h6 class="mb-2">Date :</h6>
               <div class="form-group mb-3">
-                <input class="form-control" formControlName="scheduledDate" placeholder="Datepicker"
+                <input class="form-control" formControlName="scheduledDate" placeholder="Date range"
                   #drp="bsDaterangepicker" bsDaterangepicker [container]="'html'" [minDate]="minDate"
                   [bsConfig]="{showWeekNumbers: false, displayOneMonthRange: true, displayMonths : 1}">
               </div>
@@ -56,16 +56,35 @@
                   <div #timeToRequiredAlert *ngIf="timeTo.errors?.required && formSubmitAttempt"></div>
                 </span>
               </div>
-              <!-- Every -->
-              <div class="form-group w-50">
+            </div>
+            <!-- Every -->
+            <div class="d-flex">
+              <div class="form-group w-75 mb-3">
                 <span style="transform: translate(0, 44%);" class="mr-3 d-block">
                   <h6 class=" text-nowrap mb-2">Every :</h6>
                 </span>
-                <span style="transform: translate(0, 17%);" class="w-25 d-inline-block">
-                  <timepicker class="timepicker" [mousewheel]="true" [showMeridian]="false" formControlName="timeEvery">
-                  </timepicker>
-                  <div #timeEveryRequiredAlert *ngIf="timeEvery.errors?.required && formSubmitAttempt"></div>
-                </span>
+                <div class="d-flex mt-4 d-block">
+                  <div class="w-75 form-group mr-4">
+                    <select id="every" class="form-control" formControlName="every">
+                      <option value="month" selected>Months</option>
+                      <option value="week" selected>Weeks</option>
+                      <option value="day">Days</option>
+                      <option value="time">Hours and minutes</option>
+                    </select>
+                  </div>
+                  <div *ngIf="every.value === 'month' || every.value === 'week' || every.value === 'day'"
+                    class="w-25 form-group">
+                    <input type="number" min="1" class="form-control" name="numberEvery" formControlName="numberEvery"
+                      placeholder="Select Number">
+                  </div>
+                  <div #numberEveryRequiredAlert *ngIf="numberEvery.errors?.required && formSubmitAttempt"></div>
+                  <div *ngIf="every.value === 'time'" style="transform: translate(0, -20%)" class="w-25 form-group">
+                    <timepicker class="timepicker" [mousewheel]="true" [showMeridian]="false"
+                      formControlName="timeEvery">
+                    </timepicker>
+                    <div #timeEveryRequiredAlert *ngIf="timeEvery.errors?.required && formSubmitAttempt"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

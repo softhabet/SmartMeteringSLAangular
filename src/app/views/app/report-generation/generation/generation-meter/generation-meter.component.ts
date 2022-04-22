@@ -89,7 +89,7 @@ export class GenerationMeterComponent implements OnInit {
     const step3 = this.step3.onSubmit();
     this.report.reportName = step1.reportName;
     this.report.reportDescription = step1.reportDescription;
-    this.report.reportFolderPath = this.step1.reportFileName;
+    this.report.reportFileName = this.step1.reportFileName;
     this.report.isCompressedExport = step1.checks.compressed;
     this.report.isTimeStampedFolder = step1.checks.timestamped;
     this.report.selectedColumns = step1.columns;
@@ -98,7 +98,7 @@ export class GenerationMeterComponent implements OnInit {
     if (this.report.isScheduled) {
       this.report.scheduleStart = this.getScheduelStart(this.getTimestamp(step3.scheduledDate[0]), this.getHoursAndMinutes(step3.timeFrom));
       this.report.scheduleEnd = this.getScheduelEnd(this.getTimestamp(step3.scheduledDate[1]), this.getHoursAndMinutes(step3.timeTo));
-      this.report.scheduleEvery = this.getScheduelEvery(this.getHoursAndMinutes(step3.timeEvery));
+      this.report.scheduleEvery = this.getScheduelEvery(step3);
     }
     this.report.reportType = this.reportType;
     console.log(this.report);
@@ -203,11 +203,20 @@ export class GenerationMeterComponent implements OnInit {
     return dateEnd + (hour * 3600 + min * 60);
   }
 
-  getScheduelEvery(timeEvery) {
-    const array = timeEvery.split(':');
-    const hour: number = array[0];
-    const min: number = array[1];
-    return (hour * 3600 + min * 60);
+  getScheduelEvery(form) {
+    const every = form.every;
+    if (every === 'month') {
+      return (form.numberEvery * 2628000);
+    } else if (every === 'week') {
+      return (form.numberEvery * 604800);
+    } else if (every === 'day') {
+      return (form.numberEvery * 86400);
+    } else {
+      const time = form.timeEvery;
+      const hour: number = time.getHours();
+      const min: number = time.getMinutes();
+      return (hour * 3600 + min * 60);
+    }
   }
 
   getTimestamp(date): number {

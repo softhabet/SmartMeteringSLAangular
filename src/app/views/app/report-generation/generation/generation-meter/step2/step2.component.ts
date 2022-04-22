@@ -256,7 +256,9 @@ export class Step2Component implements OnInit, AfterContentChecked {
   }
 
   getDatePlusTime(date, time) {
-    return new Date(date.setHours(time.getHours(), time.getMinutes(), 0));
+    if (date != null && time != null ) {
+      return new Date(date.setHours(time.getHours(), time.getMinutes(), 0));
+    }
   }
 
   // check if filters are valid

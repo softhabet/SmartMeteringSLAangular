@@ -46,7 +46,7 @@
           <span *ngIf="filter.filterType==='string'" class="w-25 d-block">
             <h6 class="mb-2">value</h6>
             <input type="text" class="form-control" name="filterValue" placeholder="value"
-              [(ngModel)]="filter.filterValue" (change)="changeValue(filter.filterValue, filter)">
+              [(ngModel)]="filter.filterValue" (change)="changeValue(filter.filterValue, filter)" autocomplete="off">
           </span>
           <!-- Filter Date and time -->
           <!-- one date -->
@@ -88,8 +88,9 @@
               </div>
               <div style="transform: translate(0, 12%);" class="d-block ml-2">
                 <timepicker class="timepicker" [mousewheel]="true" [(ngModel)]="mouseTimes2[filters.indexOf(filter)]"
-                  [min]="mouseTimes1[filters.indexOf(filter)]" [showMeridian]="false">
+                  [showMeridian]="false">
                 </timepicker>
+                <!-- [min]="getDatePlusTime(filter.filterValue[1],mouseTimes1[filters.indexOf(filter)])" -->
               </div>
             </div>
             <!-- <div class="form-group mb-3">
