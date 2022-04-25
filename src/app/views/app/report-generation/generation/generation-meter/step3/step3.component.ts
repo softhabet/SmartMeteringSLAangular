@@ -5,12 +5,16 @@ import { defineLocale } from 'ngx-bootstrap/chronos';
 import { frLocale } from 'ngx-bootstrap/locale';
 import {timeRequired} from './../custom.validators';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
+import { ReportService, IFilter, FiltersRequest } from 'src/app/services/report.service';
+import { isThisSecond } from 'date-fns';
 
 @Component({
   selector: 'app-step3',
   templateUrl: './step3.component.html'
 })
 export class Step3Component implements OnInit, AfterContentChecked {
+  @Input() reportFilters: IFilter[];
+  filterRequest = new FiltersRequest();
   // form
   generationForm: FormGroup;
   get FormScheduled() { return this.generationForm.get('scheduled'); }
@@ -36,7 +40,10 @@ export class Step3Component implements OnInit, AfterContentChecked {
   scheduled = false;
   formSubmitAttempt: boolean;
 
-  constructor(private notifications: NotificationsService, private localeService: BsLocaleService, private changeDetector: ChangeDetectorRef) {
+  totalMeters: number;
+  filteredMeters = 0;
+
+  constructor(private notifications: NotificationsService, private localeService: BsLocaleService, private changeDetector: ChangeDetectorRef, private reportService: ReportService) {
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
 
@@ -59,6 +66,14 @@ export class Step3Component implements OnInit, AfterContentChecked {
       every: new FormControl('month', [Validators.required]),
       numberEvery: new FormControl(1, [Validators.required])
     });
+    this.reportService.getTotalMetersNumber().subscribe(
+      (res) => {
+        this.totalMeters = res.size;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   onSubmit() {
@@ -84,6 +99,20 @@ export class Step3Component implements OnInit, AfterContentChecked {
       }
     }
     return this.generationForm.value;
+  }
+
+  onSimulate() {
+    console.log(this.reportFilters);
+    this.filterRequest.filters = this.reportFilters;
+    this.reportService.getFilteredMetersNumber(this.filterRequest).subscribe(
+      (res) => {
+        this.filteredMeters = res.size;
+        console.log(this.filteredMeters);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   onWarning(name) {

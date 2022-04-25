@@ -3,7 +3,7 @@ import {Step1Component} from './step1/step1.component';
 import {Step2Component} from './step2/step2.component';
 import {Step3Component} from './step3/step3.component';
 import { Router } from '@angular/router';
-import { ReportService, report, IReportType, Icolumns, IFilter } from 'src/app/services/report.service';
+import { ReportService, Report, IReportType, Icolumns, IFilter } from 'src/app/services/report.service';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
 import { WizardComponent as ArcWizardComponent } from 'angular-archwizard';
 
@@ -19,12 +19,13 @@ export class GenerationMeterComponent implements OnInit {
   @ViewChild('wizard') wizard: ArcWizardComponent;
   constructor(private reportService: ReportService, private notifications: NotificationsService, private router: Router) { }
 
-  report: report = new report();
+  report: Report = new Report();
   reportType: IReportType = {
     typeId : 1,
   };
   selectedColumns: Icolumns[];
   filters: IFilter[];
+  reportFilters: IFilter[];
 
   onNextStep1() {
     this.step1.onSubmit();
@@ -45,6 +46,7 @@ export class GenerationMeterComponent implements OnInit {
     this.step2.getFilters();
     if (this.step2.checkFilters()) {
       this.wizard.goToNextStep();
+      this.reportFilters = this.step2.getFilters();
     }
   }
 
@@ -93,7 +95,7 @@ export class GenerationMeterComponent implements OnInit {
     this.report.isCompressedExport = step1.checks.compressed;
     this.report.isTimeStampedFolder = step1.checks.timestamped;
     this.report.selectedColumns = step1.columns;
-    this.report.filters = this.getFiltersToSave(step2);
+    this.report.filters = step2;
     this.report.isScheduled = step3.scheduled;
     if (this.report.isScheduled) {
       this.report.scheduleStart = this.getScheduelStart(this.getTimestamp(step3.scheduledDate[0]), this.getHoursAndMinutes(step3.timeFrom));
@@ -132,58 +134,6 @@ export class GenerationMeterComponent implements OnInit {
   //   }
   //   return result;
   // }
-
-  getFiltersToSave(filters) {
-    const savedFilters: IFilter[] = [];
-    filters.forEach((filter) => {
-      if (filter.filterType === 'listOne') {
-        savedFilters.push({
-          fieldName: filter.fieldName,
-          operator: filter.operator,
-          filterValue: filter.filterValue,
-          filterType: filter.filterType
-        });
-      } else if (filter.filterType === 'listMulti') {
-        savedFilters.push({
-          fieldName: filter.fieldName,
-          operator: filter.operator,
-          filterValue: this.getList(filter.filterValue),
-          filterType: filter.filterType
-        });
-      } else if (filter.filterType === 'date') {
-        savedFilters.push({
-          fieldName: filter.fieldName,
-          operator: filter.operator,
-          filterValue: this.getTimestamp(filter.filterValue).toString(),
-          filterType: filter.filterType
-        });
-      } else if (filter.filterType === 'dateRange') {
-        const dateArray = [this.getTimestamp(filter.filterValue[0]).toString(), this.getTimestamp(filter.filterValue[1]).toString()];
-        savedFilters.push({
-          fieldName: filter.fieldName,
-          operator: filter.operator,
-          filterValue: this.getList(dateArray),
-          filterType: filter.filterType
-        });
-      } else {
-        savedFilters.push({
-          fieldName: filter.fieldName,
-          operator: filter.operator,
-          filterValue: filter.filterValue,
-          filterType: filter.filterType
-        });
-      }
-    });
-    return savedFilters;
-  }
-
-  getList(list) {
-    let string = '';
-    list.forEach((elem: string) => {
-      string += elem + ',';
-    });
-    return string.slice(0, -1);
-  }
 
   getHoursAndMinutes(time) {
     return  time.getHours() + ':' + time.getMinutes();

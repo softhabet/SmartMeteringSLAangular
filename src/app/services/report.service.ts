@@ -7,7 +7,7 @@ import {
 import { map, catchError, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 
-export class report {
+export class Report {
   reportName: string;
   reportDescription: string;
   isScheduled: boolean;
@@ -19,6 +19,10 @@ export class report {
   reportFileName: string;
   reportType: IReportType;
   selectedColumns: Icolumns[];
+  filters: IFilter[];
+}
+
+export class FiltersRequest {
   filters: IFilter[];
 }
 
@@ -75,6 +79,8 @@ export class ReportService {
   private reportSeparatorsUrl = 'http://localhost:8180/report-generation-service/reports/separators';
   private reportTimestampsUrl = 'http://localhost:8180/report-generation-service/reports/timestamps';
   private reportFileNamesUrl = 'http://localhost:8180/report-generation-service/reports/reportFileNames';
+  private totalMeterNumberUrl = 'http://localhost:8180/report-generation-service/reports/all-meters';
+  private filterdMeterNumberUrl = 'http://localhost:8180/report-generation-service/reports/filter-meters';
 
   constructor(private http: HttpClient) {  }
 
@@ -153,7 +159,7 @@ export class ReportService {
     );
   }
 
-  createReport(r: report, id: number) {
+  createReport(r: Report, id: number) {
     return this.http.post(`${this.createReportUrl}/${id}`, r, { responseType: 'text' });
   }
 
@@ -207,5 +213,20 @@ export class ReportService {
         return throwError(errorRes);
       })
     );
+  }
+
+  getTotalMetersNumber() {
+    return this.http.get(`${this.totalMeterNumberUrl}`).pipe(
+      map((res: any) => {
+        return res;
+      }),
+      catchError(errorRes => {
+        return throwError(errorRes);
+      })
+    );
+  }
+
+  getFilteredMetersNumber(filters: FiltersRequest): any {
+    return this.http.post(`${this.filterdMeterNumberUrl}`, filters, { responseType: 'json' });
   }
 }

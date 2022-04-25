@@ -4,7 +4,7 @@ import {BsLocaleService} from 'ngx-bootstrap';
 import {defineLocale} from 'ngx-bootstrap/chronos';
 import {frLocale} from 'ngx-bootstrap/locale';
 import { th, tr } from 'date-fns/locale';
-import { ReportService} from 'src/app/services/report.service';
+import { ReportService, IFilter } from 'src/app/services/report.service';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
 import {timeRequired} from './../custom.validators';
 
@@ -84,34 +84,6 @@ export class Step2Component implements OnInit, AfterContentChecked {
       }
     );
   }
-
-  // addFilter(set): void {
-  //   if (!this.checkEmpty()) {
-  //     if (this.getLastFilter().filterValue === '' || this.getLastFilter().filterValue === null || this.getLastFilter().filterValue === []) {
-  //       this.onWarning('filterValueRequiredAlert');
-  //     } else {
-  //       this.filters.push({
-  //         fieldName: set[0].fieldName,
-  //         operator: set[0].operators[0].operator,
-  //         filterValue: set[0].values[0].value,
-  //         filterType: 'listOne'
-  //       });
-  //       this.bsRangeValues.push(this.bsRangeValue);
-  //       // @ts-ignore
-  //       this.mouseTimes.push(this.mouseTime);
-  //     }
-  //   } else {
-  //     this.filters.push({
-  //       fieldName: set[0].fieldName,
-  //       operator: set[0].operators[0].operator,
-  //       filterValue: set[0].values[0].value,
-  //       filterType: 'listOne'
-  //     });
-  //     this.bsRangeValues.push(this.bsRangeValue);
-  //     // @ts-ignore
-  //     this.mouseTimes.push(this.mouseTime);
-  //   }
-  // }
 
   addFilter(set): void {
       this.filters.push({
@@ -247,7 +219,63 @@ export class Step2Component implements OnInit, AfterContentChecked {
       }
     });
     // this.checkFilters();
-    return this.filters;
+    return this.getFiltersToSave(this.filters);
+  }
+
+  getFiltersToSave(filters) {
+    const savedFilters: IFilter[] = [];
+    filters.forEach((filter) => {
+      if (filter.filterType === 'listOne') {
+        savedFilters.push({
+          fieldName: filter.fieldName,
+          operator: filter.operator,
+          filterValue: filter.filterValue,
+          filterType: filter.filterType
+        });
+      } else if (filter.filterType === 'listMulti') {
+        savedFilters.push({
+          fieldName: filter.fieldName,
+          operator: filter.operator,
+          filterValue: this.getList(filter.filterValue),
+          filterType: filter.filterType
+        });
+      } else if (filter.filterType === 'date') {
+        savedFilters.push({
+          fieldName: filter.fieldName,
+          operator: filter.operator,
+          filterValue: this.getTimestamp(filter.filterValue).toString(),
+          filterType: filter.filterType
+        });
+      } else if (filter.filterType === 'dateRange') {
+        const dateArray = [this.getTimestamp(filter.filterValue[0]).toString(), this.getTimestamp(filter.filterValue[1]).toString()];
+        savedFilters.push({
+          fieldName: filter.fieldName,
+          operator: filter.operator,
+          filterValue: this.getList(dateArray),
+          filterType: filter.filterType
+        });
+      } else {
+        savedFilters.push({
+          fieldName: filter.fieldName,
+          operator: filter.operator,
+          filterValue: filter.filterValue,
+          filterType: filter.filterType
+        });
+      }
+    });
+    return savedFilters;
+  }
+
+  getList(list) {
+    let string = '';
+    list.forEach((elem: string) => {
+      string += elem + ',';
+    });
+    return string.slice(0, -1);
+  }
+
+  getTimestamp(date): number {
+    return (new Date(date).getTime() / 1000);
   }
 
   getDateNoTime(date) {

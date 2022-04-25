@@ -48,7 +48,6 @@ export class Step1Component implements OnInit, AfterContentChecked {
     this.reportService.getReportSeparators().subscribe(
       (res) => {
         res.map((sep) => this.separators.push(sep));
-        // this.separators = res;
       },
       (err) => {
         console.log(err);
@@ -57,7 +56,6 @@ export class Step1Component implements OnInit, AfterContentChecked {
     this.reportService.getReportTimeStamps().subscribe(
       (res) => {
         res.map((stamp) => this.timestamps.push(stamp));
-        // this.timestamps = res;
       },
       (err) => {
         console.log(err);

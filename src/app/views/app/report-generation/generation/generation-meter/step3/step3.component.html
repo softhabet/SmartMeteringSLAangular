@@ -91,7 +91,8 @@
         </form>
         <!-- simulation Button -->
         <div class="d-flex mt-4 flex-row-reverse">
-          <button style="font-size: small;" type="button" class="btn btn-primary mb-1">Simulate</button>
+          <button style="font-size: small;" type="button" (click)="onSimulate()"
+            class="btn btn-primary mb-1">Simulate</button>
         </div>
       </div>
     </div>
@@ -112,7 +113,7 @@
                   </div>
                   <div class="d-block">
                     <div style="font-size: medium; font-weight: normal;" class="mt-2"><span>Total Meters</span></div>
-                    <div style="font-size: medium; font-weight: normal;"><span>1234</span></div>
+                    <div style="font-size: medium; font-weight: normal;"><span>{{totalMeters}}</span></div>
                   </div>
                 </div>
               </div>
@@ -129,7 +130,7 @@
                   <div class="d-block">
                     <div style="font-size: medium; font-weight: normal;" class="mt-2 text-nowrap"><span>Selected
                         Meters</span></div>
-                    <div style="font-size: medium; font-weight: normal;"><span>1234</span></div>
+                    <div style="font-size: medium; font-weight: normal;"><span>{{filteredMeters}}</span></div>
                   </div>
                 </div>
               </div>
