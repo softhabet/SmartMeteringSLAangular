@@ -54,9 +54,6 @@
               <option *ngFor="let separator of separators" [value]="separator.value">
                 {{separator.name}}
               </option>
-              <!-- <option value="_" selected>UnderScore (_)</option>
-              <option value="-">Dash (-)</option>
-              <option value="/">Slash (/)</option> -->
             </select>
           </div>
         </div>
@@ -75,12 +72,14 @@
               style="text-align: left; vertical-align:middle; border-radius: 10px; padding:30px; background-color: #f0eeee; border-right: 10px solid white;">
               <span class="d-block mr-5">
                 <h6 class="mb-2">Prefix</h6>
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Prefix" class="form-control" name="prefix"
-                    formControlName="prefix" (change)="onChangePrefix()">
+                <div class="d-flex flex-column input-group">
+                  <div>
+                    <input type="text" class="form-control" placeholder="Prefix" class="form-control" name="prefix"
+                      formControlName="prefix" (change)="onChangeFileName()">
+                  </div>
                   <div #prefixRequiredAlert *ngIf="prefix.errors?.required && formSubmitAttempt"></div>
                   <div #prefixLengthAlert *ngIf="prefix.errors?.minlength && formSubmitAttempt"></div>
-                  <div *ngIf="reportFileNameExists" [hidden]="prefix.pristine">Report file name exists! use random Id.
+                  <div *ngIf="reportPrefixExists" [hidden]="prefix.pristine">Report prefix exists ! use random Id.
                   </div>
                 </div>
               </span>
@@ -94,9 +93,6 @@
                     <option *ngFor="let timestamp of timestamps" [value]="timestamp.value">
                       {{timestamp.name}}
                     </option>
-                    <!-- <option value="yyyyMMddHHmm" selected>yyyyMMddHHmm</option>
-                    <option value="ddMMyyyyHHmm">ddMMyyyyHHmm</option>
-                    <option value="MMddyyyyHHmm">MMddyyyyHHmm</option> -->
                   </select>
                 </div>
               </span>
@@ -171,6 +167,5 @@
       <div #columnsEmptyAlert *ngIf="!columnsNotEmpty && formSubmitAttempt"></div>
     </accordion-group>
   </accordion>
-  <!-- <button class="btn btn-primary" type="submit">submit</button> -->
 </form>
 <simple-notifications></simple-notifications>

@@ -16,7 +16,10 @@ export class Report {
   scheduleEvery: number;
   isCompressedExport: boolean;
   isTimeStampedFolder: boolean;
-  reportFileName: string;
+  prefix: string;
+  separator: string;
+  timestamp: string;
+  randomId: string;
   reportType: IReportType;
   selectedColumns: Icolumns[];
   filters: IFilter[];
@@ -78,7 +81,7 @@ export class ReportService {
   private checkReportUrl = 'http://localhost:8180/report-generation-service/reports/name';
   private reportSeparatorsUrl = 'http://localhost:8180/report-generation-service/reports/separators';
   private reportTimestampsUrl = 'http://localhost:8180/report-generation-service/reports/timestamps';
-  private reportFileNamesUrl = 'http://localhost:8180/report-generation-service/reports/reportFileNames';
+  private reportsPrefixUrl = 'http://localhost:8180/report-generation-service/reports/reports-prefix';
   private totalMeterNumberUrl = 'http://localhost:8180/report-generation-service/reports/all-meters';
   private filterdMeterNumberUrl = 'http://localhost:8180/report-generation-service/reports/filter-meters';
 
@@ -204,8 +207,8 @@ export class ReportService {
     );
   }
 
-  getReportFileNames() {
-    return this.http.get(`${this.reportFileNamesUrl}`).pipe(
+  getReportsPrefix() {
+    return this.http.get(`${this.reportsPrefixUrl}`).pipe(
       map((res: any) => {
         return res;
       }),

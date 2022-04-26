@@ -20,7 +20,7 @@ export class Step1Component implements OnInit, AfterContentChecked {
   formSubmitAttempt: boolean;
   columnsNotEmpty: boolean;
   reportExists: boolean;
-  reportFileNameExists: boolean;
+  reportPrefixExists: boolean;
 
   randomValue: string;
   reportFileName: string;
@@ -30,7 +30,7 @@ export class Step1Component implements OnInit, AfterContentChecked {
   simpleList: Icolumns[][] = [[], []];
   separators = [];
   timestamps = [];
-  reportFileNames = [];
+  reportPrefixs = [];
 
   ngAfterContentChecked(): void {
     this.changeDetector.detectChanges();
@@ -61,9 +61,9 @@ export class Step1Component implements OnInit, AfterContentChecked {
         console.log(err);
       }
     );
-    this.reportService.getReportFileNames().subscribe(
+    this.reportService.getReportsPrefix().subscribe(
       (res) => {
-        res.map((name) => this.reportFileNames.push(name.reportFileName));
+        res.map((name) => this.reportPrefixs.push(name.reportPrefix));
         // this.timestamps = res;
       },
       (err) => {
@@ -89,31 +89,19 @@ export class Step1Component implements OnInit, AfterContentChecked {
     this.reportFileName = this.getFileNameParts( this.step1Form.value.prefix,  this.step1Form.value.separator,  this.step1Form.value.timestamp, this.step1Form.value.random.random);
   }
 
-  // checkReportNameExisting(reportName) {
-  //   this.reportService.checkReportName(reportName).subscribe(
-  //     (res) => {
-  //       this.reportExistsRes.push(res);
-  //       }
-  //     },
-  //     (err) => {
-  //       console.log(err);
-  //     }
-  //   );
-  // }
 
   checkReportNameExisting(reportName) {
     return this.reportService.checkReportName(reportName).toPromise();
   }
 
+  // check if report prefix exists
   onChangeFileName() {
     this.reportFileName = this.getFileNameParts(this.step1Form.value.prefix, this.step1Form.value.separator, this.step1Form.value.timestamp, this.step1Form.value.random.random);
-    this.reportFileNameExists = this.reportFileNames.includes(this.reportFileName);
-  }
-
-  // check if report file name exists
-  onChangePrefix() {
-    this.reportFileName = this.getFileNameParts(this.step1Form.value.prefix, this.step1Form.value.separator, this.step1Form.value.timestamp, this.step1Form.value.random.random);
-    this.reportFileNameExists = this.reportFileNames.includes(this.reportFileName);
+    if (!this.step1Form.value.random.random) {
+      this.reportPrefixExists = this.reportPrefixs.includes(this.step1Form.value.prefix);
+    } else {
+      this.reportPrefixExists = false;
+    }
   }
 
   getFileNameParts(prefix, separator, timestamp, randomized) {

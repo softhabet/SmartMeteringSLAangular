@@ -102,12 +102,10 @@ export class Step3Component implements OnInit, AfterContentChecked {
   }
 
   onSimulate() {
-    console.log(this.reportFilters);
     this.filterRequest.filters = this.reportFilters;
     this.reportService.getFilteredMetersNumber(this.filterRequest).subscribe(
       (res) => {
         this.filteredMeters = res.size;
-        console.log(this.filteredMeters);
       },
       (err) => {
         console.log(err);

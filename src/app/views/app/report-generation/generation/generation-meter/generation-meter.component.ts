@@ -31,12 +31,12 @@ export class GenerationMeterComponent implements OnInit {
     this.step1.onSubmit();
     if (this.step1.reportName.value !== '') {
       this.step1.checkReportNameExisting(this.step1.reportName.value).then( (data) => {
-        if (this.step1.step1Form.valid && this.step1.columnsNotEmpty && !this.step1.reportFileNameExists && !data) {
+        if (this.step1.step1Form.valid && this.step1.columnsNotEmpty && !this.step1.reportPrefixExists && !data) {
           this.wizard.goToNextStep();
         }
       });
     } else {
-      if (this.step1.step1Form.valid && this.step1.columnsNotEmpty && !this.step1.reportFileNameExists) {
+      if (this.step1.step1Form.valid && this.step1.columnsNotEmpty && !this.step1.reportPrefixExists) {
         this.wizard.goToNextStep();
       }
     }
@@ -91,7 +91,12 @@ export class GenerationMeterComponent implements OnInit {
     const step3 = this.step3.onSubmit();
     this.report.reportName = step1.reportName;
     this.report.reportDescription = step1.reportDescription;
-    this.report.reportFileName = this.step1.reportFileName;
+    this.report.prefix = step1.prefix;
+    this.report.separator = step1.separator;
+    this.report.timestamp = step1.timestamp;
+    if (step1.random.random) {
+      this.report.randomId = this.step1.randomValue;
+    }
     this.report.isCompressedExport = step1.checks.compressed;
     this.report.isTimeStampedFolder = step1.checks.timestamped;
     this.report.selectedColumns = step1.columns;
@@ -106,34 +111,15 @@ export class GenerationMeterComponent implements OnInit {
     console.log(this.report);
   }
 
-  // getFileNameParts(prefix, separator, timestamp) {
-  //   const year = new Date().getFullYear();
-  //   const month = new Date().getMonth();
-  //   const day = new Date().getDate();
-  //   const hour = new Date().getHours();
-  //   const min = new Date().getMinutes();
-  //   let timeFormat: string;
-  //   if (timestamp === 'yyyyMMddHHmm') {
-  //     timeFormat = year.toString() +  month.toString() + day.toString() + hour.toString() + min.toString();
-  //   } else if (timestamp === 'ddMMyyyyHHmm') {
-  //     timeFormat = day.toString() + month.toString() + year.toString() + hour.toString() + min.toString();
-  //   } else {
-  //     // MMddyyyyHHmm
-  //     timeFormat = month.toString() + day.toString() + year.toString() + hour.toString() + min.toString();
-  //   }
-  //   const random = this.generateString(13);
-  //   return (prefix + separator + timeFormat + separator + random);
-  // }
-
-  // generateString(length) {
-  //   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  //   let result = '';
-  //   const charactersLength = characters.length;
-  //   for ( let i = 0; i < length; i++ ) {
-  //       result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  //   }
-  //   return result;
-  // }
+  getSeparator(separator: string) {
+    if (separator === '_') {
+      return 'UnderScore';
+    } else if (separator === '-') {
+      return 'Dash';
+    } else if (separator === '/') {
+      return 'Slash';
+    }
+  }
 
   getHoursAndMinutes(time) {
     return  time.getHours() + ':' + time.getMinutes();
