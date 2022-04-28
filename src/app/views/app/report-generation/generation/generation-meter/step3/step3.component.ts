@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, AfterContentChecked, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgForm, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { BsLocaleService} from 'ngx-bootstrap';
+import { BsLocaleService} from 'ngx-bootstrap/datepicker';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { frLocale } from 'ngx-bootstrap/locale';
 import {timeRequired} from './../custom.validators';

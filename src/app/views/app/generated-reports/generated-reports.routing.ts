@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ReportTableComponent } from './report-table/report-table.component';
+import { InstanceTableComponent } from './instance-table/instance-table.component';
 import { GeneratedReportsComponent } from './generated-reports.component';
 
 const routes: Routes = [
     {
-        path: '', component: ReportTableComponent,
+        path: '', component: InstanceTableComponent,
         // children : [
         //   { path: '', redirectTo: 'blog-list', pathMatch: 'full' },
         // ]

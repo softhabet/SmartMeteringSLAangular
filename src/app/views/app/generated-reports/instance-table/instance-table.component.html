@@ -5,17 +5,20 @@
 </app-list-page-header>
 
 <context-menu #basicMenu>
-  <ng-template contextMenuItem let-item (execute)="onContextMenuClick('edit',$event.item)">
-    <i class="iconsminds-file-edit mr-1"></i> <span>Edit</span>
+  <ng-template contextMenuItem let-item (execute)="onContextMenuClick('csv',$event.item)">
+    <i class="bi bi-filetype-csv mr-1"></i> <span>Download CSV</span>
+  </ng-template>
+  <ng-template contextMenuItem let-item (execute)="onContextMenuClick('pdf',$event.item)">
+    <i class="bi bi-filetype-pdf mr-1"></i> <span>Download PDF</span>
+  </ng-template>
+  <ng-template contextMenuItem let-item (execute)="onContextMenuClick('excel',$event.item)">
+    <i class="bi bi-filetype-xlsx mr-1"></i> <span>Download EXCEL</span>
   </ng-template>
   <ng-template contextMenuItem let-item (execute)="onContextMenuClick('details',$event.item)">
-    <i class="iconsminds-magnifi-glass mr-1"></i> <span>Details</span>
-  </ng-template>
-  <ng-template contextMenuItem let-item (execute)="onContextMenuClick('instances',$event.item)">
-    <i class="iconsminds-files mr-1"></i> <span>Report Instances</span>
+    <i class="iconsminds-magnifi-glass mr-1"></i><span>Report details</span>
   </ng-template>
   <ng-template contextMenuItem let-item (execute)="onContextMenuClick('delete',$event.item)">
-    <i class="simple-icon-trash mr-1 ml-1"></i><span>Delete</span>
+    <i class="simple-icon-trash mr-1"></i><span>Delete</span>
   </ng-template>
 </context-menu>
 
@@ -51,8 +54,10 @@
     <div class="col-12">
       <pagination [totalItems]="totalItem" [itemsPerPage]="itemsPerPage" [rotate]="true" [maxSize]="5"
         [(ngModel)]="currentPage" (pageChanged)="pageChanged($event)" class="justify-content-center"
-        previousText="<i class='simple-icon-arrow-left'></i>" nextText="<i class='simple-icon-arrow-right'></i>">
+        [customPreviousTemplate]="prevTemplate" [customNextTemplate]="nextTemplate">
       </pagination>
+      <ng-template #prevTemplate><i class='simple-icon-arrow-left'></i></ng-template>
+      <ng-template #nextTemplate><i class='simple-icon-arrow-right'></i></ng-template>
     </div>
 
   </div>

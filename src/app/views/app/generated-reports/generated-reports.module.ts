@@ -5,7 +5,7 @@ import { GeneratedReportsRoutingModule } from './generated-reports.routing';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { PagesContainersModule } from 'src/app/containers/pages/pages.containers.module';
-import { PaginationModule } from 'ngx-bootstrap';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { LayoutContainersModule } from 'src/app/containers/layout/layout.containers.module';
 import { GeneratedReportsComponent } from './generated-reports.component';
 import { FormsModule as FormsModuleAngular, ReactiveFormsModule } from '@angular/forms';
@@ -13,11 +13,11 @@ import { ComponentsStateButtonModule } from 'src/app/components/state-button/com
 import { BootstrapModule } from 'src/app/components/bootstrap/bootstrap.module';
 import { ContextMenuModule } from 'ngx-contextmenu';
 import { SimpleNotificationsModule } from 'angular2-notifications';
-import { ReportTableComponent } from './report-table/report-table.component';
+import { InstanceTableComponent } from './instance-table/instance-table.component';
 
 
 @NgModule({
-  declarations: [GeneratedReportsComponent, ReportTableComponent],
+  declarations: [GeneratedReportsComponent, InstanceTableComponent],
   imports: [
     CommonModule,
     SharedModule,

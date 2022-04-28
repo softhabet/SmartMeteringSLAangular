@@ -84,6 +84,7 @@ export class ReportService {
   private reportsPrefixUrl = 'http://localhost:8180/report-generation-service/reports/reports-prefix';
   private totalMeterNumberUrl = 'http://localhost:8180/report-generation-service/reports/all-meters';
   private filterdMeterNumberUrl = 'http://localhost:8180/report-generation-service/reports/filter-meters';
+  private generateInstanceUrl = 'http://localhost:8180/report-generation-service/instances/report';
 
   constructor(private http: HttpClient) {  }
 
@@ -231,5 +232,9 @@ export class ReportService {
 
   getFilteredMetersNumber(filters: FiltersRequest): any {
     return this.http.post(`${this.filterdMeterNumberUrl}`, filters, { responseType: 'json' });
+  }
+
+  generateInstance(reportName: string) {
+    return this.http.post(`${this.generateInstanceUrl}/${reportName}`, {} , { responseType: 'text' });
   }
 }

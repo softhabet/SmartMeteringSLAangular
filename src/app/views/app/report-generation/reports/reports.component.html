@@ -131,8 +131,10 @@
           <div class="col-12">
             <pagination [totalItems]="totalItem" [itemsPerPage]="itemsPerPage" [rotate]="true" [maxSize]="5"
               [(ngModel)]="currentPage" (pageChanged)="pageChanged($event)" class="justify-content-center"
-              previousText="<i class='simple-icon-arrow-left'></i>" nextText="<i class='simple-icon-arrow-right'></i>">
+              [customPreviousTemplate]="prevTemplate" [customNextTemplate]="nextTemplate">
             </pagination>
+            <ng-template #prevTemplate><i class='simple-icon-arrow-left'></i></ng-template>
+            <ng-template #nextTemplate><i class='simple-icon-arrow-right'></i></ng-template>
           </div>
 
         </div>

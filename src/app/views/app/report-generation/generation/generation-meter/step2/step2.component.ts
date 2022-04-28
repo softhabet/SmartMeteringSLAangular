@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, AfterContentChecked, Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {BsLocaleService} from 'ngx-bootstrap';
+import {BsLocaleService} from 'ngx-bootstrap/datepicker';
 import {defineLocale} from 'ngx-bootstrap/chronos';
 import {frLocale} from 'ngx-bootstrap/locale';
 import { th, tr } from 'date-fns/locale';

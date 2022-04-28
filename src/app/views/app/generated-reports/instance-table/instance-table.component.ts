@@ -7,10 +7,10 @@ import { Router } from '@angular/router';
 import { ContextMenuComponent } from 'ngx-contextmenu';
 
 @Component({
-  selector: 'app-reporttable',
-  templateUrl: './report-table.component.html',
+  selector: 'app-instancetable',
+  templateUrl: './instance-table.component.html',
 })
-export class ReportTableComponent implements OnInit {
+export class InstanceTableComponent implements OnInit {
 
   rows = reports.slice(0, 20).map(({ title, createdBy, date, id }) => ({ title, createdBy, date, id }));
 

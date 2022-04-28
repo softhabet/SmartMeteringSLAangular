@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { GenerationRoutingModule } from './generation.routing';
 import { ReportGenerationModule } from '../report-generation.module';
 import { GenerationMeterModule } from './generation-meter/generation-meter.module';
-import { PaginationModule } from 'ngx-bootstrap';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ContextMenuModule } from 'ngx-contextmenu';
 import { GenerationMeterComponent } from './generation-meter/generation-meter.component';
 import { GenerationEventComponent } from './generation-event/generation-event.component';

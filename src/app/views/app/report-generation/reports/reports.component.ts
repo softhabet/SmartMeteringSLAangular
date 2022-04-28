@@ -249,7 +249,19 @@ export class ReportsComponent implements OnInit {
   }
 
   onContextMenuClick(action: string, event) {
-    if (action === 'delete') {
+    if (action === 'generate') {
+      this.reportService.generateInstance(event.reportName).subscribe(
+        (res) => {
+          console.log(res);
+          this.notifications.create('Created !', 'Report instance created.', NotificationType.Success, { timeOut: 3000, showProgressBar: true });
+          setTimeout(() => {this.router.navigateByUrl('app/generated-reports'); } , 3000);
+        },
+        (err) => {
+          console.log(err);
+          this.notifications.create('Error !', 'Error creating report instance.', NotificationType.Error, { timeOut: 3000, showProgressBar: true });
+        }
+      );
+    } else if (action === 'delete') {
       this.reportService.deleteReport(event.reportName).subscribe(
         (res) => {
           console.log(res);
