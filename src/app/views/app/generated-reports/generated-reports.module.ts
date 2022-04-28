@@ -8,6 +8,11 @@ import { PagesContainersModule } from 'src/app/containers/pages/pages.containers
 import { PaginationModule } from 'ngx-bootstrap';
 import { LayoutContainersModule } from 'src/app/containers/layout/layout.containers.module';
 import { GeneratedReportsComponent } from './generated-reports.component';
+import { FormsModule as FormsModuleAngular, ReactiveFormsModule } from '@angular/forms';
+import { ComponentsStateButtonModule } from 'src/app/components/state-button/components.state-button.module';
+import { BootstrapModule } from 'src/app/components/bootstrap/bootstrap.module';
+import { ContextMenuModule } from 'ngx-contextmenu';
+import { SimpleNotificationsModule } from 'angular2-notifications';
 import { ReportTableComponent } from './report-table/report-table.component';
 
 
@@ -21,7 +26,14 @@ import { ReportTableComponent } from './report-table/report-table.component';
     NgxDatatableModule,
     CollapseModule,
     PagesContainersModule,
-    PaginationModule.forRoot()
+    BootstrapModule,
+    ComponentsStateButtonModule,
+    FormsModuleAngular,
+    SimpleNotificationsModule.forRoot(),
+    PaginationModule.forRoot(),
+    ContextMenuModule.forRoot({
+      useBootstrap4: true,
+    })
   ]
 })
 

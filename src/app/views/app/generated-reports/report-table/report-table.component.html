@@ -1,56 +1,60 @@
-<app-list-page-header [selectAllState]="selectAllState" (selectAllChange)="selectAllChange($event)"
-  [showOrderBy]="false" [showDisplayMode]="false" (searchKeyUp)="updateFilter($event)"
-  (itemsPerPageChange)="onItemsPerPageChange($event)" [itemsPerPage]="itemsPerPage"
-  [itemOptionsPerPage]="itemOptionsPerPage">
+<app-list-page-header [showOrderBy]="false" [showSelectAll]="false" [showDisplayMode]="false"
+  (searchKeyUp)="search($event)" (itemsPerPageChange)="onItemsPerPageChange($event)" [itemsPerPage]="itemsPerPage"
+  [itemOptionsPerPage]="itemOptionsPerPage" (addNewItem)="gotToReportGeneration()"
+  (changeTypeBy)="changeTypeBy($event)">
 </app-list-page-header>
 
-<div class="row">
-  <div class="col-12 mb-4 data-table-rows">
-    <ngx-datatable [rows]="rows" [columns]="columns" [columnMode]="ColumnMode.flex" [limit]="itemsPerPage"
-      [headerHeight]="20" [footerHeight]="100" #table [sorts]="[{ prop: 'title', dir: 'asc' }]"
-      (select)="onSelect($event)" [selected]="selected" [selectionType]="SelectionType.checkbox">
-      <ngx-datatable-column name="Title" [flexGrow]="1.2">
-        <ng-template let-value="value" ngx-datatable-cell-template>
-          <a class="c-pointer">{{ value }}</a>
-        </ng-template>
-      </ngx-datatable-column>
-      <ngx-datatable-column name="Created By" [flexGrow]="0.7">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          {{ value }}
-        </ng-template>
-      </ngx-datatable-column>
-      <ngx-datatable-column name="Date" [flexGrow]="1.1">
-        <ng-template let-value="value" ngx-datatable-cell-template>
-          {{ value }}
-        </ng-template>
-      </ngx-datatable-column>
+<context-menu #basicMenu>
+  <ng-template contextMenuItem let-item (execute)="onContextMenuClick('edit',$event.item)">
+    <i class="iconsminds-file-edit mr-1"></i> <span>Edit</span>
+  </ng-template>
+  <ng-template contextMenuItem let-item (execute)="onContextMenuClick('details',$event.item)">
+    <i class="iconsminds-magnifi-glass mr-1"></i> <span>Details</span>
+  </ng-template>
+  <ng-template contextMenuItem let-item (execute)="onContextMenuClick('instances',$event.item)">
+    <i class="iconsminds-files mr-1"></i> <span>Report Instances</span>
+  </ng-template>
+  <ng-template contextMenuItem let-item (execute)="onContextMenuClick('delete',$event.item)">
+    <i class="simple-icon-trash mr-1 ml-1"></i><span>Delete</span>
+  </ng-template>
+</context-menu>
 
-      <ngx-datatable-column name="Id" [width]="120" [sortable]="false" [canAutoResize]="false" [draggable]="false"
-        [resizeable]="false">
-        <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
-          let-selectFn="selectFn">
-        </ng-template>
-        <ng-template ngx-datatable-cell-template let-isSelected="isSelected" let-value="value"
-          let-onCheckboxChangeFn="onCheckboxChangeFn">
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" [id]="'customCheck' + value" [checked]="isSelected"
-              (change)="onCheckboxChangeFn($event)" />
-            <label class="custom-control-label" [for]="'customCheck' + value"></label>
-          </div>
-        </ng-template>
-      </ngx-datatable-column>
+<div class="card">
+  <div class="card-body">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Report file name</th>
+          <th scope="col">Report Name</th>
+          <th scope="col">Report type</th>
+          <th scope="col">Creation date</th>
+          <th scope="col">Report size</th>
+          <th scope="col">Line count</th>
+          <th scope="col">Compressed</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of instancesList" [contextMenu]="basicMenu" [contextMenuSubject]="i">
+          <td>{{i.reportInstanceFileName}}</td>
+          <td>{{i.reportName}}</td>
+          <td>{{i.reportType}}</td>
+          <td>{{formatDate(i.creationDate)}}</td>
+          <td>{{i.reportSize}}</td>
+          <td>{{i.lineCount}}</td>
+          <td>{{i.isCompressed}}</td>
+          <td>{{i.status}}</td>
+        </tr>
+      </tbody>
+    </table>
 
-      <ngx-datatable-footer *ngIf="true">
-        <ng-template ngx-datatable-footer-template let-rowCount="rowCount" let-pageSize="pageSize"
-          let-selectedCount="selectedCount" let-curPage="curPage" let-offset="offset" let-limit="limit">
-          <div class="w-100 d-flex justify-content-center">
-            <pagination [totalItems]="rowCount" [itemsPerPage]="pageSize" [maxSize]="5"
-              previousText="<i class='simple-icon-arrow-left'></i>" (pageChanged)="table.onFooterPage($event)"
-              nextText="<i class='simple-icon-arrow-right'></i>">
-            </pagination>
-          </div>
-        </ng-template>
-      </ngx-datatable-footer>
-    </ngx-datatable>
+    <div class="col-12">
+      <pagination [totalItems]="totalItem" [itemsPerPage]="itemsPerPage" [rotate]="true" [maxSize]="5"
+        [(ngModel)]="currentPage" (pageChanged)="pageChanged($event)" class="justify-content-center"
+        previousText="<i class='simple-icon-arrow-left'></i>" nextText="<i class='simple-icon-arrow-right'></i>">
+      </pagination>
+    </div>
+
   </div>
 </div>
+<simple-notifications></simple-notifications>

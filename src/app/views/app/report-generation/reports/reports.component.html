@@ -78,14 +78,17 @@
         <div class="separator mt-3 mb-5"></div>
 
         <context-menu #basicMenu>
-          <ng-template contextMenuItem let-item (execute)="onContextMenuClick('edit',$event.item)">
-            <i class="iconsminds-file-edit mr-1"></i> <span>Edit</span>
+          <ng-template contextMenuItem let-item (execute)="onContextMenuClick('generate',$event.item)">
+            <i class="iconsminds-file-copy mr-1 mt-1"></i> <span>Generate instance</span>
           </ng-template>
           <ng-template contextMenuItem let-item (execute)="onContextMenuClick('details',$event.item)">
             <i class="iconsminds-magnifi-glass mr-1"></i> <span>Details</span>
           </ng-template>
           <ng-template contextMenuItem let-item (execute)="onContextMenuClick('instances',$event.item)">
             <i class="iconsminds-files mr-1"></i> <span>Report Instances</span>
+          </ng-template>
+          <ng-template contextMenuItem let-item (execute)="onContextMenuClick('edit',$event.item)">
+            <i class="iconsminds-file-edit mr-1"></i> <span>Edit</span>
           </ng-template>
           <ng-template contextMenuItem let-item (execute)="onContextMenuClick('delete',$event.item)">
             <i class="simple-icon-trash mr-1 ml-1"></i><span>Delete</span>
@@ -95,7 +98,6 @@
         <div class="card">
 
           <div class="card-body">
-            <!-- <span *ngIf="reportsList.length == 0">{{onDataEmpty()}} </span> -->
             <table class="table table-hover">
               <thead>
                 <tr>

@@ -31,7 +31,6 @@ export class ReportsComponent implements OnInit {
   // if true : is scheduled
   isScheduled = false;
 
-  @Output() searchKeyUp: EventEmitter<any> = new EventEmitter();
   stateButtonCurrentState = '';
   stateButtonShowMessage = false;
   stateButtonMessage = '';

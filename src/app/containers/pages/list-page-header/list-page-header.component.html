@@ -2,9 +2,9 @@
   <div class="col-12">
     <app-heading></app-heading>
     <div class="top-right-button-container text-zero">
-      <button type="button" (click)="onAddNewItem()"
-        class="top-right-button btn btn-primary btn-lg mr-1">{{ 'pages.add-new' | translate}}</button>
-      <div class="btn-group" dropdown>
+      <button type="button" (click)="onAddNewItem()" class="top-right-button btn btn-primary btn-lg mb-2">{{
+        'pages.add-new' | translate}}</button>
+      <div class="btn-group" dropdown *ngIf="showSelectAll">
         <div class="btn btn-primary btn-lg pl-4 pr-0 check-button">
           <label class="custom-control custom-checkbox mb-0 d-inline-block">
             <input type="checkbox" class="custom-control-input" [checked]="selectAllState==='checked'"
@@ -24,7 +24,7 @@
       </div>
     </div>
     <app-breadcrumb></app-breadcrumb>
-    <div class="display-options-container">
+    <div class="display-options-container mt-1">
       <a class="btn pt-0 pl-0 d-inline-block d-md-none c-pointer" data-toggle="collapse"
         (click)="displayOptionsCollapsed = !displayOptionsCollapsed" role="button" aria-expanded="true"
         aria-controls="displayOptions">
@@ -52,7 +52,8 @@
               <path class="view-icon-svg"
                 d="M3,16v1H1V16H3m.12-1H.88a.87.87,0,0,0-.88.88v1.24A.87.87,0,0,0,.88,18H3.12A.87.87,0,0,0,4,17.12V15.88A.87.87,0,0,0,3.12,15Z" />
               <path class="view-icon-svg" d="M17.5,10H6.5a.5.5,0,0,1,0-1h11a.5.5,0,0,1,0,1Z" />
-              <path class="view-icon-svg" d="M17.5,17H6.5a.5.5,0,0,1,0-1h11a.5.5,0,0,1,0,1Z" /></svg>
+              <path class="view-icon-svg" d="M17.5,17H6.5a.5.5,0,0,1,0-1h11a.5.5,0,0,1,0,1Z" />
+            </svg>
           </a>
           <a href="javascript:;" [ngClass]="{'mr-2 view-icon':true , 'active' : displayMode==='image'}"
             (click)="onSelectDisplayMode('image')">
@@ -82,6 +83,20 @@
           </div>
         </div>
 
+        <div class="d-block d-md-inline-block position-relative" *ngIf="showType">
+          <div class="float-md-left mr-2 mb-1" dropdown>
+            <button id="button-basic" dropdownToggle type="button" class="btn btn-outline-dark btn-xs dropdown-toggle"
+              aria-controls="dropdown-basic">
+              Select Type : {{typeOrder.label}} <span class="caret"></span>
+            </button>
+            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+              <li role="menuitem" *ngFor="let type of typeOptionsOrders"><a
+                  [ngClass]="type.value === typeOrder.value ? 'dropdown-item active' : 'dropdown-item'"
+                  (click)="onChangeReportType(type)">{{type.label}}</a></li>
+            </ul>
+          </div>
+        </div>
+
         <div class="d-inline-block" *ngIf="showSearch">
           <div class="search-sm d-inline-block float-md-left mr-1 mb-1 align-top">
             <input class="form-control" placeholder="Search" (keyup)="onSearchKeyUp($event)">
@@ -102,7 +117,7 @@
           </span>
         </div>
       </div>
-      <div class="separator mb-4"></div>
+      <div class="separator mb-4 mt-1"></div>
     </div>
   </div>
 </div>
