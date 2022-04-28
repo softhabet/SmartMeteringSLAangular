@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   HttpClient,
   HttpHeaders,
-  HttpParams
+  HttpParams,
 } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
@@ -34,6 +34,9 @@ export interface IInstanceListResponse {
 export class InstanceService {
 
   private instanceListUrl = 'http://localhost:8180/report-generation-service/instances/info';
+  private exportCSVUrl = 'http://localhost:8180/report-generation-service/instances/export-csv';
+  private exportPDFUrl = 'http://localhost:8180/report-generation-service/instances/export-pdf';
+  private exportXLSXUrl = 'http://localhost:8180/report-generation-service/instances/export-xlsx';
 
   constructor(private http: HttpClient) { }
 
@@ -58,4 +61,17 @@ export class InstanceService {
         })
       );
   }
+
+  exportCSV(id: number): Observable<any> {
+    return this.http.get(`${this.exportCSVUrl}/${id}`, {observe: 'response', responseType: 'blob'});
+  }
+
+  exportPDF(id: number): Observable<any> {
+    return this.http.get(`${this.exportPDFUrl}/${id}`, {responseType: 'blob'});
+  }
+
+  exportExcel(id: number): Observable<any> {
+    return this.http.get(`${this.exportXLSXUrl}/${id}`, {responseType: 'blob'});
+  }
+
 }

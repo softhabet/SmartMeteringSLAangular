@@ -90,7 +90,21 @@ export class InstanceTableComponent implements OnInit {
   }
 
   onContextMenuClick(action: string, event) {
-    if (action === 'delete') {
+    if (action === 'csv') {
+        this.instanceService.exportCSV(event.instanceId).subscribe(
+          (res) => {
+            console.log(res);
+            let fileName = res.headers.get('content-disposition')?.split(';')[1].split('=')[1];
+            let blob: Blob = res.body as Blob;
+            let link = document.createElement('a');
+            link.download = fileName;
+            link.href = window.URL.createObjectURL(blob);
+            link.click();
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
     } else if (action === 'details') {
     }
     console.log('onContextMenuClick -> action :  ', action, ', item.row :', event.instanceId);
