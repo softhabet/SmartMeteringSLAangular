@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import reports from 'src/app/mydata/reportsInstances';
-import { SelectionType } from '@swimlane/ngx-datatable';
 import { InstanceService, IInstanceInfo, IInstanceListResponse } from 'src/app/services/instance.service';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ContextMenuComponent } from 'ngx-contextmenu';
 
 @Component({
@@ -24,20 +23,26 @@ export class InstanceTableComponent implements OnInit {
   totalPage = 0;
 
   type = '';
-  name = '';
+  searchName = '';
+  reportName = '';
 
   @ViewChild('basicMenu') public basicMenu: ContextMenuComponent;
-  constructor(private instanceService: InstanceService, private notifications: NotificationsService, private router: Router) { }
+  constructor(private instanceService: InstanceService, private notifications: NotificationsService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.loadData(this.itemsPerPage, this.currentPage);
+    this.reportName = this.route.snapshot.paramMap.get('reportName');
+    this.loadData(this.itemsPerPage, this.currentPage, this.searchName, this.reportName, this.type);
   }
 
-    // get data paginated from back
-  loadData(pageSize: number = 10, currentPage: number = 0, name: string = '', type: string = '') {
+  isNull(): boolean {
+    return (this.reportName == null);
+  }
+
+  // get data paginated from back
+  loadData(pageSize: number = 10, currentPage: number = 0, searchName: string = '', searchReport: string = '', type: string = '') {
     this.itemsPerPage = pageSize;
-    this.currentPage = currentPage;
-    this.instanceService.getinstances(pageSize, currentPage, name, type).subscribe(
+    this.currentPage = currentPage + 1;
+    this.instanceService.getinstances(pageSize, currentPage, searchName, searchReport, type).subscribe(
       res => {
         this.instancesList = res.instancesList;
         // this.onDataEmpty(res.instancesList);
@@ -58,13 +63,13 @@ export class InstanceTableComponent implements OnInit {
   }
 
   search(event) {
-    this.name = event.target.value.toLowerCase().trim();
-    this.loadData(this.itemsPerPage, 0, this.name, this.type);
+    this.searchName = event.target.value.trim();
+    this.loadData(this.itemsPerPage, 0, this.searchName, this.reportName, this.type);
   }
 
   changeTypeBy(type: any) {
     this.type = type;
-    this.loadData(this.itemsPerPage, 0, this.name, this.type);
+    this.loadData(this.itemsPerPage, 0, this.searchName, this.reportName, this.type);
   }
 
   gotToReportGeneration() {
@@ -73,11 +78,12 @@ export class InstanceTableComponent implements OnInit {
 
   onItemsPerPageChange(perPage: number) {
     this.itemsPerPage = perPage;
-    this.loadData(this.itemsPerPage, 0, this.name, this.type);
+    this.loadData(this.itemsPerPage, 0, this.searchName, this.reportName, this.type);
   }
 
   pageChanged(event: any): void {
-    this.loadData(this.itemsPerPage, event.page - 1, this.name, this.type);
+    this.currentPage = event.page - 1;
+    this.loadData(this.itemsPerPage, this.currentPage, this.searchName, this.reportName, this.type);
   }
 
   // format date for table
@@ -89,25 +95,122 @@ export class InstanceTableComponent implements OnInit {
     }
   }
 
+  // download file
+  getDownload(data) {
+    const fileName = data.headers.get('content-disposition')?.split(';')[1].split('=')[1];
+    const blob: Blob = data.body as Blob;
+    const link = document.createElement('a');
+    link.download = fileName;
+    link.href = window.URL.createObjectURL(blob);
+    link.click();
+  }
+
+  // Set report size after downloading
+  setReportSize(size: number, id: number) {
+    this.instanceService.setInstanceSize(id, size).subscribe(
+      (res) => {
+        this.loadData(this.itemsPerPage, this.currentPage - 1, this.searchName, this.reportName, this.type);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  // format report size in table
+  formatReportSize(size: number): string {
+    if (size === 0) {
+      return 'NaN';
+    } else if (size < 1000) {
+      return (size + ' o');
+    } else if (size >= 1000 && size < 1000000) {
+      return (Math.trunc(size / 1000) + ' Ko');
+    } else {
+      return (Math.trunc(size / 1000000) + ' Mo');
+    }
+  }
+
+  getBoolean(bool: boolean): string {
+    if (bool) {
+      return 'YES';
+    } else {
+      return 'NO';
+    }
+  }
+
+  // generate pills colors
+  typeColor(type) {
+    if (type === 'METER') {
+      return 'primary';
+    } else if (type === 'EVENT') {
+      return 'secondary';
+    }
+  }
+
+  compressedColor(scheduled) {
+    if (scheduled === true) {
+      return 'success';
+    } else if (scheduled === false) {
+      return 'danger';
+    }
+  }
+
+  statusColor(status) {
+    if (status === 'ACTIVE') {
+        return 'success';
+    } else if (status === 'FINISHED') {
+        return 'danger';
+    } else if (status === 'NOT_STARTED') {
+        return 'warning';
+    }
+  }
+
   onContextMenuClick(action: string, event) {
     if (action === 'csv') {
         this.instanceService.exportCSV(event.instanceId).subscribe(
           (res) => {
-            console.log(res);
-            let fileName = res.headers.get('content-disposition')?.split(';')[1].split('=')[1];
-            let blob: Blob = res.body as Blob;
-            let link = document.createElement('a');
-            link.download = fileName;
-            link.href = window.URL.createObjectURL(blob);
-            link.click();
+            this.getDownload(res);
+            this.setReportSize(res.headers.get('content-length'), event.instanceId);
           },
           (err) => {
             console.log(err);
           }
         );
+    } else if (action === 'pdf') {
+      this.instanceService.exportPDF(event.instanceId).subscribe(
+        (res) => {
+          this.getDownload(res);
+          this.setReportSize(res.headers.get('content-length'), event.instanceId);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    } else if (action === 'excel') {
+      this.instanceService.exportExcel(event.instanceId).subscribe(
+        (res) => {
+          this.getDownload(res);
+          this.setReportSize(res.headers.get('content-length'), event.instanceId);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
     } else if (action === 'details') {
+    } else if (action === 'delete') {
+      this.instanceService.deleteInstance(event.instanceId).subscribe(
+        (res) => {
+          console.log(res);
+          const index = this.instancesList.indexOf(event);
+          if (index > -1) {
+            this.instancesList.splice(index, 1);
+          }
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
     }
-    console.log('onContextMenuClick -> action :  ', action, ', item.row :', event.instanceId);
   }
 
 }

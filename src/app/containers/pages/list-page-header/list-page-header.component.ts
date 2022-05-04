@@ -33,7 +33,7 @@ export class ListPageHeaderComponent implements OnInit {
   @Output() changeTypeBy: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('search') search: any;
-  constructor(private router : Router) { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
@@ -61,7 +61,7 @@ export class ListPageHeaderComponent implements OnInit {
     this.changeTypeBy.emit(type.value);
   }
 
-  onSearchKeyUp($event){
+  onSearchKeyUp($event) {
     this.searchKeyUp.emit($event);
   }
 }

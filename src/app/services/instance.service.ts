@@ -34,19 +34,24 @@ export interface IInstanceListResponse {
 export class InstanceService {
 
   private instanceListUrl = 'http://localhost:8180/report-generation-service/instances/info';
+  private setInstanceSizeUrl = 'http://localhost:8180/report-generation-service/instances/size';
   private exportCSVUrl = 'http://localhost:8180/report-generation-service/instances/export-csv';
   private exportPDFUrl = 'http://localhost:8180/report-generation-service/instances/export-pdf';
   private exportXLSXUrl = 'http://localhost:8180/report-generation-service/instances/export-xlsx';
+  private deleteInstanceUrl = 'http://localhost:8180/report-generation-service/instances';
 
   constructor(private http: HttpClient) { }
 
-  getinstances(pageSize: number = 10, currentPage: number = 0, name: string = '', type: string = '') {
+  getinstances(pageSize: number = 10, currentPage: number = 0, searchName: string = '', searchReport: string = '', type: string = '') {
     const url = this.instanceListUrl;
     let params = new HttpParams();
     params = params.append('size', pageSize + '');
     params = params.append('page', currentPage + '');
-    if (name !== '' && name !== null) {
-      params = params.append('name', name);
+    if (searchReport !== '' && searchReport !== null) {
+      params = params.append('searchReport', searchReport);
+    }
+    if (searchName !== '' && searchName !== null) {
+      params = params.append('searchName', searchName);
     }
     if (type === 'METER' || type === 'EVENT') {
       params = params.append('type', type);
@@ -67,11 +72,18 @@ export class InstanceService {
   }
 
   exportPDF(id: number): Observable<any> {
-    return this.http.get(`${this.exportPDFUrl}/${id}`, {responseType: 'blob'});
+    return this.http.get(`${this.exportPDFUrl}/${id}`, {observe: 'response', responseType: 'blob'});
   }
 
   exportExcel(id: number): Observable<any> {
-    return this.http.get(`${this.exportXLSXUrl}/${id}`, {responseType: 'blob'});
+    return this.http.get(`${this.exportXLSXUrl}/${id}`, {observe: 'response', responseType: 'blob'});
   }
 
+  setInstanceSize(id: number, size: number) {
+    return this.http.get(`${this.setInstanceSizeUrl}/${id}/${size}`, {responseType: 'text'});
+  }
+
+  deleteInstance(id: number) {
+    return this.http.delete(`${this.deleteInstanceUrl}/${id}`, { responseType: 'text' });
+  }
 }

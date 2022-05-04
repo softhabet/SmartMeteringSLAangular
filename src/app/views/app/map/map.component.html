@@ -7,9 +7,12 @@
 </div>
 <div class="row">
   <div class="col-12 mb-4">
-    <p>{{ "map" | translate }}</p>
-    <iframe
-      src="http://localhost:5601/app/dashboards#/view/dc251a40-adf3-11ec-9eb7-d9381ddbc36e?embed=true&_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!t%2Cvalue%3A0)%2Ctime%3A(from%3Anow-15m%2Cto%3Anow))&show-time-filter=true"
-      height="600" width="1200"></iframe>
+    <!-- <p>{{ "map" | translate }}</p> -->
+    <h3>Elastic Map</h3>
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe
+        src="http://localhost:5601/app/dashboards#/view/a5b31740-cb81-11ec-82dc-a19ba060bb01?embed=true&_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!t%2Cvalue%3A0)%2Ctime%3A(from%3Anow-15m%2Cto%3Anow))"
+        class="embed-responsive-item"></iframe>
+    </div>
   </div>
 </div>

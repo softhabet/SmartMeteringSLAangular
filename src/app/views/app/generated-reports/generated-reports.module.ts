@@ -14,10 +14,12 @@ import { BootstrapModule } from 'src/app/components/bootstrap/bootstrap.module';
 import { ContextMenuModule } from 'ngx-contextmenu';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { InstanceTableComponent } from './instance-table/instance-table.component';
+import { InstancesComponent } from './instances/instances.component';
+import { ReportInstancesComponent } from './report-instances/report-instances.component';
 
 
 @NgModule({
-  declarations: [GeneratedReportsComponent, InstanceTableComponent],
+  declarations: [GeneratedReportsComponent, InstanceTableComponent, InstancesComponent, ReportInstancesComponent],
   imports: [
     CommonModule,
     SharedModule,

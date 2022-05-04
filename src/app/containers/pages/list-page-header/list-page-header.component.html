@@ -1,6 +1,9 @@
 <div class="row">
   <div class="col-12">
-    <app-heading></app-heading>
+
+    <!-- <app-heading></app-heading> -->
+    <h1>{{ 'menu.generated-reports' | translate }}</h1>
+
     <div class="top-right-button-container text-zero">
       <button type="button" (click)="onAddNewItem()" class="top-right-button btn btn-primary btn-lg mb-2">{{
         'pages.add-new' | translate}}</button>
@@ -23,7 +26,16 @@
         </ul>
       </div>
     </div>
-    <app-breadcrumb></app-breadcrumb>
+
+    <!-- <app-breadcrumb></app-breadcrumb> -->
+    <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
+      <ol class="breadcrumb pt-0">
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ "menu.instances" | translate }}
+        </li>
+      </ol>
+    </nav>
+
     <div class="display-options-container mt-1">
       <a class="btn pt-0 pl-0 d-inline-block d-md-none c-pointer" data-toggle="collapse"
         (click)="displayOptionsCollapsed = !displayOptionsCollapsed" role="button" aria-expanded="true"
@@ -82,27 +94,29 @@
             </ul>
           </div>
         </div>
-
+        <!-- Type -->
         <div class="d-block d-md-inline-block position-relative" *ngIf="showType">
           <div class="float-md-left mr-2 mb-1" dropdown>
             <button id="button-basic" dropdownToggle type="button" class="btn btn-outline-dark btn-xs dropdown-toggle"
-              aria-controls="dropdown-basic">
+              style="font-size: 13px;" aria-controls="dropdown-basic">
               Select Type : {{typeOrder.label}} <span class="caret"></span>
             </button>
-            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" style="font-size: 13px;" role="menu"
+              aria-labelledby="button-basic">
               <li role="menuitem" *ngFor="let type of typeOptionsOrders"><a
                   [ngClass]="type.value === typeOrder.value ? 'dropdown-item active' : 'dropdown-item'"
                   (click)="onChangeReportType(type)">{{type.label}}</a></li>
             </ul>
           </div>
         </div>
-
+        <!-- Search -->
         <div class="d-inline-block" *ngIf="showSearch">
           <div class="search-sm d-inline-block float-md-left mr-1 mb-1 align-top">
-            <input class="form-control" placeholder="Search" (keyup)="onSearchKeyUp($event)">
+            <input class="form-control" style="font-size: 13px;" placeholder="Search" (keyup)="onSearchKeyUp($event)">
           </div>
         </div>
-        <div class="float-right" *ngIf="showItemsPerPage">
+        <!-- items per page -->
+        <div class="float-right mb-1" *ngIf="showItemsPerPage">
           <span class="text-muted text-small">Per Page </span>
           <span dropdown class="d-inline-block position-relative">
             <button class="btn btn-outline-dark btn-xs dropdown-toggle" type="button" data-toggle="dropdown"
@@ -117,7 +131,9 @@
           </span>
         </div>
       </div>
-      <div class="separator mb-4 mt-1"></div>
+      <div class="d-inline-block" *ngIf="!showSearch"></div>
+      <div class="d-inline-block" *ngIf="!showType"></div>
+      <div class="separator mb-4 mt-2"></div>
     </div>
   </div>
 </div>

@@ -8,7 +8,7 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-reports',
@@ -47,7 +47,7 @@ export class ReportsComponent implements OnInit {
   totalPage = 0;
 
   @ViewChild('basicMenu') public basicMenu: ContextMenuComponent;
-  constructor(fb: FormBuilder, private notifications: NotificationsService, private reportService: ReportService, private router: Router) {
+  constructor(fb: FormBuilder, private notifications: NotificationsService, private reportService: ReportService, private router: Router, private route: ActivatedRoute) {
     const reportControls = {
       searchName: new FormControl(''),
       searchOwner: new FormControl(''),
@@ -158,6 +158,15 @@ export class ReportsComponent implements OnInit {
     }
   }
 
+  // get yes or no for isScheduled table
+  getScheduled(bool: boolean): string {
+    if (bool) {
+      return 'YES';
+    } else {
+      return 'NO';
+    }
+  }
+
   // generate pills colors
   typeColor(type) {
     if (type === 'METER') {
@@ -252,7 +261,6 @@ export class ReportsComponent implements OnInit {
     if (action === 'generate') {
       this.reportService.generateInstance(event.reportName).subscribe(
         (res) => {
-          console.log(res);
           this.notifications.create('Created !', 'Report instance created.', NotificationType.Success, { timeOut: 3000, showProgressBar: true });
           setTimeout(() => {this.router.navigateByUrl('app/generated-reports'); } , 3000);
         },
@@ -264,7 +272,6 @@ export class ReportsComponent implements OnInit {
     } else if (action === 'delete') {
       this.reportService.deleteReport(event.reportName).subscribe(
         (res) => {
-          console.log(res);
           const index = this.reportsList.indexOf(event);
           if (index > -1) {
             this.reportsList.splice(index, 1);
@@ -277,15 +284,15 @@ export class ReportsComponent implements OnInit {
     } else if (action === 'details') {
       this.reportService.getReportDetails(event.reportName).subscribe(
         (res) => {
-          console.log(res);
           window.location.href = 'http://localhost:8180/report-generation-service/reports/details/' + event.reportName;
         },
         (err) => {
           console.log(err);
         }
       );
+    } else if (action === 'instances') {
+      this.router.navigateByUrl('app/generated-reports/' + event.reportName);
     }
-    console.log('onContextMenuClick -> action :  ', action, ', item.row :', event.reportName);
   }
 
 }
