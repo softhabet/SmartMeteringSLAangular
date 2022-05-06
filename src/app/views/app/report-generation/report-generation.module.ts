@@ -17,10 +17,11 @@ import { ContextMenuModule } from 'ngx-contextmenu';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { FormsModule as FormsModuleAngular, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReportDetailsComponent } from './report-details/report-details.component';
 
 
 @NgModule({
-  declarations: [ReportGenerationComponent, ReportsComponent],
+  declarations: [ReportGenerationComponent, ReportsComponent, ReportDetailsComponent],
   imports: [
     CommonModule,
     SharedModule,

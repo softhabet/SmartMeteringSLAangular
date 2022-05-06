@@ -284,7 +284,8 @@ export class ReportsComponent implements OnInit {
     } else if (action === 'details') {
       this.reportService.getReportDetails(event.reportName).subscribe(
         (res) => {
-          window.location.href = 'http://localhost:8180/report-generation-service/reports/details/' + event.reportName;
+          // window.location.href = 'http://localhost:8180/report-generation-service/reports/details/' + event.reportName;
+          this.router.navigateByUrl('app/report-generation/details/' + event.reportName);
         },
         (err) => {
           console.log(err);

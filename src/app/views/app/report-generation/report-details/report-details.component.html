@@ -1,0 +1,39 @@
+<app-heading></app-heading>
+<app-breadcrumb></app-breadcrumb>
+<div class="separator mb-2 mt-1"></div>
+<h2 class="mt-4 mb-2">{{reportName}}</h2>
+
+<div class="row mt-4">
+  <div class="col-12 mb-4 data-table-rows">
+    <ngx-datatable [rows]="rows" [columns]="columns" [columnMode]="'force'" [headerHeight]="20" [footerHeight]="100"
+      [rowHeight]="'100%'" #table>
+      <ngx-datatable-column name="Field">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <strong>{{value}}</strong>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Info">
+        <ng-template let-row="row" let-value="value" let-i="index" ngx-datatable-cell-template>
+          <span *ngIf="checkValue(value) === 'string'">{{value}}</span>
+          <ng-template *ngIf="checkValue(value) === 'columns'" ngFor let-obj [ngForOf]="value">
+            <span> {{ obj.columnName }} </span>
+            <br />
+          </ng-template>
+          <ng-template *ngIf="checkValue(value) === 'filters'" ngFor let-obj [ngForOf]="value">
+            <strong>Filter {{value.indexOf(obj) + 1}}</strong>
+            <br />
+            <span>Field name: {{ obj.fieldName }} </span>
+            <br />
+            <span>Operator: {{ obj.operator }} </span>
+            <br />
+            <span *ngIf="(obj.filterType === 'listOne')">Value: {{ obj.filterValue }}</span>
+            <span *ngIf="(obj.filterType === 'listMulti')">Values: {{ obj.filterValue }}</span>
+            <span *ngIf="(obj.filterType === 'date')">Date: {{ formatTimestamp(obj.filterValue) }}</span>
+            <span *ngIf="(obj.filterType === 'dateRange')">{{ getDateRange(obj.filterValue) }}</span>
+            <br />
+          </ng-template>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+</div>

@@ -17,6 +17,7 @@ export class LangService {
   supportedLanguages: Language[] = [
     { code: 'en', direction: 'ltr', label: 'English', shorthand: 'en' },
     { code: 'fr', direction: 'ltr', label: 'French', shorthand: 'fr' },
+    { code: 'ar', direction: 'rtl', label: 'Arabic', shorthand: 'ar' }
   ];
 
   constructor(private translate: TranslateService, private rendererFactory: RendererFactory2, private router: Router) {
@@ -55,7 +56,7 @@ export class LangService {
       this.translate.use(language);
     }
     this.checkForDirectionChange();
-    localStorage.setItem(languageKey, language)
+    localStorage.setItem(languageKey, language);
   }
 
   get language(): string {

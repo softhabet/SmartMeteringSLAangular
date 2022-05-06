@@ -102,10 +102,10 @@ export class Step2Component implements OnInit, AfterContentChecked {
   }
 
   deleteFilter(filter) {
-    this.filters.splice(this.filters.indexOf(filter), 1);
-    this.bsRangeValues.splice(this.filters.indexOf(filter), 1);
     this.mouseTimes1.splice(this.filters.indexOf(filter), 1);
     this.mouseTimes2.splice(this.filters.indexOf(filter), 1);
+    this.bsRangeValues.splice(this.filters.indexOf(filter), 1);
+    this.filters.splice(this.filters.indexOf(filter), 1);
   }
 
   getOperators(set, fieldName) {
