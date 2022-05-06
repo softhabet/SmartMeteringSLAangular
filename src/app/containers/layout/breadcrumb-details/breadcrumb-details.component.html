@@ -1,0 +1,22 @@
+<div class="d-flex">
+  <div>
+    <h1>{{ 'menu.'+currentRoute | translate }}</h1>
+  </div>
+  <div>
+    <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block mt-3" aria-label="breadcrumb">
+      <ol class="breadcrumb pt-0">
+        <li class="breadcrumb-item" *ngFor="let sub of pathArr; let i = index" [hidden]="i >= pathArr.length - 1">
+          <a [routerLink]="[getUrl(sub)]">{{ "menu." + sub | translate }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ "menu." + currentRoute | translate }}
+        </li>
+      </ol>
+    </nav>
+  </div>
+  <div class="ml-auto mr-1">
+    <button id="button-basic" type="button" class="btn btn-primary" aria-controls="dropdown-basic"
+      (click)="goToBack()">Back<span class="caret"></span>
+    </button>
+  </div>
+</div>

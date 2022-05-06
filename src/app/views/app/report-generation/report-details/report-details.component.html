@@ -1,12 +1,11 @@
-<app-heading></app-heading>
-<app-breadcrumb></app-breadcrumb>
+<app-breadcrumb-details></app-breadcrumb-details>
 <div class="separator mb-2 mt-1"></div>
-<h2 class="mt-4 mb-2">{{reportName}}</h2>
+<h2 class="mt-4 mb-2">Report info : {{reportName}}</h2>
 
 <div class="row mt-4">
   <div class="col-12 mb-4 data-table-rows">
-    <ngx-datatable [rows]="rows" [columns]="columns" [columnMode]="'force'" [headerHeight]="20" [footerHeight]="100"
-      [rowHeight]="'100%'" #table>
+    <ngx-datatable [rows]="rows" [columns]="columns" [columnMode]="'force'" [headerHeight]="0" [rowHeight]="'100%'"
+      #table>
       <ngx-datatable-column name="Field">
         <ng-template let-value="value" ngx-datatable-cell-template>
           <strong>{{value}}</strong>
@@ -34,6 +33,7 @@
           </ng-template>
         </ng-template>
       </ngx-datatable-column>
+      <ngx-datatable-footer></ngx-datatable-footer>
     </ngx-datatable>
   </div>
 </div>

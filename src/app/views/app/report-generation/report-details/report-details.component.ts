@@ -2,8 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReportService } from 'src/app/services/report.service';
 import { ColumnMode, DatatableComponent, SelectionType } from '@swimlane/ngx-datatable';
-import { isSyntheticPropertyOrListener } from '@angular/compiler/src/render3/util';
-import { tr } from 'date-fns/locale';
 
 @Component({
   selector: 'app-report-details',
@@ -54,7 +52,6 @@ export class ReportDetailsComponent implements OnInit {
   loadData(reportName) {
     this.reportService.getReportDetails(reportName).subscribe(
       (res) => {
-        // window.location.href = 'http://localhost:8180/report-generation-service/reports/details/' + event.reportName;
         this.reportDetails = res;
         for (const [k, v] of Object.entries(res)) {
           if (k === 'reportName') {
@@ -67,11 +64,11 @@ export class ReportDetailsComponent implements OnInit {
           } else if (k === 'reportDescription') {
             this.rows[3].info = v as string;
           } else if (k === 'isCompressedExport') {
-            this.rows[5].info = v as boolean;
+            this.rows[5].info = this.formatBoolean(v as boolean);
           } else if (k === 'isTimeStampedFolder') {
-            this.rows[6].info = v as boolean;
+            this.rows[6].info = this.formatBoolean(v as boolean);
           } else if (k === 'isScheduled') {
-            this.rows[7].info = v as boolean;
+            this.rows[7].info = this.formatBoolean(v as boolean);
           } else if (k === 'prefix') {
             this.prefix = v as string;
           } else if (k === 'separator') {
@@ -84,7 +81,7 @@ export class ReportDetailsComponent implements OnInit {
           this.rows[4].info = this.setReportFileName(this.prefix, this.separator, this.randomId, this.timestamp, this.reportType);
           this.rows = [...this.rows];
         }
-        if (this.rows[7].info) {
+        if (res.isScheduled) {
           this.isScheduled = true;
           for (const [k, v] of Object.entries(res)) {
             if (k === 'status') {
@@ -122,8 +119,6 @@ export class ReportDetailsComponent implements OnInit {
             this.rows = [...this.rows];
           }
         }
-        console.log(this.reportDetails);
-        console.log(this.rows);
       },
       (err) => {
         console.log(err);
@@ -156,6 +151,14 @@ export class ReportDetailsComponent implements OnInit {
     const hour = date.getHours();
     const min = date.getMinutes();
     return (year.toString() + '-' + this.DateToString(month) + '-' + this.DateToString(day) + ' ' + this.DateToString(hour) + ':' + this.DateToString(min));
+  }
+
+  formatBoolean(bool) {
+    if (bool) {
+      return 'YES';
+    } else {
+      return 'NO';
+    }
   }
 
   DateToString(date) {

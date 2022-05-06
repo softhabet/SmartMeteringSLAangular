@@ -197,6 +197,7 @@ export class InstanceTableComponent implements OnInit {
         }
       );
     } else if (action === 'details') {
+      this.router.navigateByUrl('app/report-generation/details/' + event.reportName);
     } else if (action === 'delete') {
       this.instanceService.deleteInstance(event.instanceId).subscribe(
         (res) => {
