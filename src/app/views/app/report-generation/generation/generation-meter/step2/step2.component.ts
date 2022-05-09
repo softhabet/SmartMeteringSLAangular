@@ -185,17 +185,15 @@ export class Step2Component implements OnInit, AfterContentChecked {
     return this.filters.length === 0;
   }
 
-  // return filters to wizard
-  getFilters() {
+  // send filters to wizard
+  sendFilters() {
     this.filters.map((filter, index) => {
       if (filter.filterType === 'date') {
         const time1 = this.mouseTimes1[index];
         if (filter.filterValue !== '' && filter.filterValue !== null && time1 == null) {
           filter.filterValue = this.getDateNoTime(filter.filterValue);
-          console.log(filter.filterValue);
         } else if (filter.filterValue !== '' && filter.filterValue !== null && time1 != null) {
           filter.filterValue = this.getDatePlusTime(filter.filterValue, time1);
-          console.log(filter.filterValue);
         }
       } else if (filter.filterType === 'dateRange') {
         const time1 = this.mouseTimes1[index];
@@ -214,7 +212,6 @@ export class Step2Component implements OnInit, AfterContentChecked {
             filter.filterValue[0] = this.getDatePlusTime(filter.filterValue[0], time1);
             filter.filterValue[1] = this.getDatePlusTime(filter.filterValue[1], time2);
           }
-          console.log(filter.filterValue);
         }
       }
     });

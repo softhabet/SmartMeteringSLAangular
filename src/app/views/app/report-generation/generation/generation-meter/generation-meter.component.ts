@@ -43,10 +43,10 @@ export class GenerationMeterComponent implements OnInit {
   }
 
   onNextStep2() {
-    this.step2.getFilters();
+    this.step2.sendFilters();
     if (this.step2.checkFilters()) {
       this.wizard.goToNextStep();
-      this.reportFilters = this.step2.getFilters();
+      this.reportFilters = this.step2.sendFilters();
     }
   }
 
@@ -87,7 +87,7 @@ export class GenerationMeterComponent implements OnInit {
 
   getReportData() {
     const step1 = this.step1.onSubmit();
-    const step2 = this.step2.getFilters();
+    const step2 = this.step2.sendFilters();
     const step3 = this.step3.onSubmit();
     this.report.reportName = step1.reportName;
     this.report.reportDescription = step1.reportDescription;

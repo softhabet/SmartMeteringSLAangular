@@ -13,7 +13,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ArchwizardModule } from 'angular-archwizard';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 
-
 @NgModule({
   declarations: [GenerationMeterComponent, GenerationEventComponent, GenerationComponent],
   imports: [

@@ -2,12 +2,19 @@
   <div class="col-12">
     <app-heading></app-heading>
     <app-breadcrumb></app-breadcrumb>
-    <div class="separator mb-5"></div>
+    <div class="separator mb-3"></div>
   </div>
 </div>
+
 <div class="row">
   <div class="col-12 mb-4">
-    <p>{{ "dashboard" | translate }}</p>
+    <h3 class="mb-2">Dashboard Test</h3>
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe
+        src="http://localhost:5601/app/dashboards#/view/972434e0-cd46-11ec-82dc-a19ba060bb01?embed=true&_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!t%2Cvalue%3A0)%2Ctime%3A(from%3Anow-15m%2Cto%3Anow))&hide-filter-bar=true"
+        class="embed-responsive-item"></iframe>
+    </div>
   </div>
 </div>
+
 <!-- <router-outlet></router-outlet> -->
