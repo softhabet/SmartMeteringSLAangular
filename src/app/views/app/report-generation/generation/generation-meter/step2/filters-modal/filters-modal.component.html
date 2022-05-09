@@ -1,1 +1,49 @@
-<button type="button" class="btn btn-primary" (click)="openModalWithComponent()">Select existing filter</button>
+<div class="modal-header">
+  <h4 class="modal-title pull-left">{{title}}</h4>
+  <button type="button" class="btn btn-primary pull-right" (click)="sendSelectedFilters(selected)">Add</button>
+  <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button> -->
+</div>
+<div class="modal-body">
+  <ngx-datatable [rows]="rows" [columns]="columns" [columnMode]="'force'" [headerHeight]="20" [rowHeight]="'100%'"
+    #table (select)="onSelect($event)" [selected]="selected" [selectionType]="SelectionType.checkbox">
+    <ngx-datatable-column name="Field" prop="fieldName">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <span>{{value}}</span>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Operator" prop="operator">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <span>{{value}}</span>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Value" prop="filterValue">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <span *ngIf="!checkIfDate(value) && !checkIfDateRange(value)">{{value}}</span>
+        <span *ngIf="checkIfDate(value)">{{formatTimestamp(value)}}</span>
+        <span *ngIf="checkIfDateRange(value)" style="white-space:pre-wrap">{{getDateRange(value)}}</span>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Check" prop="filterId" [width]="40" [sortable]="false" [canAutoResize]="false"
+      [draggable]="false" [resizeable]="false">
+      <ng-template ngx-datatable-header-template let-value="value" let-allRowsSelected="allRowsSelected"
+        let-selectFn="selectFn">
+      </ng-template>
+      <ng-template ngx-datatable-cell-template let-isSelected="isSelected" let-value="value"
+        let-onCheckboxChangeFn="onCheckboxChangeFn">
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" [id]="'customCheck' + value" [checked]="isSelected"
+            (change)="onCheckboxChangeFn($event)" />
+          <label class="custom-control-label" [for]="'customCheck' + value"></label>
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-footer></ngx-datatable-footer>
+  </ngx-datatable>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-primary" (click)="bsModalRef.hide()">{{closeBtnName}}</button>
+</div>

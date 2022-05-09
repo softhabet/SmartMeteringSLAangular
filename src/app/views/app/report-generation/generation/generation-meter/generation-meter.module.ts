@@ -16,13 +16,12 @@ import { Step2Component } from './step2/step2.component';
 import { Step3Component } from './step3/step3.component';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { FiltersModalComponent } from './step2/filters-modal/filters-modal.component';
-import { FilterModalComponent } from './step2/filters-modal/filter-modal/filter-modal.component';
 
 
 @NgModule({
 
-  declarations: [Step1Component, Step2Component, Step3Component, FiltersModalComponent, FilterModalComponent],
-  entryComponents: [FilterModalComponent],
+  declarations: [Step1Component, Step2Component, Step3Component, FiltersModalComponent],
+  entryComponents: [FiltersModalComponent],
   imports: [
     CommonModule,
     ReportGenerationModule,

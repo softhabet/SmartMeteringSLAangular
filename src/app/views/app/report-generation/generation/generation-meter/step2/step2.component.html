@@ -8,7 +8,7 @@
         (click)="createFilters()">
         Create new filter
       </button>
-      <app-filters-modal></app-filters-modal>
+      <button type="button" class="btn btn-primary" (click)="openModalWithComponent()">Select existing filter</button>
       <!-- <button type="button" class="btn btn-outline-primary btn-sm mb-3">
         Select existing filter
       </button> -->
@@ -116,11 +116,8 @@
       <br>
       <!-- Delete Save Filter buttons -->
       <div class="d-flex flex-row-reverse">
-        <app-state-button *ngIf="!checkEmpty()" btnClass="btn btn-success" [currentState]="stateButtonCurrentState"
-          [message]="stateButtonMessage" [showMessage]="stateButtonShowMessage" (click)="onStateButtonClick($event)"
-          [isDisabled]="stateButtonDisabled">
-          Save Filters
-        </app-state-button>
+        <button *ngIf="!checkEmpty()" style="font-size: small;" type="button" class="btn btn-success"
+          (click)="saveFilters(filters)">Save Filters</button>
         <button *ngIf="checkEmpty()" style="font-size: small;" type="button" class="btn btn-success" disabled>Save
           Filters
         </button>

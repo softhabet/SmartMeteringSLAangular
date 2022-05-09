@@ -3,22 +3,24 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {BsLocaleService} from 'ngx-bootstrap/datepicker';
 import {defineLocale} from 'ngx-bootstrap/chronos';
 import {frLocale} from 'ngx-bootstrap/locale';
-import { th, tr } from 'date-fns/locale';
-import { ReportService, IFilter } from 'src/app/services/report.service';
+import { ReportService, IFilter, IFilterSave } from 'src/app/services/report.service';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
 import {timeRequired} from './../custom.validators';
+import { FilterService } from 'src/app/services/filter.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { TranslateService } from '@ngx-translate/core';
+import { FiltersModalComponent } from './filters-modal/filters-modal.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-step2',
   templateUrl: './step2.component.html'
 })
 export class Step2Component implements OnInit, AfterContentChecked {
+  bsModalRef: BsModalRef;
 
-  // save filter button
-  stateButtonCurrentState = '';
-  stateButtonShowMessage = false;
-  stateButtonMessage = '';
-  stateButtonDisabled = false;
+  // selected filters
+  selected: any[] = [];
 
   // show time
   public time = false;
@@ -41,7 +43,8 @@ export class Step2Component implements OnInit, AfterContentChecked {
 
   criteriaSet = [];
 
-  constructor(private notifications: NotificationsService, private localeService: BsLocaleService, private changeDetector: ChangeDetectorRef, private reportService: ReportService) {
+  constructor(private filterService: FilterService, private modalService: BsModalService, private translateService: TranslateService,
+              private notifications: NotificationsService, private localeService: BsLocaleService, private changeDetector: ChangeDetectorRef, private reportService: ReportService) {
     this.maxDate.setDate(this.maxDate.getDate() + 7);
     this.bsRangeValue = [this.bsValue, this.maxDate];
     this.bsRangeValues = [this.bsRangeValue];
@@ -220,24 +223,24 @@ export class Step2Component implements OnInit, AfterContentChecked {
   }
 
   getFiltersToSave(filters) {
-    const savedFilters: IFilter[] = [];
+    const reportFilters: IFilter[] = [];
     filters.forEach((filter) => {
       if (filter.filterType === 'listOne') {
-        savedFilters.push({
+        reportFilters.push({
           fieldName: filter.fieldName,
           operator: filter.operator,
           filterValue: filter.filterValue,
           filterType: filter.filterType
         });
       } else if (filter.filterType === 'listMulti') {
-        savedFilters.push({
+        reportFilters.push({
           fieldName: filter.fieldName,
           operator: filter.operator,
           filterValue: this.getList(filter.filterValue),
           filterType: filter.filterType
         });
       } else if (filter.filterType === 'date') {
-        savedFilters.push({
+        reportFilters.push({
           fieldName: filter.fieldName,
           operator: filter.operator,
           filterValue: this.getTimestamp(filter.filterValue).toString(),
@@ -245,14 +248,14 @@ export class Step2Component implements OnInit, AfterContentChecked {
         });
       } else if (filter.filterType === 'dateRange') {
         const dateArray = [this.getTimestamp(filter.filterValue[0]).toString(), this.getTimestamp(filter.filterValue[1]).toString()];
-        savedFilters.push({
+        reportFilters.push({
           fieldName: filter.fieldName,
           operator: filter.operator,
           filterValue: this.getList(dateArray),
           filterType: filter.filterType
         });
       } else {
-        savedFilters.push({
+        reportFilters.push({
           fieldName: filter.fieldName,
           operator: filter.operator,
           filterValue: filter.filterValue,
@@ -260,7 +263,7 @@ export class Step2Component implements OnInit, AfterContentChecked {
         });
       }
     });
-    return savedFilters;
+    return reportFilters;
   }
 
   getList(list) {
@@ -366,19 +369,86 @@ export class Step2Component implements OnInit, AfterContentChecked {
     }
   }
 
-  onStateButtonClick(event) {
-    if (this.stateButtonDisabled) {
-      return;
-    }
-    this.stateButtonDisabled = true;
-    this.stateButtonCurrentState = 'show-spinner';
-    setTimeout(() => {
-      this.stateButtonCurrentState = 'show-success';
-      setTimeout(() => {
-        this.stateButtonCurrentState = '';
-        this.stateButtonShowMessage = false;
-        this.stateButtonDisabled = false;
-      }, 500);
-    }, 1000);
+  saveFilters(filters) {
+    const savedFilters: IFilterSave[] = [];
+    filters.forEach((filter) => {
+      if (filter.filterType === 'listOne') {
+        savedFilters.push({
+          fieldName: filter.fieldName,
+          operator: filter.operator,
+          filterValue: filter.filterValue,
+          filterType: filter.filterType,
+          saved: true
+        });
+      } else if (filter.filterType === 'listMulti') {
+        savedFilters.push({
+          fieldName: filter.fieldName,
+          operator: filter.operator,
+          filterValue: this.getList(filter.filterValue),
+          filterType: filter.filterType,
+          saved: true
+        });
+      } else if (filter.filterType === 'date') {
+        savedFilters.push({
+          fieldName: filter.fieldName,
+          operator: filter.operator,
+          filterValue: this.getTimestamp(filter.filterValue).toString(),
+          filterType: filter.filterType,
+          saved: true
+        });
+      } else if (filter.filterType === 'dateRange') {
+        const dateArray = [this.getTimestamp(filter.filterValue[0]).toString(), this.getTimestamp(filter.filterValue[1]).toString()];
+        savedFilters.push({
+          fieldName: filter.fieldName,
+          operator: filter.operator,
+          filterValue: this.getList(dateArray),
+          filterType: filter.filterType,
+          saved: true
+        });
+      } else {
+        savedFilters.push({
+          fieldName: filter.fieldName,
+          operator: filter.operator,
+          filterValue: filter.filterValue,
+          filterType: filter.filterType,
+          saved: true
+        });
+      }
+    });
+    this.filterService.saveFilters(savedFilters).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  openModalWithComponent() {
+    const initialState = {
+      columns: [
+        { prop: 'fieldName', name: 'Field' },
+        { prop: 'operator', name: 'Operator' },
+        { prop: 'filterValue', name: 'Value' },
+        { prop: 'filterId', name: 'Check' },
+      ],
+      rows: [],
+      list: [],
+      selected: [],
+      // title: this.translateService.instant('modal.modal-title')
+      title: 'Filters'
+    };
+    this.bsModalRef = this.modalService.show(FiltersModalComponent, { initialState, class: 'modal-dialog-centered modal-lg' });
+    this.bsModalRef.content.closeBtnName = this.translateService.instant('modal.close');
+    this.bsModalRef.content.passSelected.subscribe((receivedFilters) => {
+      console.log(receivedFilters);
+      receivedFilters.forEach(filter => {
+        if (filter.filterType === 'listMulti' ) {
+
+        }
+        this.filters.push(filter);
+      });
+    });
   }
 }

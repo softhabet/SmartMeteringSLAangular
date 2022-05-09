@@ -40,6 +40,14 @@ export interface IFilter {
   filterType: string;
 }
 
+export interface IFilterSave {
+  fieldName: string;
+  operator: string;
+  filterValue: string;
+  filterType: string;
+  saved: boolean;
+}
+
 export interface IReportInfo {
   reportName: string;
   userName: string;
