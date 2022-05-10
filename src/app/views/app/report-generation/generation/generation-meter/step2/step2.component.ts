@@ -10,7 +10,6 @@ import { FilterService } from 'src/app/services/filter.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { TranslateService } from '@ngx-translate/core';
 import { FiltersModalComponent } from './filters-modal/filters-modal.component';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-step2',
@@ -444,11 +443,45 @@ export class Step2Component implements OnInit, AfterContentChecked {
     this.bsModalRef.content.passSelected.subscribe((receivedFilters) => {
       console.log(receivedFilters);
       receivedFilters.forEach(filter => {
-        if (filter.filterType === 'listMulti' ) {
-
+        this.bsRangeValues.push(this.bsRangeValue);
+        if (filter.filterType === 'listMulti') {
+          const string = filter.filterValue.split(',');
+          filter.filterValue = [];
+          string.forEach(value => {
+            filter.filterValue.push(value);
+          });
+          this.mouseTimes1.push(this.mouseTime);
+          this.mouseTimes2.push(this.mouseTime);
+          this.filters.push(filter);
+        } else if (filter.filterType === 'date' ) {
+          filter.filterValue = (new Date(filter.filterValue * 1000));
+          this.mouseTimes1.push(this.getTime(filter.filterValue));
+          this.mouseTimes2.push(this.mouseTime);
+          this.filters.push(filter);
+        } else if (filter.filterType === 'dateRange' ) {
+          const string = filter.filterValue.split(',');
+          filter.filterValue = [];
+          string.forEach(value => {
+            filter.filterValue.push(new Date(value * 1000));
+          });
+          this.mouseTimes1.push(this.getTime(this.getTime(filter.filterValue[0])));
+          this.mouseTimes2.push(this.getTime(this.getTime(filter.filterValue[1])));
+          this.filters.push(filter);
+        } else {
+          this.mouseTimes1.push(this.mouseTime);
+          this.mouseTimes2.push(this.mouseTime);
+          this.filters.push(filter);
         }
-        this.filters.push(filter);
       });
     });
   }
+
+  // fix timestamp
+  getTime(date) {
+    // const date = new Date(timestamp * 1000);
+    const hour = date.getHours();
+    const min = date.getMinutes();
+    return new Date(((hour - 1) * 3600 + min * 60) * 1000);
+  }
+
 }

@@ -38,7 +38,7 @@ export class FiltersModalComponent implements OnInit {
   checkIfDate(timestampString: string): boolean {
     if (!this.checkIfDateRange(timestampString)) {
       const timestamp = parseInt(timestampString, 10);
-      return (new Date(timestamp * 10000)).getTime() > 0;
+      return (new Date(timestamp * 1000)).getTime() > 0;
     } else {
       return false;
     }
@@ -48,7 +48,7 @@ export class FiltersModalComponent implements OnInit {
   checkIfDateRange(timestampList: string): boolean {
     if (timestampList.includes(',')) {
       const timestamp = parseInt(timestampList.split(',')[0] , 10);
-      return (new Date(timestamp * 10000)).getTime() > 0;
+      return (new Date(timestamp * 1000)).getTime() > 0;
     } else {
       return false;
     }
