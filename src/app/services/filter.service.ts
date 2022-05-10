@@ -8,12 +8,13 @@ import { Observable, throwError } from 'rxjs';
 })
 export class FilterService {
   private saveFiltersUrl = 'http://localhost:8180/report-generation-service/reports/filter/save';
-  private savedFiltersUrl = 'http://localhost:8180/report-generation-service/reports/filter/saved';
+  private savedFiltersGetUrl = 'http://localhost:8180/report-generation-service/reports/filter/saved';
+  private savedFiltersDeleteUrl = 'http://localhost:8180/report-generation-service/reports/filter/saved';
 
   constructor(private http: HttpClient) { }
 
   getFilters() {
-    return this.http.get(`${this.savedFiltersUrl}`).pipe(
+    return this.http.get(`${this.savedFiltersGetUrl}`).pipe(
       map((res) => {
         return res;
       }),
@@ -25,5 +26,9 @@ export class FilterService {
 
   saveFilters(filters: Array<object>) {
     return this.http.post(`${this.saveFiltersUrl}`, filters , { responseType: 'text' });
+  }
+
+  deleteFilters(filters: Array<object>) {
+    return this.http.post(`${this.savedFiltersDeleteUrl}`, filters , { responseType: 'text' });
   }
 }

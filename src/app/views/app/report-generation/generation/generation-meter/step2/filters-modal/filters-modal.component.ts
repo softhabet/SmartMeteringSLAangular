@@ -24,10 +24,13 @@ export class FiltersModalComponent implements OnInit {
   constructor(private filterService: FilterService, public bsModalRef: BsModalRef) { }
 
   ngOnInit() {
+    this.loadFilters();
+  }
+
+  loadFilters() {
     this.filterService.getFilters().subscribe(
       (res) => {
         this.rows = res as Array<object>;
-        console.log(this.rows);
       },
       (err) => {
         console.log(err);
@@ -83,6 +86,18 @@ export class FiltersModalComponent implements OnInit {
     this.bsModalRef.hide();
   }
 
+  deleteSelectedFilters(selected) {
+    console.log(selected);
+    this.filterService.deleteFilters(selected).subscribe(
+      (res) => {
+        this.loadFilters();
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
   onSelect({ selected }) {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
@@ -97,6 +112,19 @@ export class FiltersModalComponent implements OnInit {
     } else {
       this.selectAllState = '';
     }
+  }
+
+  selectAll(event) {
+    this.selectAllChange(event);
+  }
+
+  selectAllChange($event) {
+    if ($event.target.checked) {
+      this.selected = [...this.rows];
+    } else {
+      this.selected = [];
+    }
+    this.setSelectAllState();
   }
 
 }

@@ -1,9 +1,27 @@
 <div class="modal-header">
   <h4 class="modal-title pull-left">{{title}}</h4>
-  <button type="button" class="btn btn-primary pull-right" (click)="sendSelectedFilters(selected)">Add</button>
-  <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
-    <span aria-hidden="true">&times;</span>
-  </button> -->
+  <!-- <button type="button" class="btn btn-primary pull-right" (click)="sendSelectedFilters(selected)">Add</button> -->
+  <div class="btn-group" dropdown>
+    <div class="btn btn-primary btn-lg pl-4 pr-0 check-button">
+      <label class="custom-control custom-checkbox mb-0 d-inline-block">
+        <input type="checkbox" class="custom-control-input" [checked]="selectAllState==='checked'"
+          [indeterminate]="selectAllState === 'indeterminate'" (change)="selectAll($event)">
+        <span class="custom-control-label">&nbsp;</span>
+      </label>
+    </div>
+    <button id="button-split" type="button" dropdownToggle class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+      aria-controls="dropdown-split">
+      <span class="caret"></span>
+    </button>
+    <ul id="dropdown-split" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+      aria-labelledby="button-split">
+      <li role="menuitem"><a class="dropdown-item" (click)="sendSelectedFilters(selected)">Add</a></li>
+      <li role="menuitem"><a class="dropdown-item" (click)="deleteSelectedFilters(selected)">Delete</a></li>
+    </ul>
+  </div>
+  <!-- <button type=" button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+          </button> -->
 </div>
 <div class="modal-body">
   <ngx-datatable [rows]="rows" [columns]="columns" [columnMode]="'force'" [headerHeight]="20" [rowHeight]="'100%'"

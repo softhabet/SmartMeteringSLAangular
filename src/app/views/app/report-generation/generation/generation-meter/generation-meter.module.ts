@@ -16,6 +16,8 @@ import { Step2Component } from './step2/step2.component';
 import { Step3Component } from './step3/step3.component';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { FiltersModalComponent } from './step2/filters-modal/filters-modal.component';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ComponentsStateButtonModule } from 'src/app/components/state-button/components.state-button.module';
 
 
 @NgModule({
@@ -32,9 +34,11 @@ import { FiltersModalComponent } from './step2/filters-modal/filters-modal.compo
     ReportGenerationModule,
     DndListModule,
     NgSelectModule,
+    ComponentsStateButtonModule,
     ModalModule.forRoot(),
     SimpleNotificationsModule.forRoot(),
     BsDatepickerModule.forRoot(),
+    BsDropdownModule.forRoot(),
     TimepickerModule.forRoot(),
     PaginationModule.forRoot(),
     ContextMenuModule.forRoot({

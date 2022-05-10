@@ -368,6 +368,10 @@ export class Step2Component implements OnInit, AfterContentChecked {
     }
   }
 
+  onSaveFilters() {
+    this.notifications.create('Filters Saved!', 'Filters saved.', NotificationType.Success, { timeOut: 3000, showProgressBar: true });
+  }
+
   saveFilters(filters) {
     const savedFilters: IFilterSave[] = [];
     filters.forEach((filter) => {
@@ -416,7 +420,7 @@ export class Step2Component implements OnInit, AfterContentChecked {
     });
     this.filterService.saveFilters(savedFilters).subscribe(
       (res) => {
-        console.log(res);
+        this.onSaveFilters();
       },
       (err) => {
         console.log(err);
@@ -441,7 +445,6 @@ export class Step2Component implements OnInit, AfterContentChecked {
     this.bsModalRef = this.modalService.show(FiltersModalComponent, { initialState, class: 'modal-dialog-centered modal-lg' });
     this.bsModalRef.content.closeBtnName = this.translateService.instant('modal.close');
     this.bsModalRef.content.passSelected.subscribe((receivedFilters) => {
-      console.log(receivedFilters);
       receivedFilters.forEach(filter => {
         this.bsRangeValues.push(this.bsRangeValue);
         if (filter.filterType === 'listMulti') {
