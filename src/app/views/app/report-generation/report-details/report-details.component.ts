@@ -220,7 +220,7 @@ export class ReportDetailsComponent implements OnInit {
     } else {
       const hours = time / 3600;
       const minutes = (time - Math.trunc(hours) * 3600) / 60;
-      return (Math.trunc(hours) + ' hours' + Math.trunc(minutes) + ' minutes');
+      return (Math.trunc(hours) + ' hours' + ' ' + Math.trunc(minutes) + ' minutes');
     }
   }
 
