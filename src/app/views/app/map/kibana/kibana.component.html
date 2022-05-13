@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-12 mb-4">
+    <!-- <p>{{ "map" | translate }}</p> -->
+    <div class="d-flex flex-row justify-content-between">
+      <h3>Elastic Map</h3>
+      <button type="button" class="btn btn-outline-primary btn-sm mb-3 mr-2 float-right"
+        [routerLink]="['/app/map/leaflet']" routerLinkActive="router-link-active">Leaflet Map</button>
+    </div>
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe
+        src="http://localhost:5601/app/dashboards#/view/a5b31740-cb81-11ec-82dc-a19ba060bb01?embed=true&_g=(filters%3A!()%2CrefreshInterval%3A(pause%3A!t%2Cvalue%3A0)%2Ctime%3A(from%3Anow-15m%2Cto%3Anow))"
+        class="embed-responsive-item"></iframe>
+    </div>
+  </div>
+</div>

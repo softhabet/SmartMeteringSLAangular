@@ -25,6 +25,8 @@
     "report-generation": "Report Generation",
     "reports": "Reports",
     "map": "Map",
+    "kibana": "Elastic Map",
+    "leaflet": "Leaflet Map",
     "dashboards": "Dashboards",
     "generation": "Generation",
     "meter": "Meter",

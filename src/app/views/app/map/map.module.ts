@@ -8,11 +8,11 @@ import { PagesContainersModule } from 'src/app/containers/pages/pages.containers
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { LayoutContainersModule } from 'src/app/containers/layout/layout.containers.module';
 import { MapComponent} from './map.component';
-
-
+import { KibanaComponent } from './kibana/kibana.component';
+import { LeafletComponent } from './leaflet/leaflet.component';
 
 @NgModule({
-  declarations: [MapComponent],
+  declarations: [MapComponent, KibanaComponent, LeafletComponent],
   imports: [
     CommonModule,
     SharedModule,
