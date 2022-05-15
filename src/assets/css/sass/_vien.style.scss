@@ -46,11 +46,13 @@ Table of Contents
 41.Blog
 42.Rounded
 43.Rtl
+44.Map leaflet
 */
 
 /* 00.Variables and Imports */
 
 @import url("https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700");
+@import "~leaflet/dist/leaflet.css";
 
 $main-menu-item-height: 110px;
 $main-menu-width: 120px;
