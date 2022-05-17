@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, EventEmitter, Output, OnDestroy} from '@a
 import { ReportService, IReportInfo, IReportResponse } from 'src/app/services/report.service';
 import { ContextMenuComponent } from 'ngx-contextmenu';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
+import { NgxSpinnerService } from 'ngx-bootstrap-spinner';
 import {
   FormGroup,
   FormControl,
@@ -53,7 +54,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
   totalPage = 0;
 
   @ViewChild('basicMenu') public basicMenu: ContextMenuComponent;
-  constructor(fb: FormBuilder, private notifications: NotificationsService, private instanceMsg: InstanceMsgService, private reportService: ReportService, private router: Router, private route: ActivatedRoute) {
+  constructor(fb: FormBuilder, private notifications: NotificationsService, private instanceMsg: InstanceMsgService, private reportService: ReportService, private router: Router, private route: ActivatedRoute
+    , private spinner: NgxSpinnerService) {
     const reportControls = {
       searchName: new FormControl(''),
       searchOwner: new FormControl(''),
@@ -67,20 +69,25 @@ export class ReportsComponent implements OnInit, OnDestroy {
     this.subscription = this.instanceMsg.currentMessage.subscribe(message => {
       if (message !== this.message && message !== '' && message !== null ) {
         this.message = message;
-        console.log(message);
-        this.reportService.generateInstance(message).subscribe(
-          (res) => {
-            this.notifications.create('Created !', 'Report instance created.', NotificationType.Success, { timeOut: 3000, showProgressBar: true });
-            setTimeout(() => {this.router.navigateByUrl('app/generated-reports').then(() => {this.instanceMsg.changeMessage(''); }); } , 3000);
-          },
-          (err) => {
-            console.log(err);
-            this.notifications.create('Error !', 'Error creating report instance.', NotificationType.Error, { timeOut: 3000, showProgressBar: true });
-          }
-        );
+        this.generateInstance(message);
       }
     });
     this.loadData(this.itemsPerPage, this.currentPage);
+  }
+
+  generateInstance(reportName) {
+    this.spinner.show();
+    this.reportService.generateInstance(reportName).subscribe(
+      (res) => {
+        this.spinner.hide();
+        this.notifications.create('Created !', 'Report instance created.', NotificationType.Success, { timeOut: 3000, showProgressBar: true });
+        setTimeout(() => {this.router.navigateByUrl('app/generated-reports').then(() => {this.instanceMsg.changeMessage(''); }); } , 3000);
+      },
+      (err) => {
+        console.log(err);
+        this.notifications.create('Error !', 'Error creating report instance.', NotificationType.Error, { timeOut: 3000, showProgressBar: true });
+      }
+    );
   }
 
   ngOnDestroy() {
@@ -285,16 +292,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   onContextMenuClick(action: string, event) {
     if (action === 'generate') {
-      this.reportService.generateInstance(event.reportName).subscribe(
-        (res) => {
-          this.notifications.create('Created !', 'Report instance created.', NotificationType.Success, { timeOut: 3000, showProgressBar: true });
-          setTimeout(() => {this.router.navigateByUrl('app/generated-reports'); } , 3000);
-        },
-        (err) => {
-          console.log(err);
-          this.notifications.create('Error !', 'Error creating report instance.', NotificationType.Error, { timeOut: 3000, showProgressBar: true });
-        }
-      );
+      this.generateInstance(event.reportName);
     } else if (action === 'delete') {
       this.reportService.deleteReport(event.reportName).subscribe(
         (res) => {

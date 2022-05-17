@@ -2,6 +2,7 @@ import { AfterViewInit, Component} from '@angular/core';
 import { MapService, Icoord } from 'src/app/services/map.service';
 import 'leaflet/dist/images/marker-shadow.png';
 import * as L from 'leaflet';
+import { NgxSpinnerService } from 'ngx-bootstrap-spinner';
 
 @Component({
   selector: 'app-leaflet',
@@ -30,11 +31,23 @@ export class LeafletComponent implements AfterViewInit {
     popupAnchor: [2, -40]
   });
 
-  constructor(private mapService: MapService) { }
+  constructor(private mapService: MapService, private spinner: NgxSpinnerService) { }
 
   ngAfterViewInit(): void {
     this.createMap();
     window.dispatchEvent(new Event('resize'));
+    this.spinner.show();
+    this.mapService.getCoords().subscribe(
+      (res) => {
+        res.forEach((location) => {
+          this.addMarker(location, 'green');
+        });
+        this.spinner.hide();
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   createMap() {
@@ -60,17 +73,6 @@ export class LeafletComponent implements AfterViewInit {
 
     mainLayer.addTo(this.map);
 
-    this.mapService.getCoords().subscribe(
-      (res) => {
-        res.forEach((location) => {
-          this.addMarker(location);
-        });
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-
     // this.mapService.getGeo().subscribe(
     //   (res) => {
     //     // L.geoJSON(res.geometry).addTo(this.map);
@@ -89,8 +91,9 @@ export class LeafletComponent implements AfterViewInit {
   }
 
   // { icon: this.smallIcon }
-  addMarker(location) {
+  addMarker(location, markerColor) {
     const marker = L.circleMarker([location.meterLat, location.meterLng], { renderer: this.renderer });
+    marker.setStyle({color: markerColor});
     marker.addTo(this.map);
     // marker.addTo(this.map).bindPopup(location.dcNumber);
   }

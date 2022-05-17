@@ -10,6 +10,7 @@ import { LayoutContainersModule } from 'src/app/containers/layout/layout.contain
 import { MapComponent} from './map.component';
 import { KibanaComponent } from './kibana/kibana.component';
 import { LeafletComponent } from './leaflet/leaflet.component';
+import { NgxSpinnerModule } from 'ngx-bootstrap-spinner';
 
 @NgModule({
   declarations: [MapComponent, KibanaComponent, LeafletComponent],
@@ -21,6 +22,7 @@ import { LeafletComponent } from './leaflet/leaflet.component';
     NgxDatatableModule,
     CollapseModule,
     PagesContainersModule,
+    NgxSpinnerModule,
     PaginationModule.forRoot()
   ]
 })

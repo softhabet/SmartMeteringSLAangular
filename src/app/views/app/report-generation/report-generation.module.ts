@@ -16,8 +16,8 @@ import { UiCardsContainersModule } from 'src/app/containers/ui/cards/ui.cards.co
 import { ContextMenuModule } from 'ngx-contextmenu';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { FormsModule as FormsModuleAngular, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReportDetailsComponent } from './report-details/report-details.component';
+import { NgxSpinnerModule } from 'ngx-bootstrap-spinner';
 
 
 @NgModule({
@@ -38,6 +38,7 @@ import { ReportDetailsComponent } from './report-details/report-details.componen
     LayoutContainersModule,
     FormsModuleAngular,
     ReactiveFormsModule,
+    NgxSpinnerModule,
     SimpleNotificationsModule.forRoot(),
     PaginationModule.forRoot(),
     ContextMenuModule.forRoot({
