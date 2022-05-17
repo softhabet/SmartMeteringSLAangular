@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import reports from 'src/app/mydata/reportsInstances';
 import { InstanceService, IInstanceInfo, IInstanceListResponse } from 'src/app/services/instance.service';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,9 +9,6 @@ import { ContextMenuComponent } from 'ngx-contextmenu';
   templateUrl: './instance-table.component.html',
 })
 export class InstanceTableComponent implements OnInit {
-
-  rows = reports.slice(0, 20).map(({ title, createdBy, date, id }) => ({ title, createdBy, date, id }));
-
   res: IInstanceListResponse[] = [];
   instancesList: IInstanceInfo[] = [];
 

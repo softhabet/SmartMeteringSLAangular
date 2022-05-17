@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, EventEmitter, Output} from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, Output, OnDestroy} from '@angular/core';
 import { ReportService, IReportInfo, IReportResponse } from 'src/app/services/report.service';
 import { ContextMenuComponent } from 'ngx-contextmenu';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
@@ -9,12 +9,18 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { InstanceMsgService } from 'src/app/services/instanceMsg.service';
 
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html'
 })
-export class ReportsComponent implements OnInit {
+export class ReportsComponent implements OnInit, OnDestroy {
+
+  message: string;
+  subscription: Subscription;
+
   reportForm: FormGroup;
   get searchName() {
     return this.reportForm.get('searchName');
@@ -47,7 +53,7 @@ export class ReportsComponent implements OnInit {
   totalPage = 0;
 
   @ViewChild('basicMenu') public basicMenu: ContextMenuComponent;
-  constructor(fb: FormBuilder, private notifications: NotificationsService, private reportService: ReportService, private router: Router, private route: ActivatedRoute) {
+  constructor(fb: FormBuilder, private notifications: NotificationsService, private instanceMsg: InstanceMsgService, private reportService: ReportService, private router: Router, private route: ActivatedRoute) {
     const reportControls = {
       searchName: new FormControl(''),
       searchOwner: new FormControl(''),
@@ -58,7 +64,27 @@ export class ReportsComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.subscription = this.instanceMsg.currentMessage.subscribe(message => {
+      if (message !== this.message && message !== '' && message !== null ) {
+        this.message = message;
+        console.log(message);
+        this.reportService.generateInstance(message).subscribe(
+          (res) => {
+            this.notifications.create('Created !', 'Report instance created.', NotificationType.Success, { timeOut: 3000, showProgressBar: true });
+            setTimeout(() => {this.router.navigateByUrl('app/generated-reports').then(() => {this.instanceMsg.changeMessage(''); }); } , 3000);
+          },
+          (err) => {
+            console.log(err);
+            this.notifications.create('Error !', 'Error creating report instance.', NotificationType.Error, { timeOut: 3000, showProgressBar: true });
+          }
+        );
+      }
+    });
     this.loadData(this.itemsPerPage, this.currentPage);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   // get data paginated from back

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {Step1Component} from './step1/step1.component';
 import {Step2Component} from './step2/step2.component';
 import {Step3Component} from './step3/step3.component';
@@ -6,18 +6,23 @@ import { Router } from '@angular/router';
 import { ReportService, Report, IReportType, Icolumns, IFilter } from 'src/app/services/report.service';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
 import { WizardComponent as ArcWizardComponent } from 'angular-archwizard';
+import { InstanceMsgService } from 'src/app/services/instanceMsg.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-generation-meter',
   templateUrl: './generation-meter.component.html'
 })
 
-export class GenerationMeterComponent implements OnInit {
+export class GenerationMeterComponent implements OnInit, OnDestroy {
   @ViewChild(Step1Component) step1: Step1Component;
   @ViewChild(Step2Component) step2: Step2Component;
   @ViewChild(Step3Component) step3: Step3Component;
   @ViewChild('wizard') wizard: ArcWizardComponent;
-  constructor(private reportService: ReportService, private notifications: NotificationsService, private router: Router) { }
+  constructor(private reportService: ReportService, private instanceMsg: InstanceMsgService, private notifications: NotificationsService, private router: Router) { }
+
+  message: string;
+  subscription: Subscription;
 
   report: Report = new Report();
   reportType: IReportType = {
@@ -67,7 +72,11 @@ export class GenerationMeterComponent implements OnInit {
       (res) => {
         console.log(res);
         this.onSuccess();
-        setTimeout(() => {this.router.navigateByUrl('app/report-generation/generation/reports'); } , 3000);
+        if (this.report.isScheduled) {
+          setTimeout(() => {this.router.navigateByUrl('app/report-generation/generation/reports').then(() => {this.instanceCommand(''); }); } , 3000);
+        } else {
+          setTimeout(() => {this.router.navigateByUrl('app/report-generation/generation/reports').then(() => {this.instanceCommand(this.report.reportName); }); } , 3000);
+        }
       },
       (err) => {
         console.log(err);
@@ -159,7 +168,16 @@ export class GenerationMeterComponent implements OnInit {
     return (new Date(date).getTime() / 1000);
   }
 
+  instanceCommand(reportName: string) {
+    this.instanceMsg.changeMessage(reportName);
+  }
+
   ngOnInit(): void {
+    this.subscription = this.instanceMsg.currentMessage.subscribe(message => this.message = message);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }
