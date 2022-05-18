@@ -99,6 +99,7 @@ export class Step1Component implements OnInit, AfterContentChecked {
     this.reportFileName = this.getFileNameParts(this.step1Form.value.prefix, this.step1Form.value.separator, this.step1Form.value.timestamp, this.step1Form.value.random.random);
     if (!this.step1Form.value.random.random) {
       this.reportPrefixExists = this.reportPrefixs.includes(this.step1Form.value.prefix);
+      // this.step1Form.get('random').get('random').setValue(true);
     } else {
       this.reportPrefixExists = false;
     }

@@ -4,6 +4,8 @@ import { throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 export interface Icoord {
+  meterType: string;
+  communicationType: string;
   meterLat: number;
   meterLng: number;
 }

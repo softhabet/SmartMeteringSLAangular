@@ -1,4 +1,4 @@
-import { AfterViewInit, Component} from '@angular/core';
+import { AfterViewInit, Component, ViewEncapsulation} from '@angular/core';
 import { MapService, Icoord } from 'src/app/services/map.service';
 import 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/images/marker-icon.png';
@@ -10,7 +10,8 @@ import { NgxSpinnerService } from 'ngx-bootstrap-spinner';
 @Component({
   selector: 'app-leaflet',
   templateUrl: './leaflet.component.html',
-  styleUrls: ['./leaflet.component.scss']
+  styleUrls: ['./leaflet.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class LeafletComponent implements AfterViewInit {
   map;
@@ -39,23 +40,11 @@ export class LeafletComponent implements AfterViewInit {
     this.createMap();
     window.dispatchEvent(new Event('resize'));
     this.spinner.show();
-    this.mapService.getCoords().subscribe(
-      (res) => {
-        res.forEach((location) => {
-          this.addMarker(location, 'white');
-        });
-        this.map.addLayer(this.markers);
-        this.spinner.hide();
-      },
-      (err) => {
-        console.log(err);
-        this.spinner.hide();
-      }
-    );
+    this.loadAllMeters();
   }
 
   createMap() {
-    this.markers = L.markerClusterGroup();
+    this.markers = L.markerClusterGroup({disableClusteringAtZoom: 13});
 
     const centreVilleTunis = {
       lat: 36.8003753,
@@ -77,25 +66,38 @@ export class LeafletComponent implements AfterViewInit {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
 
+    // tslint:disable-next-line: new-parens
+    const legend = new (L.Control.extend({options: { position: 'bottomleft' }}));
+
+    legend.onAdd = (map) => {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML += '<h4>Meters Color</h4>';
+      div.innerHTML += '<i style="background: #007500"></i><span>ELECTRICITY</span><br>';
+      div.innerHTML += '<i style="background: #FF0000"></i><span>GAZ</span><br>';
+      div.innerHTML += '<i style="background: #0000FF"></i><span>WATER</span><br>';
+      return div;
+    };
+
+    legend.addTo(this.map);
     mainLayer.addTo(this.map);
   }
 
   // { icon: this.smallIcon }
-  addMarker(location, markerColor) {
-    const marker = L.circleMarker([location.meterLat, location.meterLng], { renderer: this.renderer });
-    marker.setStyle({color: markerColor});
+  addMarker(meter) {
+    const marker = L.circleMarker([meter.meterLat, meter.meterLng], { renderer: this.renderer });
+    marker.setStyle({color: this.getMarkerColor(meter)});
     // marker.addTo(this.map);
     this.markers.addLayer(marker);
     // marker.addTo(this.map).bindPopup(location.dcNumber);
   }
 
-  addMarkerColor(location, filters: string[]) {
-    if (filters.includes('ELECTRICITY')) {
-      this.addMarker(location, 'green');
-    } else if (filters.includes('GAZ')) {
-      this.addMarker(location, 'red');
-    } else if (filters.includes('WATER')) {
-      this.addMarker(location, 'blue');
+  getMarkerColor(meter): string {
+    if (meter.meterType === 'ELECTRICITY') {
+      return 'green';
+    } else if (meter.meterType === 'GAZ') {
+      return 'red';
+    } else if (meter.meterType === 'WATER') {
+      return 'blue';
     }
   }
 
@@ -104,9 +106,25 @@ export class LeafletComponent implements AfterViewInit {
     this.spinner.show();
     this.mapService.getFilteredCoords(filters).subscribe(
       (res) => {
-        res.forEach((location) => {
-          this.addMarkerColor(location, filters);
+        res.forEach((meter) => {
+          this.addMarker(meter);
         });
+        this.spinner.hide();
+      },
+      (err) => {
+        console.log(err);
+        this.spinner.hide();
+      }
+    );
+  }
+
+  loadAllMeters() {
+    this.mapService.getCoords().subscribe(
+      (res) => {
+        res.forEach((meter) => {
+          this.addMarker(meter);
+        });
+        this.map.addLayer(this.markers);
         this.spinner.hide();
       },
       (err) => {
