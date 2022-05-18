@@ -1,6 +1,7 @@
 import { AfterViewInit, Component} from '@angular/core';
 import { MapService, Icoord } from 'src/app/services/map.service';
-// import 'leaflet/dist/images/marker-shadow.png';
+import 'leaflet/dist/images/marker-shadow.png';
+import 'leaflet/dist/images/marker-icon.png';
 import * as L from 'leaflet';
 import { Map, MapOptions, MarkerClusterGroup, MarkerClusterGroupOptions } from 'leaflet';
 import 'leaflet.markercluster';
@@ -77,22 +78,6 @@ export class LeafletComponent implements AfterViewInit {
     });
 
     mainLayer.addTo(this.map);
-
-    // this.mapService.getGeo().subscribe(
-    //   (res) => {
-    //     // L.geoJSON(res.geometry).addTo(this.map);
-    //     console.log(res);
-    //     L.geoJSON(res.geometry, {
-    //       pointToLayer: (feature, lnglat) => {
-    //         return L.marker(lnglat, { icon: this.customMarker });
-    //       }
-    //     });
-    //     // console.log(res);
-    //   },
-    //   (err) => {
-    //     console.log(err);
-    //   }
-    // );
   }
 
   // { icon: this.smallIcon }
@@ -104,13 +89,23 @@ export class LeafletComponent implements AfterViewInit {
     // marker.addTo(this.map).bindPopup(location.dcNumber);
   }
 
+  addMarkerColor(location, filters: string[]) {
+    if (filters.includes('ELECTRICITY')) {
+      this.addMarker(location, 'green');
+    } else if (filters.includes('GAZ')) {
+      this.addMarker(location, 'red');
+    } else if (filters.includes('WATER')) {
+      this.addMarker(location, 'blue');
+    }
+  }
+
   loadFilteredMeters(filters: string[]) {
     this.markers.clearLayers();
     this.spinner.show();
     this.mapService.getFilteredCoords(filters).subscribe(
       (res) => {
         res.forEach((location) => {
-          this.addMarker(location, 'green');
+          this.addMarkerColor(location, filters);
         });
         this.spinner.hide();
       },

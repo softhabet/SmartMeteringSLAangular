@@ -41,9 +41,9 @@
               "./node_modules/angular-calendar/css/angular-calendar.css",
               "./node_modules/ngx-lightbox/lightbox.css",
               "./node_modules/video.js/dist/video-js.min.css",
-              "node_modules/leaflet/dist/leaflet.css",
-              "node_modules/leaflet.markercluster/dist/MarkerCluster.css",
-              "node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css",
+              "./node_modules/leaflet/dist/leaflet.css",
+              "./node_modules/leaflet.markercluster/dist/MarkerCluster.css",
+              "./node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css",
               {
                 "input": "src/assets/css/sass/themes/vien.light.blueyale.scss",
                 "bundleName": "light.blue.yale",
