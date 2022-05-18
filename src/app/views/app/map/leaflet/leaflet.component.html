@@ -1,11 +1,34 @@
 <div class="row">
-  <div class="col-12 mb-4">
+  <div class="col-12 mb-2">
     <!-- <p>{{ "map" | translate }}</p> -->
     <div class="d-flex flex-row justify-content-between">
       <h3>Leaflet Map</h3>
       <button type="button" class="btn btn-outline-primary btn-sm mb-3 mr-2 float-right"
         [routerLink]="['/app/map/kibana']" routerLinkActive="router-link-active">Elastic Map</button>
     </div>
+
+    <div class="d-flex flex-row mb-2">
+      <h3 class="mr-4 mt-2">Meter Type Filters</h3>
+      <div class="btn-group" btnRadioGroup [(ngModel)]="uncheckableRadioModelType">
+        <label class="btn btn-outline-primary" btnRadio="Left" uncheckable tabindex="0" role="button"
+          (click)="addToFilters('ELECTRICITY')">ELECTRICITY</label>
+        <label class="btn btn-outline-primary" btnRadio="Middle" uncheckable tabindex="0" role="button"
+          (click)="addToFilters('GAZ')">GAZ</label>
+        <label class="btn btn-outline-primary" btnRadio="Right" uncheckable tabindex="0" role="button"
+          (click)="addToFilters('WATER')">WATER</label>
+      </div>
+    </div>
+
+    <div class="d-flex flex-row mb-2">
+      <h3 class="mr-4 mt-2">Communication Type Filters</h3>
+      <div class="btn-group" btnRadioGroup [(ngModel)]="uncheckableRadioModelComm">
+        <label class="btn btn-outline-primary" btnRadio="Left" uncheckable tabindex="0" role="button"
+          (click)="addToFilters('P2P')">P2P</label>
+        <label class="btn btn-outline-primary" btnRadio="Right" uncheckable tabindex="0" role="button"
+          (click)="addToFilters('PLC')">PLC</label>
+      </div>
+    </div>
+
     <div class="col-md-12 mt-2">
       <div id="map"></div>
       <ngx-bootstrap-spinner bdColor="rgba(51,51,51,0.8)" size="default" color="#fff" type="border"

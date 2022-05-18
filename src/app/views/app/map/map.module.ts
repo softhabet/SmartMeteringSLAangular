@@ -11,6 +11,8 @@ import { MapComponent} from './map.component';
 import { KibanaComponent } from './kibana/kibana.component';
 import { LeafletComponent } from './leaflet/leaflet.component';
 import { NgxSpinnerModule } from 'ngx-bootstrap-spinner';
+import { BootstrapModule } from 'src/app/components/bootstrap/bootstrap.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [MapComponent, KibanaComponent, LeafletComponent],
@@ -23,6 +25,8 @@ import { NgxSpinnerModule } from 'ngx-bootstrap-spinner';
     CollapseModule,
     PagesContainersModule,
     NgxSpinnerModule,
+    BootstrapModule,
+    FormsModule,
     PaginationModule.forRoot()
   ]
 })

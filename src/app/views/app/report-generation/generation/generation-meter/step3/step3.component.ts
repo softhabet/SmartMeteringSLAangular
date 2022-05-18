@@ -111,6 +111,14 @@ export class Step3Component implements OnInit, AfterContentChecked {
         console.log(err);
       }
     );
+    this.reportService.getTotalMetersNumber().subscribe(
+      (res) => {
+        this.totalMeters = res.size;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   onWarning(name) {
