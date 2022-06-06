@@ -2,12 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ViewsComponent } from './views.component';
 import { ErrorComponent } from './error/error.component';
-import { AngularFireAuthGuard, redirectUnauthorizedTo, redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { AuthGuard } from './../shared/auth.guard';
 import { environment } from './../../environments/environment';
-
-const redirectUnauthorizedToLogin = () =>  redirectUnauthorizedTo(['/user']) ;
-const redirectLoggedInToItems = () => redirectLoggedInTo(['/app']);
 
 let routes: Routes = [
   {

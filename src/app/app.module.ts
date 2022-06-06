@@ -6,8 +6,8 @@ import { ViewsModule } from './views/views.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { HttpClientModule } from '@angular/common/http';
-import { AngularFireModule } from '@angular/fire';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './shared/authconfig.interceptor';
 import { environment } from '../environments/environment';
 import { LayoutContainersModule } from './containers/layout/layout.containers.module';
 import { AutocompleteOffDirective } from './directives/autocomplete-off.directive';
@@ -21,13 +21,18 @@ import { AutocompleteOffDirective } from './directives/autocomplete-off.directiv
     BrowserAnimationsModule,
     TranslateModule.forRoot(),
     HttpClientModule,
-    AngularFireModule.initializeApp(environment.firebase)
   ],
   declarations: [
     AppComponent,
     AutocompleteOffDirective
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

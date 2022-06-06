@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { auth } from 'firebase/app';
 import { Observable, from, throwError} from 'rxjs';
 import { Router } from '@angular/router';
 
@@ -27,7 +25,7 @@ export class AuthService {
   private signUpUrl = 'http://localhost:8180/authentication-service/admins/register';
 
 
-  constructor(private http: HttpClient, public router: Router, private afAuth: AngularFireAuth) { }
+  constructor(private http: HttpClient, public router: Router) { }
 
   signIn(credentials: ISignInCredentials) {
     const params = new HttpParams({
@@ -42,10 +40,6 @@ export class AuthService {
   register(credentials: ICreateCredentials) {
     return this.http.post(`${this.signUpUrl}`, credentials, { responseType: 'text' });
   }
-
-  // signOut() {
-  //   return from(this.afAuth.auth.signOut());
-  // }
 
   logOut() {
     const removeToken = localStorage.removeItem('access_token');
@@ -63,16 +57,16 @@ export class AuthService {
     return (authToken !== null) ? true : false;
   }
 
-  sendPasswordEmail(email) {
-    return from(this.afAuth.auth.sendPasswordResetEmail(email));
-  }
+  // sendPasswordEmail(email) {
+  //   return from(this.afAuth.auth.sendPasswordResetEmail(email));
+  // }
 
-  resetPassword(credentials: IPasswordReset) {
-    return from(this.afAuth.auth.confirmPasswordReset(credentials.code, credentials.newPassword));
-  }
+  // resetPassword(credentials: IPasswordReset) {
+  //   return from(this.afAuth.auth.confirmPasswordReset(credentials.code, credentials.newPassword));
+  // }
 
-  get user(): firebase.User {
-    return this.afAuth.auth.currentUser;
-  }
+  // get user(): firebase.User {
+  //   return this.afAuth.auth.currentUser;
+  // }
 
 }
