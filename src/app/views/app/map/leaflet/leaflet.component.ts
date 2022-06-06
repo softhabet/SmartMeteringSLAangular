@@ -84,7 +84,7 @@ export class LeafletComponent implements AfterViewInit {
 
   // { icon: this.smallIcon }
   addMarker(meter) {
-    const marker = L.circleMarker([meter.meterLat, meter.meterLng], { renderer: this.renderer });
+    const marker = L.circleMarker([meter.meterLat, meter.meterLng], {radius: 5, renderer: this.renderer });
     marker.setStyle({color: this.getMarkerColor(meter)});
     // marker.addTo(this.map);
     this.markers.addLayer(marker);
