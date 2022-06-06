@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { UserComponent } from './user.component';
 import { UserRoutingModule } from './user.routing';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +11,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { ComponentsStateButtonModule } from 'src/app/components/state-button/components.state-button.module';
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent, ForgotPasswordComponent, UserComponent, ResetPasswordComponent],
+  declarations: [LoginComponent, RegisterComponent, UserComponent, ResetPasswordComponent],
   imports: [
     CommonModule,
     UserRoutingModule,

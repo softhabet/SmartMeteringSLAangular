@@ -11,6 +11,8 @@ import { AuthInterceptor } from './shared/authconfig.interceptor';
 import { environment } from '../environments/environment';
 import { LayoutContainersModule } from './containers/layout/layout.containers.module';
 import { AutocompleteOffDirective } from './directives/autocomplete-off.directive';
+import { AvatarModule } from 'ngx-avatar';
+
 
 @NgModule({
   imports: [
@@ -21,6 +23,7 @@ import { AutocompleteOffDirective } from './directives/autocomplete-off.directiv
     BrowserAnimationsModule,
     TranslateModule.forRoot(),
     HttpClientModule,
+    AvatarModule
   ],
   declarations: [
     AppComponent,

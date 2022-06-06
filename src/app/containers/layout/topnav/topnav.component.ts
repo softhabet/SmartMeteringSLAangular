@@ -4,6 +4,7 @@ import { SidebarService, ISidebar } from '../sidebar/sidebar.service';
 import { Router } from '@angular/router';
 import { LangService, Language } from 'src/app/shared/lang.service';
 import { AuthService } from 'src/app/shared/auth.service';
+import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -20,8 +21,9 @@ export class TopnavComponent implements OnInit, OnDestroy {
   isFullScreen = false;
   isDarkModeActive = false;
   searchKey = '';
+  userName: string;
 
-  constructor(private sidebarService: SidebarService, private authService: AuthService, private router: Router, private langService: LangService) {
+  constructor(private sidebarService: SidebarService, private authService: AuthService, private userService: UserService, private router: Router, private langService: LangService) {
     this.languages = this.langService.supportedLanguages;
     this.currentLanguage = this.langService.languageShorthand;
     this.isSingleLang = this.langService.isSingleLang;
@@ -47,6 +49,13 @@ export class TopnavComponent implements OnInit, OnDestroy {
       : environment.defaultColor;
   }
 
+  getUserName(): any {
+    this.userService.getUserName(this.authService.getTokenSubject()).subscribe((res) => {
+      this.userName = res;
+      return this.userName = res;
+    });
+  }
+
   fullScreenClick() {
     this.isFullScreen = !this.isFullScreen;
     if (this.isFullScreen) {
@@ -62,9 +71,7 @@ export class TopnavComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // if (this.authService.user) {
-    //   this.displayName = this.authService.user.displayName;
-    // }
+    this.userName = this.getUserName();
     this.subscription = this.sidebarService.getSidebar().subscribe(
       res => {
         this.sidebar = res;

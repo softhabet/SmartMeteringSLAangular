@@ -16,14 +16,16 @@ export interface ICreateCredentials {
 }
 
 export interface IPasswordReset {
-  code: string;
+  email: string;
   newPassword: string;
+  oldPassword: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private signInUrl = 'http://localhost:8180/authentication-service/login';
   private signUpUrl = 'http://localhost:8180/authentication-service/admins/register';
+  private resetUrl = 'http://localhost:8180/authentication-service/admins/reset-password';
 
 
   constructor(private http: HttpClient, public router: Router) { }
@@ -66,6 +68,10 @@ export class AuthService {
     } catch (err) {
       return 0;
     }
+  }
+
+  resetPassword(credentials: IPasswordReset) {
+    return this.http.post(`${this.resetUrl}`, credentials, { responseType: 'text' });
   }
 
   // sendPasswordEmail(email) {

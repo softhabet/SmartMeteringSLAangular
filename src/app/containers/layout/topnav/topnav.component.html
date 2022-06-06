@@ -212,13 +212,13 @@
     </div>
 
     <!-- user profile icon fixed-->
-    <div style="transform: translate(-2%, 4%);" class="user d-inline-block" dropdown>
+    <div style="transform: translate(-2%, -2%);" class="user d-inline-block" dropdown>
       <button class="user-header-icon btn btn-empty p-0" type="button" dropdownToggle>
-        <!-- <span class="name">{{ displayName }}</span> -->
-        <i class="iconsminds-male-2"></i>
+        <!-- <i class="iconsminds-male-2"></i> -->
+        <ngx-avatar textSizeRatio=3 size=35 name={{userName}}></ngx-avatar>
       </button>
       <div class="dropdown-menu dropdown-menu-right mt-3" *dropdownMenu role="menu">
-        <a class="dropdown-item c-pointer">Account</a>
+        <a class="dropdown-item">{{userName}}</a>
         <li class="divider dropdown-divider"></li>
         <a class="dropdown-item c-pointer" (click)="onSignOut()">Sign out</a>
       </div>

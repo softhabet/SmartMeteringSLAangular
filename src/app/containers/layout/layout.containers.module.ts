@@ -17,6 +17,7 @@ import { ApplicationMenuComponent } from './application-menu/application-menu.co
 import { FormsModule } from '@angular/forms';
 import { BreadcrumbReportsComponent } from './breadcrumb-reports/breadcrumb-reports.component';
 import { BreadcrumbDetailsComponent } from './breadcrumb-details/breadcrumb-details.component';
+import { AvatarModule } from 'ngx-avatar';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { BreadcrumbDetailsComponent } from './breadcrumb-details/breadcrumb-deta
     BreadcrumbDetailsComponent
   ],
   imports: [
+    AvatarModule,
     CommonModule,
     PerfectScrollbarModule,
     TranslateModule,
