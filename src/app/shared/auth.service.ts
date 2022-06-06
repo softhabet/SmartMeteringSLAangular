@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
-import { Observable, from } from 'rxjs';
+import { Observable, from, throwError} from 'rxjs';
+import { Router } from '@angular/router';
 
 export interface ISignInCredentials {
   email: string;
@@ -11,7 +13,7 @@ export interface ISignInCredentials {
 export interface ICreateCredentials {
   email: string;
   password: string;
-  displayName: string;
+  userName: string;
 }
 
 export interface IPasswordReset {
@@ -21,26 +23,44 @@ export interface IPasswordReset {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private signInUrl = 'http://localhost:8180/authentication-service/login';
+  private signUpUrl = 'http://localhost:8180/authentication-service/admins/register';
 
-  constructor(private afAuth: AngularFireAuth) { }
 
-  signIn(credentials: ISignInCredentials): Observable<auth.UserCredential> {
-    return from(this.afAuth.auth.signInWithEmailAndPassword(credentials.email, credentials.password));
-  }
+  constructor(private http: HttpClient, public router: Router, private afAuth: AngularFireAuth) { }
 
-  signOut() {
-    return from(this.afAuth.auth.signOut());
+  signIn(credentials: ISignInCredentials) {
+    const params = new HttpParams({
+      fromObject: { email: credentials.email, password: credentials.password},
+    });
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }),
+    };
+    return this.http.post(`${this.signInUrl}`, params.toString(), httpOptions);
   }
 
   register(credentials: ICreateCredentials) {
-    return from(
-      this.afAuth.auth.createUserWithEmailAndPassword(credentials.email, credentials.password).then(
-        () => {
-          this.afAuth.auth.currentUser.updateProfile({ displayName: credentials.displayName });
-          this.afAuth.auth.updateCurrentUser(this.afAuth.auth.currentUser);
-        }
-      )
-    );
+    return this.http.post(`${this.signUpUrl}`, credentials, { responseType: 'text' });
+  }
+
+  // signOut() {
+  //   return from(this.afAuth.auth.signOut());
+  // }
+
+  logOut() {
+    const removeToken = localStorage.removeItem('access_token');
+    if (removeToken == null) {
+      this.router.navigate(['/user']);
+    }
+  }
+
+  getToken() {
+    return localStorage.getItem('access_token');
+  }
+
+  get isLoggedIn(): boolean {
+    const authToken = localStorage.getItem('access_token');
+    return (authToken !== null) ? true : false;
   }
 
   sendPasswordEmail(email) {

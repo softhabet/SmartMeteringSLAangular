@@ -28,12 +28,15 @@ export class LoginComponent implements OnInit {
     this.buttonDisabled = true;
     this.buttonState = 'show-spinner';
 
-    this.authService.signIn(this.loginForm.value).subscribe((user) => {
+    this.authService.signIn(this.loginForm.value).subscribe((res: any) => {
+      localStorage.removeItem('access_token');
+      localStorage.setItem('access_token', res.access_token);
       this.router.navigate(['/']);
     }, (error) => {
+      localStorage.removeItem('access_token');
       this.buttonDisabled = false;
       this.buttonState = '';
-      this.notifications.create('Error', error.message, NotificationType.Bare, { theClass: 'outline primary', timeOut: 6000, showProgressBar: false });
+      this.notifications.create('False credentials !', 'Please check your email or password.', NotificationType.Error, { theClass: 'outline primary', timeOut: 4000, showProgressBar: false });
     });
   }
 }

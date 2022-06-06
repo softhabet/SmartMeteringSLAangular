@@ -26,9 +26,18 @@ export class RegisterComponent implements OnInit {
     this.buttonState = 'show-spinner';
 
     this.authService.register(this.registerForm.value).subscribe(() => {
-      this.router.navigate(['/']);
+      this.notifications.create('Success', 'Account registered', NotificationType.Success, { theClass: 'outline primary', timeOut: 3000, showProgressBar: true });
+      setTimeout(() => {
+        this.router.navigate(['/']);
+    }, 3000);
     }, (error) => {
-      this.notifications.create('Error', error.message, NotificationType.Bare, { theClass: 'outline primary', timeOut: 6000, showProgressBar: false });
+      if (error.error === 'USERNAME EXISTS') {
+        this.notifications.create('UserName exists !', 'Choose another userName.', NotificationType.Warn, { theClass: 'outline primary', timeOut: 4000, showProgressBar: false });
+      } else if ('EMAIL EXISTS') {
+        this.notifications.create('Email exists !', 'Choose another Email.', NotificationType.Warn, { theClass: 'outline primary', timeOut: 4000, showProgressBar: false });
+      } else {
+        this.notifications.create('Error', 'Error', NotificationType.Error, { theClass: 'outline primary', timeOut: 4000, showProgressBar: false });
+      }
       this.buttonDisabled = false;
       this.buttonState = '';
     });

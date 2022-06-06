@@ -15,72 +15,35 @@
 
     <form #registerForm="ngForm" novalidate (ngSubmit)="onSubmit()">
       <label class="form-group has-float-label">
-        <input
-          class="form-control"
-          required
-          ngModel
-          #displayName="ngModel"
-          name="displayName"
-        />
-        <span>{{ "user.fullname" | translate }}</span>
-        <div
-          *ngIf="!displayName.valid && registerForm.submitted"
-          class="invalid-tooltip"
-        >
-          Name is required!
+        <input class="form-control" required ngModel #userName="ngModel" name="userName" />
+        <!-- <span>{{ "user.fullname" | translate }}</span> -->
+        <span>UserName</span>
+        <div *ngIf="!userName.valid && registerForm.submitted" class="invalid-tooltip">
+          userName is required!
         </div>
       </label>
       <label class="form-group has-float-label">
-        <input
-          class="form-control"
-          required
-          email
-          ngModel
-          #email="ngModel"
-          name="email"
-        />
+        <input class="form-control" required email ngModel #email="ngModel" name="email" />
         <span>{{ "user.email" | translate }}</span>
-        <div
-          *ngIf="!email.valid && registerForm.submitted"
-          class="invalid-tooltip"
-        >
+        <div *ngIf="!email.valid && registerForm.submitted" class="invalid-tooltip">
           Email is required!
         </div>
-        <div
-          *ngIf="email?.errors?.email && registerForm.submitted"
-          class="invalid-tooltip"
-        >
+        <div *ngIf="email?.errors?.email && registerForm.submitted" class="invalid-tooltip">
           Email must be a valid address!
         </div>
       </label>
       <label class="form-group has-float-label">
-        <input
-          class="form-control"
-          type="password"
-          placeholder=""
-          required
-          ngModel
-          #password="ngModel"
-          name="password"
-        />
+        <input class="form-control" type="password" placeholder="" required ngModel #password="ngModel"
+          name="password" />
         <span>{{ "user.password" | translate }}</span>
-        <div
-          *ngIf="!password.valid && registerForm.submitted"
-          class="invalid-tooltip"
-        >
+        <div *ngIf="!password.valid && registerForm.submitted" class="invalid-tooltip">
           Password is required!
         </div>
       </label>
       <div class="d-flex justify-content-between align-items-center">
-        <a routerLink="/user/forgot-password"
-          >{{ "user.forgot-password" | translate }}?</a
-        >
-        <app-state-button
-          [btnClass]="'btn btn-primary btn-lg btn-shadow'"
-          [currentState]="buttonState"
-          [isDisabled]="buttonDisabled"
-          click="onLoginClick()"
-        >
+        <a routerLink="/user/forgot-password">{{ "user.forgot-password" | translate }}?</a>
+        <app-state-button [btnClass]="'btn btn-primary btn-lg btn-shadow'" [currentState]="buttonState"
+          [isDisabled]="buttonDisabled" click="onLoginClick()">
           {{ "user.register-button" | translate | uppercase }}
         </app-state-button>
       </div>

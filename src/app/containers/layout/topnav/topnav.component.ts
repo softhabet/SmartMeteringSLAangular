@@ -101,9 +101,7 @@ export class TopnavComponent implements OnInit, OnDestroy {
   }
 
   onSignOut() {
-    this.authService.signOut().subscribe(() => {
-      this.router.navigate(['/']);
-    });
+    this.authService.logOut();
   }
 
   searchKeyUp(event: KeyboardEvent) {
