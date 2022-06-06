@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AuthService } from 'src/app/shared/auth.service';
 import {Step1Component} from './step1/step1.component';
 import {Step2Component} from './step2/step2.component';
 import {Step3Component} from './step3/step3.component';
@@ -19,7 +20,7 @@ export class GenerationMeterComponent implements OnInit, OnDestroy {
   @ViewChild(Step2Component) step2: Step2Component;
   @ViewChild(Step3Component) step3: Step3Component;
   @ViewChild('wizard') wizard: ArcWizardComponent;
-  constructor(private reportService: ReportService, private instanceMsg: InstanceMsgService, private notifications: NotificationsService, private router: Router) { }
+  constructor(private authservice: AuthService, private reportService: ReportService, private instanceMsg: InstanceMsgService, private notifications: NotificationsService, private router: Router) { }
 
   message: string;
   subscription: Subscription;
@@ -68,7 +69,7 @@ export class GenerationMeterComponent implements OnInit, OnDestroy {
 
   postReport() {
     this.getReportData();
-    this.reportService.createReport(this.report, 1).subscribe(
+    this.reportService.createReport(this.report, this.authservice.getTokenSubject()).subscribe(
       (res) => {
         console.log(res);
         this.onSuccess();

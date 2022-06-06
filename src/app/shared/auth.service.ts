@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, from, throwError} from 'rxjs';
 import { Router } from '@angular/router';
+import jwt_decode from 'jwt-decode';
 
 export interface ISignInCredentials {
   email: string;
@@ -55,6 +56,16 @@ export class AuthService {
   get isLoggedIn(): boolean {
     const authToken = localStorage.getItem('access_token');
     return (authToken !== null) ? true : false;
+  }
+
+  getTokenSubject(): number {
+    const authToken = localStorage.getItem('access_token');
+    try {
+      const decodedToken: any = jwt_decode(authToken);
+      return Number(decodedToken.sub);
+    } catch (err) {
+      return 0;
+    }
   }
 
   // sendPasswordEmail(email) {
