@@ -2,6 +2,8 @@ import {ChangeDetectorRef, AfterContentChecked, Component, OnInit, ViewChild} fr
 import { NgForm, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { ReportService, Icolumns} from 'src/app/services/report.service';
 import { NotificationsService, NotificationType } from 'angular2-notifications';
+import { UserService } from 'src/app/services/user.service';
+import { AuthService } from 'src/app/shared/auth.service';
 
 @Component({
   selector: 'app-step1',
@@ -25,7 +27,9 @@ export class Step1Component implements OnInit, AfterContentChecked {
   randomValue: string;
   reportFileName: string;
 
-  constructor(private notifications: NotificationsService, private changeDetector: ChangeDetectorRef, private reportService: ReportService) {}
+  userName: string;
+
+  constructor(private notifications: NotificationsService, private changeDetector: ChangeDetectorRef, private reportService: ReportService, private authService: AuthService, private userService: UserService) {}
 
   simpleList: Icolumns[][] = [[], []];
   separators = [];
@@ -37,6 +41,7 @@ export class Step1Component implements OnInit, AfterContentChecked {
   }
 
   ngOnInit(): void {
+    this.userName = this.getUserName();
     this.reportService.getColumns(1).subscribe(
       (res) => {
         this.simpleList[0] = res;
@@ -89,6 +94,12 @@ export class Step1Component implements OnInit, AfterContentChecked {
     this.reportFileName = this.getFileNameParts( this.step1Form.value.prefix,  this.step1Form.value.separator,  this.step1Form.value.timestamp, this.step1Form.value.random.random);
   }
 
+  getUserName(): any {
+    this.userService.getUserName(this.authService.getTokenSubject()).subscribe((res) => {
+      this.userName = res;
+      return this.userName = res;
+    });
+  }
 
   checkReportNameExisting(reportName) {
     return this.reportService.checkReportName(reportName).toPromise();

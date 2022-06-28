@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { InstanceMsgService } from 'src/app/services/instanceMsg.service';
 
 @Component({
   selector: 'app-instances',
@@ -6,9 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InstancesComponent implements OnInit {
 
-  constructor() { }
+  constructor(private instanceMsg: InstanceMsgService) { }
 
   ngOnInit(): void {
+    this.instanceMsg.changeMessage('');
   }
 
 }

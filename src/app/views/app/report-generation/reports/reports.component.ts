@@ -86,6 +86,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
       (err) => {
         console.log(err);
         this.spinner.hide();
+        this.instanceMsg.changeMessage('');
         this.notifications.create('Error !', 'Error creating report instance.', NotificationType.Error, { timeOut: 3000, showProgressBar: true });
       }
     );

@@ -57,6 +57,7 @@ export class Step3Component implements OnInit, AfterContentChecked {
   }
 
   ngOnInit(): void {
+    this.filteredMeters = 0;
     this.generationForm = new FormGroup({
       scheduled: new FormControl(false, [Validators.required]),
       scheduledDate: new FormControl(null, [Validators.required]),

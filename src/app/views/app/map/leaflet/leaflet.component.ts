@@ -44,7 +44,7 @@ export class LeafletComponent implements AfterViewInit {
   }
 
   createMap() {
-    this.markers = L.markerClusterGroup({disableClusteringAtZoom: 13});
+    this.markers = L.markerClusterGroup({disableClusteringAtZoom: 17});
 
     const centreVilleTunis = {
       lat: 36.8003753,
